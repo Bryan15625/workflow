@@ -1,4 +1,8 @@
 package com.bryanhuang.workflow.dto.response;
 
-public class ErrorResponse {
-}
+import java.util.Map;
+
+public record ErrorResponse(
+    String message,
+    Map<String, String> errors
+) {}
