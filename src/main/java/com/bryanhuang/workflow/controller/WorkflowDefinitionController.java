@@ -1,24 +1,33 @@
 package com.bryanhuang.workflow.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.bryanhuang.workflow.dto.request.CreateWorkflowDefinitionRequest;
+import com.bryanhuang.workflow.dto.response.CreateWorkflowDefinitionResponse;
+import com.bryanhuang.workflow.service.WorkflowDefinitionService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/definitions")
+@RequestMapping("/definition")
+@RequiredArgsConstructor
+@Slf4j
 public class WorkflowDefinitionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(WorkflowDefinitionController.class);
-
-    @GetMapping("/{id}")
-    public void getWorkflowDefinition(@PathVariable String id) {
-        logger.info("Hit definitions endpoint {}", id);
-    }
+    private final WorkflowDefinitionService workflowDefinitionService;
 
     @PostMapping
-    public String createWorkflowDefinition() {
-        return "This is the post mapping";
-    }
+    public ResponseEntity<CreateWorkflowDefinitionResponse> createWorkflowDefinition(@Valid @RequestBody CreateWorkflowDefinitionRequest createWorkflowDefinitionRequest) {
+        log.info("Received request to create workflow definition for: {}", createWorkflowDefinitionRequest.getWorkflowDefinitionName());
 
+        CreateWorkflowDefinitionResponse response = workflowDefinitionService
+                .createWorkflowDefinition(createWorkflowDefinitionRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
 
 }
