@@ -64,6 +64,28 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(CycleDetectedException.class)
+    public ResponseEntity<ErrorResponse> handleCycleDetectedException(CycleDetectedException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Invalid workflow definition",
+                Map.of("cycle", exception.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidWorkflowDefinitionException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidWorkflowDefinitionException(
+            InvalidWorkflowDefinitionException exception
+    ) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Invalid workflow definition",
+                Map.of("workflowDefinition", exception.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     /**
      * Handle generic exceptions
      * @param exception

@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import com.bryanhuang.workflow.model.StepName;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +15,9 @@ public class StepRequest {
     @NotNull(message = "Step ID is required and must be an Integer")
     private Integer stepId;
 
-    @NotBlank(message = "Step name is required and cannot be blank")
-    private String stepName;
+    @NotNull(message = "Step name is required and cannot be blank")
+    private StepName stepName;
 
     @NotNull(message = "Next step IDs are required and must not be empty")
-    private List<Integer> nextStepIds;
+    private List<Integer> dependsOnStepIds;
 }
