@@ -15,5 +15,7 @@ import java.util.UUID;
 public class WorkflowDefinition {
     private UUID workflowDefinitionId;
     private String workflowDefinitionName;
+    private Profile profile;
+    private WorkflowInput input;
     private List<WorkflowStep> steps;
 }

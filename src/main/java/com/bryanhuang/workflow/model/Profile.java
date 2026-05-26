@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkflowStep {
-    private Integer stepId;
-    private StepName stepName;
-    private List<Integer> dependsOnStepIds;
+public class Profile {
+    private Integer age;
+    private Integer weightKg;
+    private Integer heightCm;
+    private Sex sex;
+    private Goal goal;
 }

@@ -5,14 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkflowStep {
-    private Integer stepId;
-    private StepName stepName;
-    private List<Integer> dependsOnStepIds;
+public class WorkflowInput {
+    private String sourceFilePath;
+    private String resultFilePath;
 }
