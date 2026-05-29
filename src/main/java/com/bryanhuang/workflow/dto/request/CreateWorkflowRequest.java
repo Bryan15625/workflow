@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateWorkflowDefinitionRequest {
+public class CreateWorkflowRequest {
     @NotBlank(message = "Workflow definition name is required and cannot be blank")
     private String workflowDefinitionName;
 

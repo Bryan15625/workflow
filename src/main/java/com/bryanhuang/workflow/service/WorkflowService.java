@@ -1,7 +1,8 @@
 package com.bryanhuang.workflow.service;
 
-import com.bryanhuang.workflow.dto.request.CreateWorkflowDefinitionRequest;
+import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowDefinitionResponse;
+import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.exception.InvalidWorkflowDefinitionException;
 import com.bryanhuang.workflow.model.WorkflowInput;
 import com.bryanhuang.workflow.model.Profile;
@@ -13,9 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class WorkflowDefinitionService {
+public class WorkflowService {
 
-    public CreateWorkflowDefinitionResponse createWorkflowDefinition(CreateWorkflowDefinitionRequest request) {
+    public CreateWorkflowDefinitionResponse createWorkflowDefinition(CreateWorkflowRequest request) {
         UUID workflowId = UUID.randomUUID();
 
         WorkflowDefinition workflowDefinition = new WorkflowDefinition(
@@ -46,6 +47,10 @@ public class WorkflowDefinitionService {
         saveWorkflowDefinition(workflowDefinition);
 
         return new CreateWorkflowDefinitionResponse(workflowId);
+    }
+
+    public WorkflowResponse getWorkflowDefinition(UUID workflowId) {
+        return null;
     }
 
 

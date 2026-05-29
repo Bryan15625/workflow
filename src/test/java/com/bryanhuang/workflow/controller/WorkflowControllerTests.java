@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.controller;
 
-import com.bryanhuang.workflow.service.WorkflowDefinitionService;
+import com.bryanhuang.workflow.service.WorkflowService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,14 +13,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(WorkflowDefinitionController.class)
-class WorkflowDefinitionControllerTests {
+@WebMvcTest(WorkflowController.class)
+class WorkflowControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private WorkflowDefinitionService workflowDefinitionService;
+    private WorkflowService workflowService;
 
     @Test
     void createWorkflowDefinition_whenValidationFails_returnsValidationErrorResponse() throws Exception {
