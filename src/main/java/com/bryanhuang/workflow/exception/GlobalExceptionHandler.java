@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestControllerAdvice
@@ -67,23 +68,39 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CycleDetectedException.class)
     public ResponseEntity<ErrorResponse> handleCycleDetectedException(CycleDetectedException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
-                "Invalid workflow definition",
+                "Invalid workflow",
                 Map.of("cycle", exception.getMessage())
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-    @ExceptionHandler(InvalidWorkflowDefinitionException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidWorkflowDefinitionException(
-            InvalidWorkflowDefinitionException exception
+    @ExceptionHandler(InvalidWorkflowException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidWorkflowException(
+            InvalidWorkflowException exception
     ) {
         ErrorResponse errorResponse = new ErrorResponse(
-                "Invalid workflow definition",
-                Map.of("workflowDefinition", exception.getMessage())
+                "Invalid workflow",
+                Map.of("workflow", exception.getMessage())
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(WorkflowNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleWorkflowNotFoundException(
+            WorkflowNotFoundException exception
+    ) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Workflow not found",
+                Map.of("workflow", exception.getMessage())
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
     }
 
     /**
