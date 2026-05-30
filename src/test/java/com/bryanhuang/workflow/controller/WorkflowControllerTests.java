@@ -23,7 +23,7 @@ class WorkflowControllerTests {
     private WorkflowService workflowService;
 
     @Test
-    void createWorkflowDefinition_whenValidationFails_returnsValidationErrorResponse() throws Exception {
+    void createWorkflow_whenValidationFails_returnsValidationErrorResponse() throws Exception {
         mockMvc.perform(post("/definition")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -41,7 +41,7 @@ class WorkflowControllerTests {
     }
 
     @Test
-    void createWorkflowDefinition_whenRequestBodyHasInvalidType_returnsInvalidRequestBodyResponse() throws Exception {
+    void createWorkflow_whenRequestBodyHasInvalidType_returnsInvalidRequestBodyResponse() throws Exception {
         mockMvc.perform(post("/definition")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -63,7 +63,7 @@ class WorkflowControllerTests {
     }
 
     @Test
-    void createWorkflowDefinition_whenRequestBodyIsMalformed_returnsInvalidRequestBodyResponse() throws Exception {
+    void createWorkflow_whenRequestBodyIsMalformed_returnsInvalidRequestBodyResponse() throws Exception {
         mockMvc.perform(post("/definition")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -79,7 +79,7 @@ class WorkflowControllerTests {
     }
 
     @Test
-    void createWorkflowDefinition_whenRequestBodyContainsUnknownFields_returnsInvalidRequestBodyResponse() throws Exception {
+    void createWorkflow_whenRequestBodyContainsUnknownFields_returnsInvalidRequestBodyResponse() throws Exception {
         mockMvc.perform(post("/definition")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""

@@ -1,5 +1,8 @@
 package com.bryanhuang.workflow.dto.request;
 
+import com.bryanhuang.workflow.dto.InputDto;
+import com.bryanhuang.workflow.dto.ProfileDto;
+import com.bryanhuang.workflow.dto.StepDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,18 +17,18 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class CreateWorkflowRequest {
-    @NotBlank(message = "Workflow definition name is required and cannot be blank")
-    private String workflowDefinitionName;
+    @NotBlank(message = "Workflow name is required and cannot be blank")
+    private String workflowName;
 
     @NotNull(message = "Profile is required")
     @Valid
-    private ProfileRequest profile;
+    private ProfileDto profile;
 
     @NotNull(message = "Input is required")
     @Valid
-    private InputRequest input;
+    private InputDto input;
 
     @Valid
-    @NotEmpty(message = "At least one definition step is required")
-    private List<StepRequest> steps;
+    @NotEmpty(message = "At least one step is required")
+    private List<StepDto> steps;
 }
