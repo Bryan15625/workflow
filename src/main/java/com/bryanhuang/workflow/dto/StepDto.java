@@ -1,7 +1,8 @@
-package com.bryanhuang.workflow.dto.request;
+package com.bryanhuang.workflow.dto;
 
 import com.bryanhuang.workflow.model.StepName;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,9 +10,8 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-@Setter
-@NoArgsConstructor
-public class StepRequest {
+@Builder
+public class StepDto {
     @NotNull(message = "Step ID is required and must be an Integer")
     private Integer stepId;
 
@@ -20,4 +20,14 @@ public class StepRequest {
 
     @NotNull(message = "Next step IDs are required and must not be empty")
     private List<Integer> dependsOnStepIds;
+
+    public StepDto(
+            Integer stepId,
+            StepName stepName,
+            List<Integer> dependsOnStepIds
+    ) {
+        this.stepId = stepId;
+        this.stepName = stepName;
+        this.dependsOnStepIds = dependsOnStepIds;
+    }
 }

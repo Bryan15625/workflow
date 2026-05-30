@@ -1,0 +1,19 @@
+package com.bryanhuang.workflow.model;
+
+import lombok.*;
+
+import java.util.List;
+
+@Getter
+@Builder
+public class Step {
+    private Integer stepId;
+    private StepName stepName;
+    private List<Integer> dependsOnStepIds;
+
+    public Step(Integer stepId, StepName stepName, List<Integer> dependsOnStepIds) {
+        this.stepId = stepId;
+        this.stepName = stepName;
+        this.dependsOnStepIds = dependsOnStepIds;
+    }
+}
