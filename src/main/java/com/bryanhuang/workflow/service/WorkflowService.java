@@ -1,64 +1,51 @@
 package com.bryanhuang.workflow.service;
 
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
-import com.bryanhuang.workflow.dto.response.CreateWorkflowDefinitionResponse;
+import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
-import com.bryanhuang.workflow.exception.InvalidWorkflowDefinitionException;
-import com.bryanhuang.workflow.model.WorkflowInput;
-import com.bryanhuang.workflow.model.Profile;
-import com.bryanhuang.workflow.model.WorkflowDefinition;
-import com.bryanhuang.workflow.model.WorkflowStep;
+import com.bryanhuang.workflow.entity.WorkflowEntity;
+import com.bryanhuang.workflow.exception.InvalidWorkflowException;
+import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
+import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
+import com.bryanhuang.workflow.mapper.WorkflowMapper;
+import com.bryanhuang.workflow.model.Workflow;
+import com.bryanhuang.workflow.model.Step;
+import com.bryanhuang.workflow.repository.WorkflowRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class WorkflowService {
 
-    public CreateWorkflowDefinitionResponse createWorkflowDefinition(CreateWorkflowRequest request) {
+    private final WorkflowMapper workflowMapper;
+    private final WorkflowEntityMapper workflowEntityMapper;
+    private final WorkflowRepository workflowRepository;
+
+    public CreateWorkflowResponse createWorkflow(CreateWorkflowRequest request) {
         UUID workflowId = UUID.randomUUID();
 
-        WorkflowDefinition workflowDefinition = new WorkflowDefinition(
-                workflowId,
-                request.getWorkflowDefinitionName(),
-                new Profile(
-                        request.getProfile().getAge(),
-                        request.getProfile().getWeightKg(),
-                        request.getProfile().getHeightCm(),
-                        request.getProfile().getSex(),
-                        request.getProfile().getGoal()
-                ),
-                new WorkflowInput(
-                        request.getInput().getSourceFilePath(),
-                        request.getInput().getResultFilePath()
-                ),
-                request.getSteps().stream()
-                        .map(step -> new WorkflowStep(
-                                step.getStepId(),
-                                step.getStepName(),
-                                step.getDependsOnStepIds()
-                        ))
-                        .toList()
-        );
+        Workflow workflow = workflowMapper.toWorkflow(workflowId, request);
+        validateWorkflow(workflow);
+        WorkflowEntity workflowEntity = workflowEntityMapper.toWorkflowEntity(workflow);
+        saveWorkflow(workflowEntity);
 
-        validateWorkflowDefinition(workflowDefinition);
-
-        saveWorkflowDefinition(workflowDefinition);
-
-        return new CreateWorkflowDefinitionResponse(workflowId);
+        return new CreateWorkflowResponse(workflowId);
     }
 
-    public WorkflowResponse getWorkflowDefinition(UUID workflowId) {
-        return null;
+    public WorkflowResponse getWorkflow(UUID workflowId) {
+        WorkflowEntity workflowEntity = getWorkflowById(workflowId);
+        Workflow workflow = workflowEntityMapper.toWorkflow(workflowEntity);
+        return workflowMapper.toWorkflowResponse(workflow);
     }
 
 
-    private void validateWorkflowDefinition(WorkflowDefinition workflowDefinition) {
-        validateDag(workflowDefinition);
-
-        // Ensure workflow name isn't already used in the DB
-        validateWorkflowName(workflowDefinition.getWorkflowDefinitionName());
+    private void validateWorkflow(Workflow workflow) {
+        validateDag(workflow);
 
     }
 
@@ -70,30 +57,30 @@ public class WorkflowService {
     5. No cycles exist
     6. No duplicate dependencies per step
      */
-    private void validateDag(WorkflowDefinition workflowDefinition) {
-        Set<Integer> stepIds = validateUniqueStepIds(workflowDefinition);
-        validateDependencyIdsExist(workflowDefinition, stepIds);
-        validateAtLeastOneRootStep(workflowDefinition);
-        validateAtLeastOneTerminalStep(workflowDefinition);
-        detectCycle(workflowDefinition);
+    private void validateDag(Workflow workflow) {
+        Set<Integer> stepIds = validateUniqueStepIds(workflow);
+        validateDependencyIdsExist(workflow, stepIds);
+        validateAtLeastOneRootStep(workflow);
+        validateAtLeastOneTerminalStep(workflow);
+        detectCycle(workflow);
     }
 
-    private Set<Integer> validateUniqueStepIds(WorkflowDefinition workflowDefinition) {
+    private Set<Integer> validateUniqueStepIds(Workflow workflow) {
         Set<Integer> stepIds = new HashSet<>();
-        for (WorkflowStep step : workflowDefinition.getSteps()) {
+        for (Step step : workflow.getSteps()) {
             if (stepIds.contains(step.getStepId())) {
-                throw new InvalidWorkflowDefinitionException("Duplicate step ID found");
+                throw new InvalidWorkflowException("Duplicate step ID found");
             }
             stepIds.add(step.getStepId());
         }
         return stepIds;
     }
 
-    private void validateDependencyIdsExist(WorkflowDefinition workflowDefinition, Set<Integer> stepIds) {
-        for (WorkflowStep step : workflowDefinition.getSteps()) {
+    private void validateDependencyIdsExist(Workflow workflow, Set<Integer> stepIds) {
+        for (Step step : workflow.getSteps()) {
             for (Integer dependencyId : step.getDependsOnStepIds()) {
                 if (!stepIds.contains(dependencyId)) {
-                    throw new InvalidWorkflowDefinitionException(
+                    throw new InvalidWorkflowException(
                             "Step " + step.getStepId() + " depends on unknown step ID: " + dependencyId
                     );
                 }
@@ -101,36 +88,36 @@ public class WorkflowService {
         }
     }
 
-    private void validateAtLeastOneRootStep(WorkflowDefinition workflowDefinition) {
-        boolean hasRootStep = workflowDefinition.getSteps().stream()
+    private void validateAtLeastOneRootStep(Workflow workflow) {
+        boolean hasRootStep = workflow.getSteps().stream()
                 .anyMatch(step -> step.getDependsOnStepIds().isEmpty());
 
         if (!hasRootStep) {
-            throw new InvalidWorkflowDefinitionException(
+            throw new InvalidWorkflowException(
                     "Workflow must contain at least one root step with no dependencies"
             );
         }
     }
 
-    private void validateAtLeastOneTerminalStep(WorkflowDefinition workflowDefinition) {
-        Set<Integer> dependencyIds = workflowDefinition.getSteps().stream()
+    private void validateAtLeastOneTerminalStep(Workflow workflow) {
+        Set<Integer> dependencyIds = workflow.getSteps().stream()
                 .flatMap(step -> step.getDependsOnStepIds().stream())
                 .collect(java.util.stream.Collectors.toSet());
 
-        boolean hasTerminalStep = workflowDefinition.getSteps().stream()
+        boolean hasTerminalStep = workflow.getSteps().stream()
                 .anyMatch(step -> !dependencyIds.contains(step.getStepId()));
 
         if (!hasTerminalStep) {
-            throw new InvalidWorkflowDefinitionException(
+            throw new InvalidWorkflowException(
                     "Workflow must contain at least one terminal step"
             );
         }
     }
 
-    private void detectCycle(WorkflowDefinition workflowDefinition) {
+    private void detectCycle(Workflow workflow) {
         Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
 
-        for (WorkflowStep step : workflowDefinition.getSteps()) {
+        for (Step step : workflow.getSteps()) {
             adjacencyList.putIfAbsent(step.getStepId(), new java.util.ArrayList<>());
 
             for (Integer dependencyId : step.getDependsOnStepIds()) {
@@ -144,7 +131,7 @@ public class WorkflowService {
 
         for (Integer stepId : adjacencyList.keySet()) {
             if (hasCycle(stepId, adjacencyList, visiting, visited)) {
-                throw new InvalidWorkflowDefinitionException("Cycle detected in workflow definition");
+                throw new InvalidWorkflowException("Cycle detected in workflow");
             }
         }
 
@@ -178,12 +165,19 @@ public class WorkflowService {
         return false;
     }
 
-    // TODO: Implement workflow name validation against db
-    private void validateWorkflowName(String workflowName) {
+
+
+    private void saveWorkflow(WorkflowEntity workflowEntity) {
+
+        workflowRepository.save(workflowEntity);
+        // Ensure workflow name isn't already used in the DB
 
     }
+    private WorkflowEntity getWorkflowById(UUID workflowId) {
+        return workflowRepository.findById(workflowId)
+                .orElseThrow(() -> new WorkflowNotFoundException(
+                        "Workflow not found with id: " + workflowId
+                ));
 
-    // TODO: Implement saving workflow definition to db
-    private void saveWorkflowDefinition(WorkflowDefinition workflowDefinition) {
     }
 }
