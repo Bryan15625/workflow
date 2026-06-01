@@ -12,7 +12,12 @@ import org.springframework.stereotype.Component;
 public class WorkflowEntityMapper {
 
     public WorkflowEntity toWorkflowEntity(Workflow workflow) {
-        WorkflowPayload payload = new WorkflowPayload(workflow.getProfile(), workflow.getInput(), workflow.getSteps());
+
+        WorkflowPayload payload = WorkflowPayload.builder()
+                .profile(workflow.getProfile())
+                .input(workflow.getInput())
+                .steps(workflow.getSteps())
+                .build();
 
         return WorkflowEntity.builder()
                 .workflowId(workflow.getWorkflowId())
@@ -22,17 +27,17 @@ public class WorkflowEntityMapper {
     }
 
     public Workflow toWorkflow(WorkflowEntity workflowEntity) {
+
             WorkflowPayload workflowPayload = workflowEntity.getWorkflowJson();
 
             return Workflow.builder()
                     .workflowId(workflowEntity.getWorkflowId())
                     .workflowName(workflowEntity.getWorkflowName())
-                    .profile(workflowPayload.profile())
-                    .input(workflowPayload.input())
-                    .steps(workflowPayload.steps())
+                    .profile(workflowPayload.getProfile())
+                    .input(workflowPayload.getInput())
+                    .steps(workflowPayload.getSteps())
                     .createdAt(workflowEntity.getCreatedAt())
                     .updatedAt(workflowEntity.getUpdatedAt())
                     .build();
     }
-
 }

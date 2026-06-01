@@ -5,13 +5,10 @@ import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.entity.WorkflowEntity;
 import com.bryanhuang.workflow.exception.InvalidWorkflowException;
-import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowMapper;
 import com.bryanhuang.workflow.model.Workflow;
 import com.bryanhuang.workflow.model.Step;
-import com.bryanhuang.workflow.repository.WorkflowRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
@@ -24,7 +21,7 @@ public class WorkflowService {
 
     private final WorkflowMapper workflowMapper;
     private final WorkflowEntityMapper workflowEntityMapper;
-    private final WorkflowRepository workflowRepository;
+    private final WorkflowQueryService workflowQueryService;
 
     public CreateWorkflowResponse createWorkflow(CreateWorkflowRequest request) {
         UUID workflowId = UUID.randomUUID();
@@ -32,21 +29,19 @@ public class WorkflowService {
         Workflow workflow = workflowMapper.toWorkflow(workflowId, request);
         validateWorkflow(workflow);
         WorkflowEntity workflowEntity = workflowEntityMapper.toWorkflowEntity(workflow);
-        saveWorkflow(workflowEntity);
+        WorkflowEntity saved = workflowQueryService.saveWorkflowEntity(workflowEntity);
 
         return new CreateWorkflowResponse(workflowId);
     }
 
     public WorkflowResponse getWorkflow(UUID workflowId) {
-        WorkflowEntity workflowEntity = getWorkflowById(workflowId);
-        Workflow workflow = workflowEntityMapper.toWorkflow(workflowEntity);
+        Workflow workflow = workflowQueryService.findWorkflow(workflowId);
         return workflowMapper.toWorkflowResponse(workflow);
     }
 
 
     private void validateWorkflow(Workflow workflow) {
         validateDag(workflow);
-
     }
 
     /*
@@ -165,19 +160,4 @@ public class WorkflowService {
         return false;
     }
 
-
-
-    private void saveWorkflow(WorkflowEntity workflowEntity) {
-
-        workflowRepository.save(workflowEntity);
-        // Ensure workflow name isn't already used in the DB
-
-    }
-    private WorkflowEntity getWorkflowById(UUID workflowId) {
-        return workflowRepository.findById(workflowId)
-                .orElseThrow(() -> new WorkflowNotFoundException(
-                        "Workflow not found with id: " + workflowId
-                ));
-
-    }
 }

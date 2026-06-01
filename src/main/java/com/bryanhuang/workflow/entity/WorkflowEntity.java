@@ -30,6 +30,7 @@ public class WorkflowEntity {
     private WorkflowPayload workflowJson;
 
     @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     @UpdateTimestamp
