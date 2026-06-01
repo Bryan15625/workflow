@@ -1,7 +1,5 @@
-package com.bryanhuang.workflow.dto.response;
+package com.bryanhuang.workflow.model;
 
-import com.bryanhuang.workflow.dto.StepExecutionResponse;
-import com.bryanhuang.workflow.model.JobStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,20 +9,20 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class WorkflowExecutionResponse {
-    private final UUID workflowExecutionId;
-    private final UUID workflowId;
-    private final JobStatus status;
-    private List<StepExecutionResponse> stepStatuses;
-    private final Instant createdAt;
-    private final Instant startedAt;
-    private final Instant completedAt;
+public class WorkflowExecution {
+    private UUID workflowExecutionId;
+    private UUID workflowId;
+    private JobStatus status;
+    private List<StepExecutionStatus> stepStatuses;
+    private Instant createdAt;
+    private Instant startedAt;
+    private Instant completedAt;
 
-    public WorkflowExecutionResponse(
+    public WorkflowExecution(
             UUID workflowExecutionId,
             UUID workflowId,
             JobStatus status,
-            List<StepExecutionResponse> stepStatuses,
+            List<StepExecutionStatus> stepStatuses,
             Instant createdAt,
             Instant startedAt,
             Instant completedAt
