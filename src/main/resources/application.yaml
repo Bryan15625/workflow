@@ -6,12 +6,12 @@ spring:
       fail-on-unknown-properties: true
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
-    kafka:
-      bootstrap-servers: localhost:9092
+  kafka:
+    bootstrap-servers: kafka:9092
   datasource:
-    url: jdbc:postgresql://localhost:5432/workflowdb
+    url: jdbc:postgresql://postgres:5432/workflowdb
     username: workflow
     password: workflow
   jpa:
