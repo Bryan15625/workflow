@@ -1,4 +1,4 @@
-package com.bryanhuang.workflow.persistence;
+package com.bryanhuang.workflow.entity.payload;
 
 import com.bryanhuang.workflow.model.StepExecutionStatus;
 
