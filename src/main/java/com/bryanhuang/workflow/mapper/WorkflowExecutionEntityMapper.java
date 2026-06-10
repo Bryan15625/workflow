@@ -2,7 +2,7 @@ package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.model.WorkflowExecution;
-import com.bryanhuang.workflow.persistence.WorkflowExecutionPayload;
+import com.bryanhuang.workflow.entity.payload.WorkflowExecutionPayload;
 import org.springframework.stereotype.Component;
 
 @Component

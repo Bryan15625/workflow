@@ -1,5 +1,6 @@
 package com.bryanhuang.workflow.controller;
 
+import com.bryanhuang.workflow.dto.response.CreateWorkflowExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
 import com.bryanhuang.workflow.service.WorkflowExecutionService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,11 @@ public class WorkflowExecutionController {
     private final WorkflowExecutionService workflowExecutionService;
 
     @PostMapping("/workflows/{workflowId}/executions")
-    public ResponseEntity<WorkflowExecutionResponse> executeWorkflow(@PathVariable UUID workflowId) {
+    public ResponseEntity<CreateWorkflowExecutionResponse> createWorkflowExecution(@PathVariable UUID workflowId) {
         log.info("Received request to execute workflow with ID={}", workflowId);
 
-        WorkflowExecutionResponse response = workflowExecutionService
-                .executeWorkflow(workflowId);
+        CreateWorkflowExecutionResponse response = workflowExecutionService
+                .createWorkflowExecution(workflowId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

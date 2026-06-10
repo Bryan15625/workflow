@@ -2,7 +2,7 @@ package com.bryanhuang.workflow.entity;
 
 
 import com.bryanhuang.workflow.model.JobStatus;
-import com.bryanhuang.workflow.persistence.WorkflowExecutionPayload;
+import com.bryanhuang.workflow.entity.payload.WorkflowExecutionPayload;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
