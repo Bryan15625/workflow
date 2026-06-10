@@ -1,5 +1,6 @@
 package com.bryanhuang.workflow.service;
 
+import com.bryanhuang.workflow.dto.response.CreateWorkflowExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionEntityMapper;
@@ -19,9 +20,14 @@ public class WorkflowExecutionService {
     private final WorkflowQueryService workflowQueryService;
     private final WorkflowExecutionMapper workflowExecutionMapper;
 
-    public WorkflowExecutionResponse executeWorkflow(UUID workflowId) {
+    /**
+     * Save workflow execution to postgres and then publish to kafka
+     * @param workflowId
+     * @return
+     */
+    public CreateWorkflowExecutionResponse createWorkflowExecution(UUID workflowId) {
 
-        WorkflowExecution workflowExecution = createWorkflowExecution(workflowId);
+        WorkflowExecution workflowExecution = buildWorkflowExecutionObject(workflowId);
 
         WorkflowExecutionEntity entity = workflowExecutionEntityMapper
                 .toWorkflowExecutionEntity(workflowExecution);
@@ -29,16 +35,16 @@ public class WorkflowExecutionService {
         WorkflowExecutionEntity saved = workflowQueryService
                 .saveWorkflowExecutionEntity(entity);
 
-        WorkflowExecution persisted = workflowExecutionEntityMapper.toWorkflowExecution(saved);
-
-        return workflowExecutionMapper.toWorkflowExecutionResponse(persisted);
+        return new CreateWorkflowExecutionResponse(saved.getWorkflowExecutionId());
     }
 
     public WorkflowExecutionResponse getWorkflowExecutionStatus(UUID executionId) {
-        return null;
+
+        WorkflowExecution workflowExecution = workflowQueryService.findWorkflowExecution(executionId);
+        return workflowExecutionMapper.toWorkflowExecutionResponse(workflowExecution);
     }
 
-    public WorkflowExecution createWorkflowExecution(UUID workflowId) {
+    public WorkflowExecution buildWorkflowExecutionObject(UUID workflowId) {
         UUID executionId = UUID.randomUUID();
         List<Step> steps = workflowQueryService.findWorkflow(workflowId).getSteps();
 

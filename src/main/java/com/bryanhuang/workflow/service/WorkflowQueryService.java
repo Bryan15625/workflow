@@ -2,9 +2,12 @@ package com.bryanhuang.workflow.service;
 
 import com.bryanhuang.workflow.entity.WorkflowEntity;
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.exception.WorkflowExecutionNotFoundException;
 import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
+import com.bryanhuang.workflow.mapper.WorkflowExecutionEntityMapper;
 import com.bryanhuang.workflow.model.Workflow;
+import com.bryanhuang.workflow.model.WorkflowExecution;
 import com.bryanhuang.workflow.repository.WorkflowExecutionRepository;
 import com.bryanhuang.workflow.repository.WorkflowRepository;
 import jakarta.transaction.Transactional;
@@ -18,6 +21,7 @@ import java.util.UUID;
 public class WorkflowQueryService {
 
     private final WorkflowEntityMapper workflowEntityMapper;
+    private final WorkflowExecutionEntityMapper workflowExecutionEntityMapper;
     private final WorkflowRepository workflowRepository;
     private final WorkflowExecutionRepository workflowExecutionRepository;
 
@@ -30,6 +34,19 @@ public class WorkflowQueryService {
         return workflowRepository.findById(workflowId)
                 .orElseThrow(() -> new WorkflowNotFoundException(
                         "Workflow not found with id: " + workflowId
+                ));
+    }
+
+    public WorkflowExecution findWorkflowExecution(UUID workflowExecutionId) {
+        WorkflowExecutionEntity entity = getWorkflowExecutionById(workflowExecutionId);
+        return workflowExecutionEntityMapper.toWorkflowExecution(entity);
+    }
+
+    // TODO: replace error with custom exception
+    private WorkflowExecutionEntity getWorkflowExecutionById(UUID workflowExecutionId) {
+        return workflowExecutionRepository.findById(workflowExecutionId)
+                .orElseThrow(() -> new WorkflowExecutionNotFoundException(
+                        "Workflow execution not found with id: " + workflowExecutionId
                 ));
     }
 
