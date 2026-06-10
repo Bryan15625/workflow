@@ -103,6 +103,20 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+    @ExceptionHandler(WorkflowExecutionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleWorkflowExecutionNotFoundException(
+            WorkflowExecutionNotFoundException exception
+    ) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Workflow execution not found",
+                Map.of("execution", exception.getMessage())
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
     /**
      * Handle generic exceptions
      * @param exception
