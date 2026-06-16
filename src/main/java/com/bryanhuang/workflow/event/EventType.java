@@ -1,0 +1,11 @@
+package com.bryanhuang.workflow.event;
+
+public enum EventType {
+    WORKFLOW_EXECUTION_CREATED,
+    WORKFLOW_EXECUTION_STARTED,
+    WORKFLOW_EXECUTION_COMPLETED,
+    WORKFLOW_EXECUTION_FAILED,
+    STEP_STARTED,
+    STEP_COMPLETED,
+    STEP_FAILED,
+}

@@ -3,12 +3,17 @@ package com.bryanhuang.workflow.service;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.event.EventEnvelope;
+import com.bryanhuang.workflow.event.EventType;
+import com.bryanhuang.workflow.event.execution.WorkflowExecutionEvent;
+import com.bryanhuang.workflow.kafka.producer.KafkaEventPublisher;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionMapper;
 import com.bryanhuang.workflow.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +24,7 @@ public class WorkflowExecutionService {
     private final WorkflowExecutionEntityMapper workflowExecutionEntityMapper;
     private final WorkflowQueryService workflowQueryService;
     private final WorkflowExecutionMapper workflowExecutionMapper;
+    private final KafkaEventPublisher publisher;
 
     /**
      * Save workflow execution to postgres and then publish to kafka
@@ -34,6 +40,23 @@ public class WorkflowExecutionService {
 
         WorkflowExecutionEntity saved = workflowQueryService
                 .saveWorkflowExecutionEntity(entity);
+
+        WorkflowExecutionEvent payload = WorkflowExecutionEvent.builder()
+                .workflowExecutionId(saved.getWorkflowExecutionId())
+                .workflowId(workflowId)
+                .build();
+
+        EventEnvelope<WorkflowExecutionEvent> event = EventEnvelope.<WorkflowExecutionEvent>builder()
+                .eventId(UUID.randomUUID())
+                .eventType(EventType.WORKFLOW_EXECUTION_CREATED)
+                .timestamp(Instant.now())
+                .payload(payload)
+                .build();
+
+        publisher.publish(
+                saved.getWorkflowExecutionId().toString(),
+                event
+        );
 
         return new CreateWorkflowExecutionResponse(saved.getWorkflowExecutionId());
     }

@@ -5,7 +5,6 @@ import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.entity.WorkflowEntity;
 import com.bryanhuang.workflow.exception.InvalidWorkflowException;
-import com.bryanhuang.workflow.kafka.producer.WorkflowEventProducer;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowMapper;
 import com.bryanhuang.workflow.model.Workflow;
@@ -25,7 +24,6 @@ public class WorkflowService {
     private final WorkflowMapper workflowMapper;
     private final WorkflowEntityMapper workflowEntityMapper;
     private final WorkflowQueryService workflowQueryService;
-    private final WorkflowEventProducer producer;
 
     public CreateWorkflowResponse createWorkflow(CreateWorkflowRequest request) {
         UUID workflowId = UUID.randomUUID();
@@ -34,8 +32,6 @@ public class WorkflowService {
         validateWorkflow(workflow);
         WorkflowEntity workflowEntity = workflowEntityMapper.toWorkflowEntity(workflow);
         WorkflowEntity saved = workflowQueryService.saveWorkflowEntity(workflowEntity);
-        log.info("publishing the event");
-        producer.publish("Bryan new event");
 
         return new CreateWorkflowResponse(workflowId);
     }
