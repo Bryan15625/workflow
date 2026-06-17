@@ -1,6 +1,8 @@
 spring:
   application:
     name: workflow
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
   jackson:
     deserialization:
       fail-on-unknown-properties: true

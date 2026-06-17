@@ -12,7 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 @Slf4j
 public class KafkaEventPublisher {
 
-    private final KafkaTemplate<String, EventEnvelope<?>> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public <T> void publish(String key, EventEnvelope<T> event) {
         log.info("Publishing event: {}", event);

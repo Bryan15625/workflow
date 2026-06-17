@@ -2,12 +2,14 @@ package com.bryanhuang.workflow.event;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
 @Builder
+@NoArgsConstructor
 public class EventEnvelope<T> {
     private UUID eventId;
     private EventType eventType;
