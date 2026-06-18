@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -28,8 +29,12 @@ public class WorkflowExecutionController {
         CreateWorkflowExecutionResponse response = workflowExecutionService
                 .createWorkflowExecution(workflowId);
 
+        URI location = URI.create(
+                "/executions/" + response.workflowExecutionId()
+        );
+
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .created(location)
                 .body(response);
     }
 

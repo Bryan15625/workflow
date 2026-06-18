@@ -2,7 +2,6 @@ package com.bryanhuang.workflow.kafka.consumer;
 
 import com.bryanhuang.workflow.event.EventEnvelope;
 import com.bryanhuang.workflow.event.handler.WorkflowExecutionEventHandler;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -11,20 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class WorkflowExecutionConsumer {
 
     private final WorkflowExecutionEventHandler workflowExecutionEventHandler;
-
-    public WorkflowExecutionConsumer(WorkflowExecutionEventHandler workflowExecutionEventHandler) {
-        this.workflowExecutionEventHandler = workflowExecutionEventHandler;
-        log.info("🔥 WorkflowExecutionConsumer CREATED");
-    }
-
-    @PostConstruct
-    public void init() {
-        log.info("🔥 Consumer bean initialized");
-    }
 
     @KafkaListener(
             topics = "workflow-events",
@@ -32,7 +21,7 @@ public class WorkflowExecutionConsumer {
     )
     public void consume(EventEnvelope<?> event) {
         log.info("Received event: {}", event);
-//        workflowExecutionEventHandler.handle(event);
+        workflowExecutionEventHandler.handle(event);
     }
 
 }

@@ -37,9 +37,8 @@ services:
       - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
       - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
 
-  workflow:
+  workflow-app:
     build: .
-    container_name: workflow-app
     depends_on:
       - postgres
       - kafka
@@ -49,7 +48,7 @@ services:
       SPRING_DATASOURCE_USERNAME: workflow
       SPRING_DATASOURCE_PASSWORD: workflow
     ports:
-      - "8080:8080"
+      - "8080"
     restart: unless-stopped
 
 volumes:

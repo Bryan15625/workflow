@@ -12,7 +12,11 @@ import org.springframework.stereotype.Component;
 public class WorkflowExecutionEventHandler {
 
     private WorkflowExecutionService workflowExecutionService;
-    public <T> void handle(EventEnvelope<T> envelope) {
+
+    public void handle(EventEnvelope<?> envelope) {
+        // if eventid already processed, skip
+        // if execution is already in the right state, skip (indepotentecy)
+        log.info("handling event: {}", envelope);
 
     }
 }
