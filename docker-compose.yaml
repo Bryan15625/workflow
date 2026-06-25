@@ -48,7 +48,7 @@ services:
       SPRING_DATASOURCE_USERNAME: workflow
       SPRING_DATASOURCE_PASSWORD: workflow
     ports:
-      - "8080"
+      - "8080:8080"
     restart: unless-stopped
 
 volumes:

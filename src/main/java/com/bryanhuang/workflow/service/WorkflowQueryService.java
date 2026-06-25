@@ -38,12 +38,12 @@ public class WorkflowQueryService {
     }
 
     public WorkflowExecution findWorkflowExecution(UUID workflowExecutionId) {
-        WorkflowExecutionEntity entity = getWorkflowExecutionById(workflowExecutionId);
+        WorkflowExecutionEntity entity = getWorkflowExecutionEntityById(workflowExecutionId);
         return workflowExecutionEntityMapper.toWorkflowExecution(entity);
     }
 
     // TODO: replace error with custom exception
-    private WorkflowExecutionEntity getWorkflowExecutionById(UUID workflowExecutionId) {
+    public WorkflowExecutionEntity getWorkflowExecutionEntityById(UUID workflowExecutionId) {
         return workflowExecutionRepository.findById(workflowExecutionId)
                 .orElseThrow(() -> new WorkflowExecutionNotFoundException(
                         "Workflow execution not found with id: " + workflowExecutionId

@@ -58,4 +58,45 @@ public class WorkflowExecutionEntity {
         this.completedAt = completedAt;
     }
 
+    public void start() {
+
+        if (status != JobStatus.READY) {
+            throw new IllegalStateException(
+                    "Execution must be READY"
+            );
+        }
+        status = JobStatus.RUNNING;
+        startedAt = Instant.now();
+    }
+
+    public void fail() {
+        if (status == JobStatus.COMPLETED || status == JobStatus.TERMINATED) {
+            throw new IllegalStateException(
+                    "Cannot fail an execution that is already completed or terminated"
+            );
+        }
+        status = JobStatus.FAILED;
+    }
+
+    public void complete() {
+        if (status == JobStatus.RUNNING) {
+            status = JobStatus.COMPLETED;
+            completedAt = Instant.now();
+        } else {
+            throw new IllegalStateException(
+                    "Cannot complete an execution that is already completed or terminated"
+            );
+        }
+    }
+
+    public void terminate() {
+        if (status == JobStatus.RUNNING) {
+            status = JobStatus.TERMINATED;
+        } else {
+            throw new IllegalStateException(
+                    "Cannot terminate an execution that is already completed or terminated"
+            );
+        }
+    }
+
 }

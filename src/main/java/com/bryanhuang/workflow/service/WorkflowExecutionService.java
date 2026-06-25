@@ -10,7 +10,9 @@ import com.bryanhuang.workflow.kafka.producer.KafkaEventPublisher;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionMapper;
 import com.bryanhuang.workflow.model.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,12 +21,14 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WorkflowExecutionService {
 
     private final WorkflowExecutionEntityMapper workflowExecutionEntityMapper;
     private final WorkflowQueryService workflowQueryService;
     private final WorkflowExecutionMapper workflowExecutionMapper;
     private final KafkaEventPublisher publisher;
+    private final TaskExecutionService taskExecutionService;
 
     /**
      * Save workflow execution to postgres and then publish to kafka
@@ -86,4 +90,20 @@ public class WorkflowExecutionService {
                 .stepStatuses(stepStatuses)
                 .build();
     }
+
+    @Transactional
+    public void onCreated(WorkflowExecutionEvent event) {
+        log.info("Change status to RUNNING for workflowExecutionId={}", event.getWorkflowExecutionId());
+        WorkflowExecutionEntity entity = workflowQueryService
+                .getWorkflowExecutionEntityById(event.getWorkflowExecutionId());
+        // Use sleep to see the transition from READY to RUNNING
+        try {
+            Thread.sleep(32000);
+        } catch (InterruptedException e) {}
+        entity.start();
+        taskExecutionService.executeWorkflow(entity);
+
+    }
+
+
 }

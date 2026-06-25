@@ -1,7 +1,9 @@
 package com.bryanhuang.workflow.event.handler;
 
 import com.bryanhuang.workflow.event.EventEnvelope;
+import com.bryanhuang.workflow.event.execution.WorkflowExecutionEvent;
 import com.bryanhuang.workflow.service.WorkflowExecutionService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,12 +13,36 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WorkflowExecutionEventHandler {
 
-    private WorkflowExecutionService workflowExecutionService;
+    private final WorkflowExecutionService workflowExecutionService;
+    private final ObjectMapper objectMapper;
 
     public void handle(EventEnvelope<?> envelope) {
         // if eventid already processed, skip
         // if execution is already in the right state, skip (indepotentecy)
         log.info("handling event: {}", envelope);
+        switch (envelope.getEventType()) {
+            case WORKFLOW_EXECUTION_CREATED -> {
+                log.info("Handling WORKFLOW_EXECUTION_CREATED event");
+                WorkflowExecutionEvent event = objectMapper.convertValue(
+                        envelope.getPayload(),
+                        WorkflowExecutionEvent.class
+                );
+                workflowExecutionService.onCreated(event);
+            }
+            case WORKFLOW_EXECUTION_STARTED ->
+                log.info("Handling WORKFLOW_EXECUTION_STARTED event");
+            case WORKFLOW_EXECUTION_COMPLETED ->
+                log.info("Handling WORKFLOW_EXECUTION_COMPLETED event");
+            case WORKFLOW_EXECUTION_FAILED ->
+                log.info("Handling WORKFLOW_EXECUTION_FAILED event");
+            case STEP_STARTED ->
+                log.info("Handling STEP_STARTED event");
+            case STEP_COMPLETED ->
+                log.info("Handling STEP_COMPLETED event");
+            case STEP_FAILED ->
+                log.info("Handling STEP_FAILED event");
+
+        }
 
     }
 }
