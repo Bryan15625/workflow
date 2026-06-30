@@ -21,7 +21,6 @@ public class TaskExecutionService {
             Workflow workflow = workflowQueryService.findWorkflow(entity.getWorkflowId());
 //            for (Step step : workflow.getSteps()) {
 //                executeStep(step);
-//
 //            }
             entity.complete();
             log.info("Task execution completed");

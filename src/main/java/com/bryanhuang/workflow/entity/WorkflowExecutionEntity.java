@@ -3,6 +3,7 @@ package com.bryanhuang.workflow.entity;
 
 import com.bryanhuang.workflow.model.JobStatus;
 import com.bryanhuang.workflow.entity.payload.WorkflowExecutionPayload;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,44 +60,46 @@ public class WorkflowExecutionEntity {
     }
 
     public void start() {
-
         if (status != JobStatus.READY) {
-            throw new IllegalStateException(
-                    "Execution must be READY"
-            );
+            throw new IllegalStateException("Execution must be READY to start.");
         }
+
         status = JobStatus.RUNNING;
         startedAt = Instant.now();
     }
 
     public void fail() {
-        if (status == JobStatus.COMPLETED || status == JobStatus.TERMINATED) {
-            throw new IllegalStateException(
-                    "Cannot fail an execution that is already completed or terminated"
-            );
+        if (status != JobStatus.RUNNING) {
+            throw new IllegalStateException("Execution must be RUNNING to fail.");
         }
+
         status = JobStatus.FAILED;
+        completedAt = Instant.now();
     }
 
     public void complete() {
-        if (status == JobStatus.RUNNING) {
-            status = JobStatus.COMPLETED;
-            completedAt = Instant.now();
-        } else {
-            throw new IllegalStateException(
-                    "Cannot complete an execution that is already completed or terminated"
-            );
+        if (status != JobStatus.RUNNING) {
+            throw new IllegalStateException("Execution must be RUNNING to complete.");
         }
+
+        status = JobStatus.COMPLETED;
+        completedAt = Instant.now();
     }
 
     public void terminate() {
-        if (status == JobStatus.RUNNING) {
-            status = JobStatus.TERMINATED;
-        } else {
-            throw new IllegalStateException(
-                    "Cannot terminate an execution that is already completed or terminated"
-            );
+        if (status != JobStatus.RUNNING) {
+            throw new IllegalStateException("Execution must be RUNNING to terminate.");
         }
+
+        status = JobStatus.TERMINATED;
+        completedAt = Instant.now();
+    }
+
+    @JsonIgnore
+    public boolean isTerminal() {
+        return status == JobStatus.COMPLETED
+                || status == JobStatus.FAILED
+                || status == JobStatus.TERMINATED;
     }
 
 }
