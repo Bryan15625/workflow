@@ -78,12 +78,28 @@ public class WorkflowExecutionEntity {
     }
 
     public void terminate() {
-        if (status != JobStatus.RUNNING) {
-            throw new IllegalStateException("Execution must be RUNNING to terminate.");
+        if (status != JobStatus.RUNNING && status != JobStatus.PAUSED) {
+            throw new IllegalStateException("Execution must be RUNNING or PAUSED to terminate.");
         }
 
         status = JobStatus.TERMINATED;
         completedAt = Instant.now();
+    }
+
+    public void pause() {
+        if (status != JobStatus.RUNNING) {
+            throw new IllegalStateException("Execution must be RUNNING to pause.");
+        }
+
+        status = JobStatus.PAUSED;
+    }
+
+    public void resume() {
+        if (status != JobStatus.PAUSED) {
+            throw new IllegalStateException("Execution must be PAUSED to resume.");
+        }
+
+        status = JobStatus.RUNNING;
     }
 
     @JsonIgnore

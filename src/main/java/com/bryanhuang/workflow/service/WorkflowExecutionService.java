@@ -40,4 +40,57 @@ public class WorkflowExecutionService {
 
         workflowExecutionEntity.complete();
     }
+
+    @Transactional
+    public void pause(UUID workflowExecutionId) {
+        WorkflowExecutionEntity workflowExecutionEntity =
+                workflowExecutionRepository
+                        .findByWorkflowExecutionId(
+                                workflowExecutionId
+                        )
+                        .orElseThrow(
+                                () -> new WorkflowExecutionNotFoundException("Workflow execution not found")
+                        );
+
+        workflowExecutionEntity.pause();
+    }
+
+    @Transactional
+    public void resume(UUID workflowExecutionId) {
+        WorkflowExecutionEntity workflowExecutionEntity =
+                workflowExecutionRepository
+                        .findByWorkflowExecutionId(
+                                workflowExecutionId
+                        )
+                        .orElseThrow(
+                                () -> new WorkflowExecutionNotFoundException("Workflow execution not found")
+                        );
+        workflowExecutionEntity.resume();
+    }
+
+    @Transactional
+    public void fail(UUID workflowExecutionId) {
+        WorkflowExecutionEntity workflowExecutionEntity =
+                workflowExecutionRepository
+                        .findByWorkflowExecutionId(
+                                workflowExecutionId
+                        )
+                        .orElseThrow(
+                                () -> new WorkflowExecutionNotFoundException("Workflow execution not found")
+                        );
+        workflowExecutionEntity.fail();
+    }
+
+    @Transactional
+    public void terminate(UUID workflowExecutionId) {
+        WorkflowExecutionEntity workflowExecutionEntity =
+                workflowExecutionRepository
+                        .findByWorkflowExecutionId(
+                                workflowExecutionId
+                        )
+                        .orElseThrow(
+                                () -> new WorkflowExecutionNotFoundException("Workflow execution not found")
+                        );
+        workflowExecutionEntity.terminate();
+    }
 }

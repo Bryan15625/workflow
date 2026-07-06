@@ -42,4 +42,18 @@ public class StepExecutionService {
 
         step.complete();
     }
+
+    @Transactional
+    public void fail(UUID workflowExecutionId, Integer stepId) {
+        StepExecutionStatusEntity step =
+                stepExecutionStatusRepository
+                        .findByWorkflowExecutionEntity_WorkflowExecutionIdAndStepId(
+                                workflowExecutionId,
+                                stepId
+                        )
+                        .orElseThrow(
+                                () -> new StepExecutionStatusNotFoundException("Step status not found")
+                        );
+        step.fail();
+    }
 }
