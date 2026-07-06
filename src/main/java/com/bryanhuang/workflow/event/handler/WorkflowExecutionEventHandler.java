@@ -2,7 +2,7 @@ package com.bryanhuang.workflow.event.handler;
 
 import com.bryanhuang.workflow.event.EventEnvelope;
 import com.bryanhuang.workflow.event.execution.WorkflowExecutionEvent;
-import com.bryanhuang.workflow.service.WorkflowExecutionService;
+import com.bryanhuang.workflow.service.WorkflowExecutionOrchestratorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WorkflowExecutionEventHandler {
 
-    private final WorkflowExecutionService workflowExecutionService;
+    private final WorkflowExecutionOrchestratorService workflowExecutionOrchestratorService;
     private final ObjectMapper objectMapper;
 
     public void handle(EventEnvelope<?> envelope) {
@@ -27,7 +27,7 @@ public class WorkflowExecutionEventHandler {
                         envelope.getPayload(),
                         WorkflowExecutionEvent.class
                 );
-                workflowExecutionService.onCreated(event);
+                workflowExecutionOrchestratorService.onCreated(event);
             }
             case WORKFLOW_EXECUTION_STARTED ->
                 log.info("Handling WORKFLOW_EXECUTION_STARTED event");

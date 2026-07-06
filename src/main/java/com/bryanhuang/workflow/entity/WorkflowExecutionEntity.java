@@ -2,15 +2,12 @@ package com.bryanhuang.workflow.entity;
 
 
 import com.bryanhuang.workflow.model.JobStatus;
-import com.bryanhuang.workflow.entity.payload.WorkflowExecutionPayload;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -29,10 +26,6 @@ public class WorkflowExecutionEntity {
     @Enumerated(EnumType.STRING)
     private JobStatus status;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private WorkflowExecutionPayload executionPayload;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
@@ -45,7 +38,6 @@ public class WorkflowExecutionEntity {
             UUID workflowExecutionId,
             UUID workflowId,
             JobStatus status,
-            WorkflowExecutionPayload executionPayload,
             Instant createdAt,
             Instant startedAt,
             Instant completedAt
@@ -53,7 +45,6 @@ public class WorkflowExecutionEntity {
         this.workflowExecutionId = workflowExecutionId;
         this.workflowId = workflowId;
         this.status = status;
-        this.executionPayload = executionPayload;
         this.createdAt = createdAt;
         this.startedAt = startedAt;
         this.completedAt = completedAt;
