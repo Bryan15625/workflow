@@ -65,7 +65,7 @@ public class KafkaConfig {
 
         factory.setConsumerFactory(consumerFactory());
         factory.setCommonErrorHandler(new DefaultErrorHandler(
-                (record, ex) -> log.error("❌ Failed to deserialize/process record: {}", record, ex)
+                (record, ex) -> log.error("Failed to deserialize/process record: {}", record, ex)
         ));
         return factory;
     }
