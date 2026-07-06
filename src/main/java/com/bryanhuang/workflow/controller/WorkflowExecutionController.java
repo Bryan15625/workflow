@@ -2,7 +2,7 @@ package com.bryanhuang.workflow.controller;
 
 import com.bryanhuang.workflow.dto.response.CreateWorkflowExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
-import com.bryanhuang.workflow.service.WorkflowExecutionService;
+import com.bryanhuang.workflow.service.WorkflowExecutionOrchestratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,13 +20,13 @@ import java.util.UUID;
 @Slf4j
 public class WorkflowExecutionController {
 
-    private final WorkflowExecutionService workflowExecutionService;
+    private final WorkflowExecutionOrchestratorService workflowExecutionOrchestratorService;
 
     @PostMapping("/workflows/{workflowId}/executions")
     public ResponseEntity<CreateWorkflowExecutionResponse> createWorkflowExecution(@PathVariable UUID workflowId) {
         log.info("Received request to execute workflow with ID={}", workflowId);
 
-        CreateWorkflowExecutionResponse response = workflowExecutionService
+        CreateWorkflowExecutionResponse response = workflowExecutionOrchestratorService
                 .createWorkflowExecution(workflowId);
 
         URI location = URI.create(
@@ -42,7 +42,7 @@ public class WorkflowExecutionController {
     public ResponseEntity<WorkflowExecutionResponse> getExecutionStatus(@PathVariable UUID executionId) {
         log.info("Received request to get execution status for executionId={}", executionId);
 
-        WorkflowExecutionResponse response = workflowExecutionService
+        WorkflowExecutionResponse response = workflowExecutionOrchestratorService
                 .getWorkflowExecutionStatus(executionId);
 
         return ResponseEntity

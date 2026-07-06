@@ -7,7 +7,6 @@ import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionEntityMapper;
 import com.bryanhuang.workflow.model.Workflow;
-import com.bryanhuang.workflow.model.WorkflowExecution;
 import com.bryanhuang.workflow.repository.WorkflowExecutionRepository;
 import com.bryanhuang.workflow.repository.WorkflowRepository;
 import jakarta.transaction.Transactional;
@@ -37,12 +36,7 @@ public class WorkflowQueryService {
                 ));
     }
 
-    public WorkflowExecution findWorkflowExecution(UUID workflowExecutionId) {
-        WorkflowExecutionEntity entity = getWorkflowExecutionEntityById(workflowExecutionId);
-        return workflowExecutionEntityMapper.toWorkflowExecution(entity);
-    }
-
-    // TODO: replace error with custom exception
+    // TODO: remove this method
     public WorkflowExecutionEntity getWorkflowExecutionEntityById(UUID workflowExecutionId) {
         return workflowExecutionRepository.findById(workflowExecutionId)
                 .orElseThrow(() -> new WorkflowExecutionNotFoundException(
@@ -59,11 +53,13 @@ public class WorkflowQueryService {
 
     }
 
+    // TODO: REMOVE THIS METHOD
     @Transactional
     public WorkflowExecutionEntity saveWorkflowExecutionEntity(WorkflowExecutionEntity workflowExecutionEntity) {
 
         return workflowExecutionRepository.save(workflowExecutionEntity);
         // Ensure workflow name isn't already used in the DB
-
     }
+
+
 }

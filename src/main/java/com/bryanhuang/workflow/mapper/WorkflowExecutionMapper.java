@@ -2,6 +2,7 @@ package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.dto.StepExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
+import com.bryanhuang.workflow.model.StepExecutionStatus;
 import com.bryanhuang.workflow.model.WorkflowExecution;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +12,18 @@ import java.util.List;
 public class WorkflowExecutionMapper {
 
     public WorkflowExecutionResponse toWorkflowExecutionResponse(
-            WorkflowExecution workflowExecution
+            WorkflowExecution workflowExecution,
+            List<StepExecutionStatus> stepExecutionStatuses
     ) {
-        List<StepExecutionResponse> stepExecutionResponse = workflowExecution
-                .getStepStatuses().stream()
+        List<StepExecutionResponse> stepExecutionResponse = stepExecutionStatuses.stream()
                 .map(stepStatus -> StepExecutionResponse.builder()
+                        .stepExecutionId(stepStatus.getId())
                         .stepId(stepStatus.getStepId())
                         .stepName(stepStatus.getStepName())
                         .status(stepStatus.getStatus())
+                        .startedAt(stepStatus.getStartedAt())
+                        .completedAt(stepStatus.getCompletedAt())
+                        .dependsOnStepIds(stepStatus.getDependsOnStepIds())
                         .build())
                 .toList();
 
