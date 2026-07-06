@@ -52,7 +52,7 @@ public class TaskExecutionService {
     }
 
 
-    public void executeStep(UUID workflowExecutionId, Integer stepId) throws InterruptedException {
+    private void executeStep(UUID workflowExecutionId, Integer stepId) throws InterruptedException {
         try {
             log.info("Executing step {}", stepId);
             stepExecutionService.start(workflowExecutionId, stepId);
