@@ -13,6 +13,7 @@ import com.bryanhuang.workflow.mapper.StepExecutionStatusEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionMapper;
 import com.bryanhuang.workflow.model.*;
+import com.bryanhuang.workflow.redis.service.WorkflowExecutionRedisService;
 import com.bryanhuang.workflow.repository.StepExecutionStatusRepository;
 import com.bryanhuang.workflow.repository.WorkflowExecutionRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,8 @@ public class WorkflowExecutionOrchestratorService {
     private final TaskExecutionService taskExecutionService;
     private final WorkflowExecutionRepository workflowExecutionRepository;
     private final StepExecutionStatusRepository stepExecutionStatusRepository;
+    private final WorkflowExecutionRedisService workflowExecutionRedisService;
+    private final WorkflowExecutionWorker workflowExecutionWorker;
 
     public CreateWorkflowExecutionResponse createWorkflowExecution(UUID workflowId) {
 
@@ -121,9 +124,17 @@ public class WorkflowExecutionOrchestratorService {
 
     public void onCreated(WorkflowExecutionEvent event) {
         log.info("Change status to RUNNING for workflowExecutionId={}", event.getWorkflowExecutionId());
-        WorkflowExecutionEntity entity = workflowQueryService
-                .getWorkflowExecutionEntityById(event.getWorkflowExecutionId());
-        taskExecutionService.executeWorkflow(entity);
+        workflowExecutionWorker.executeWorkflow(event.getWorkflowExecutionId());
+    }
+
+    public void pauseExecution(UUID workflowExecutionId) {
+        workflowExecutionRedisService.setControl(workflowExecutionId, JobControl.PAUSE);
+    }
+    public void resumeExecution(UUID workflowExecutionId) {
+        workflowExecutionRedisService.setControl(workflowExecutionId, JobControl.RESUME);
+    }
+    public void terminateExecution(UUID workflowExecutionId) {
+        workflowExecutionRedisService.setControl(workflowExecutionId, JobControl.TERMINATE);
     }
 
 

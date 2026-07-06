@@ -30,7 +30,7 @@ public class WorkflowExecutionController {
                 .createWorkflowExecution(workflowId);
 
         URI location = URI.create(
-                "/executions/" + response.workflowExecutionId()
+                "/workflow-executions/" + response.workflowExecutionId()
         );
 
         return ResponseEntity
@@ -38,7 +38,7 @@ public class WorkflowExecutionController {
                 .body(response);
     }
 
-    @GetMapping("/executions/{executionId}")
+    @GetMapping("/workflow-executions/{executionId}")
     public ResponseEntity<WorkflowExecutionResponse> getExecutionStatus(@PathVariable UUID executionId) {
         log.info("Received request to get execution status for executionId={}", executionId);
 
@@ -49,4 +49,39 @@ public class WorkflowExecutionController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+    @PostMapping("/workflow-executions/{executionId}/pause")
+    public ResponseEntity<Void> pauseExecution(@PathVariable UUID executionId) {
+        log.info("Received request to pause execution for executionId={}", executionId);
+
+        workflowExecutionOrchestratorService.pauseExecution(executionId);
+
+        return ResponseEntity
+                .accepted()
+                .build();
+    }
+
+    @PostMapping("/workflow-executions/{executionId}/resume")
+    public ResponseEntity<Void> resumeExecution(@PathVariable UUID executionId) {
+        log.info("Received request to resume execution for executionId={}", executionId);
+
+        workflowExecutionOrchestratorService.resumeExecution(executionId);
+
+        return ResponseEntity
+                .accepted()
+                .build();
+    }
+
+    @PostMapping("/workflow-executions/{executionId}/terminate")
+    public ResponseEntity<Void> terminateExecution(@PathVariable UUID executionId) {
+        log.info("Received request to terminate execution for executionId={}", executionId);
+
+        workflowExecutionOrchestratorService.terminateExecution(executionId);
+
+        return ResponseEntity
+                .accepted()
+                .build();
+    }
+
+
 }
