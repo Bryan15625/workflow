@@ -46,13 +46,15 @@ public class WorkflowService {
         validateDag(workflow);
     }
 
-    /*
-    1. Step IDs are unique
-    2. Every dependency ID exists
-    3. There is at least one root step
-    4. There is at least one terminal step
-    5. No cycles exist
-    6. No duplicate dependencies per step
+
+    /**
+     *  1. Step IDs are unique
+     *  2. Every dependency ID exists
+     *  3. There is at least one root step
+     *  4. There is at least one terminal step
+     *  5. No cycles exist
+     *  6. No duplicate dependencies per step
+     * @param workflow
      */
     private void validateDag(Workflow workflow) {
         Set<Integer> stepIds = validateUniqueStepIds(workflow);
