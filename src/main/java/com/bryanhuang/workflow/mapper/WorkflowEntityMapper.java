@@ -23,6 +23,8 @@ public class WorkflowEntityMapper {
                 .workflowId(workflow.getWorkflowId())
                 .workflowName(workflow.getWorkflowName())
                 .workflowJson(payload)
+                .createdAt(workflow.getCreatedAt())
+                .updatedAt(workflow.getUpdatedAt())
                 .build();
     }
 
