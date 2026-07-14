@@ -26,7 +26,8 @@ public class TaskExecutionService {
         UUID workflowExecutionId = entity.getWorkflowExecutionId();
         try {
             workflowExecutionService.start(workflowExecutionId);
-            Workflow workflow = workflowQueryService.findWorkflow(entity.getWorkflowId());
+            Workflow workflow = workflowQueryService
+                    .findWorkflowEntityAndMapToWorkflow(entity.getWorkflowId());
 
             for (Step step : workflow.getSteps()) {
                 if (handleWorkflowControl(workflowExecutionId) == JobControl.TERMINATE) {
@@ -70,7 +71,7 @@ public class TaskExecutionService {
         if (control == null) {
             return JobControl.NONE;
         }
-        if (control == JobControl.PAUSE) {
+        else if (control == JobControl.PAUSE) {
             workflowExecutionService.pause(workflowExecutionId);
             log.info("Workflow execution paused");
 
@@ -92,7 +93,7 @@ public class TaskExecutionService {
                 }
             }
         }
-        if (control == JobControl.TERMINATE) {
+        else if (control == JobControl.TERMINATE) {
             terminateWorkflow(workflowExecutionId);
             return JobControl.TERMINATE;
         }
@@ -103,5 +104,4 @@ public class TaskExecutionService {
         log.info("Terminating workflow");
         workflowExecutionService.terminate(workflowExecutionId);
     }
-
 }
