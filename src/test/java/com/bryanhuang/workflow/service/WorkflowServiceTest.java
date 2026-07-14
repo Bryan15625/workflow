@@ -9,6 +9,7 @@ import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowMapper;
 import com.bryanhuang.workflow.model.Step;
 import com.bryanhuang.workflow.model.Workflow;
+import com.bryanhuang.workflow.repository.WorkflowRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,6 +40,9 @@ class WorkflowServiceTest {
 
     @Mock
     private WorkflowQueryService workflowQueryService;
+
+    @Mock
+    private WorkflowRepository workflowRepository;
 
     @InjectMocks
     private WorkflowService workflowService;
@@ -67,7 +72,9 @@ class WorkflowServiceTest {
                     .thenReturn(workflow);
             when(workflowEntityMapper.toWorkflowEntity(workflow))
                     .thenReturn(workflowEntity);
-            when(workflowQueryService.saveWorkflowEntity(workflowEntity))
+            when(workflowRepository.findByWorkflowName(any()))
+                    .thenReturn(Optional.empty());
+            when(workflowRepository.save(workflowEntity))
                     .thenReturn(savedEntity);
 
             // when
@@ -81,8 +88,9 @@ class WorkflowServiceTest {
             assertEquals(generatedId, response.workflowId());
 
             verify(workflowEntityMapper).toWorkflowEntity(workflow);
-            verify(workflowQueryService).saveWorkflowEntity(workflowEntity);
-            verifyNoMoreInteractions(workflowMapper, workflowEntityMapper, workflowQueryService);
+            verify(workflowRepository).findByWorkflowName(any());
+            verify(workflowRepository).save(workflowEntity);
+            verifyNoMoreInteractions(workflowMapper, workflowEntityMapper, workflowRepository);
         }
 
         @Test
@@ -277,7 +285,9 @@ class WorkflowServiceTest {
             WorkflowEntity savedEntity = mock(WorkflowEntity.class);
 
             when(workflowEntityMapper.toWorkflowEntity(workflow)).thenReturn(workflowEntity);
-            when(workflowQueryService.saveWorkflowEntity(workflowEntity)).thenReturn(savedEntity);
+            when(workflowRepository.findByWorkflowName(any()))
+                    .thenReturn(Optional.empty());
+            when(workflowRepository.save(workflowEntity)).thenReturn(savedEntity);
 
             // when
             CreateWorkflowResponse response = workflowService.createWorkflow(request);
@@ -287,14 +297,63 @@ class WorkflowServiceTest {
             // and must be passed through to the mapper (verified via interaction).
             verify(workflowMapper).toWorkflow(any(UUID.class), eq(request));
             verify(workflowEntityMapper).toWorkflowEntity(workflow);
-            verify(workflowQueryService).saveWorkflowEntity(workflowEntity);
-            verifyNoMoreInteractions(workflowMapper, workflowEntityMapper, workflowQueryService);
+            verify(workflowRepository).findByWorkflowName(any());
+            verify(workflowRepository).save(workflowEntity);
+            verifyNoMoreInteractions(workflowMapper, workflowEntityMapper, workflowRepository);
 
             // Basic sanity check on response
             UUID workflowId = response.workflowId();
             // Ensure response contains some ID
             // (the detailed wiring is already covered in the first createWorkflow test)
             assertEquals(workflowId, response.workflowId());
+        }
+
+        @Test
+        void createWorkflow_shouldFailWhenWorkflowNameExists() {
+            CreateWorkflowRequest request = mock(CreateWorkflowRequest.class);
+
+            Workflow workflow = mock(Workflow.class);
+            Step step1 = mock(Step.class);
+            Step step2 = mock(Step.class);
+            Step step3 = mock(Step.class);
+
+            /*
+             * Valid DAG:
+             * 1 (root)
+             * 2 depends on 1
+             * 3 depends on 1
+             */
+            when(step1.getStepId()).thenReturn(1);
+            when(step1.getDependsOnStepIds()).thenReturn(List.of());            // root
+
+            when(step2.getStepId()).thenReturn(2);
+            when(step2.getDependsOnStepIds()).thenReturn(List.of(1));
+
+            when(step3.getStepId()).thenReturn(3);
+            when(step3.getDependsOnStepIds()).thenReturn(List.of(1));
+
+            when(workflow.getSteps()).thenReturn(List.of(step1, step2, step3));
+            when(workflowMapper.toWorkflow(any(UUID.class), eq(request))).thenReturn(workflow);
+
+            WorkflowEntity workflowEntity = mock(WorkflowEntity.class);
+            when(workflowEntity.getWorkflowName()).thenReturn("existing-workflow");
+
+            when(workflowEntityMapper.toWorkflowEntity(workflow)).thenReturn(workflowEntity);
+            when(workflowRepository.findByWorkflowName("existing-workflow"))
+                    .thenReturn(Optional.of(mock(WorkflowEntity.class)));
+
+            // when
+            InvalidWorkflowException ex = assertThrows(
+                    InvalidWorkflowException.class,
+                    () -> workflowService.createWorkflow(request)
+            );
+            assertEquals("Workflow name already exists", ex.getMessage());
+
+            verify(workflowMapper).toWorkflow(any(UUID.class), eq(request));
+            verify(workflowEntityMapper).toWorkflowEntity(workflow);
+            verify(workflowRepository).findByWorkflowName("existing-workflow");
+            verify(workflowRepository, never()).save(any());
+            verifyNoMoreInteractions(workflowMapper, workflowEntityMapper, workflowRepository);
         }
     }
 
@@ -309,7 +368,7 @@ class WorkflowServiceTest {
             Workflow workflow = mock(Workflow.class);
             WorkflowResponse expectedResponse = mock(WorkflowResponse.class);
 
-            when(workflowQueryService.findWorkflow(workflowId)).thenReturn(workflow);
+            when(workflowQueryService.findWorkflowEntityAndMapToWorkflow(workflowId)).thenReturn(workflow);
             when(workflowMapper.toWorkflowResponse(workflow)).thenReturn(expectedResponse);
 
             // when
@@ -317,7 +376,7 @@ class WorkflowServiceTest {
 
             // then
             assertSame(expectedResponse, actualResponse);
-            verify(workflowQueryService).findWorkflow(workflowId);
+            verify(workflowQueryService).findWorkflowEntityAndMapToWorkflow(workflowId);
             verify(workflowMapper).toWorkflowResponse(workflow);
             verifyNoMoreInteractions(workflowQueryService, workflowMapper);
         }

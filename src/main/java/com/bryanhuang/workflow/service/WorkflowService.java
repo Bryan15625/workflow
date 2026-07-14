@@ -9,6 +9,7 @@ import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowMapper;
 import com.bryanhuang.workflow.model.Workflow;
 import com.bryanhuang.workflow.model.Step;
+import com.bryanhuang.workflow.repository.WorkflowRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
@@ -24,6 +25,7 @@ public class WorkflowService {
     private final WorkflowMapper workflowMapper;
     private final WorkflowEntityMapper workflowEntityMapper;
     private final WorkflowQueryService workflowQueryService;
+    private final WorkflowRepository workflowRepository;
 
     public CreateWorkflowResponse createWorkflow(CreateWorkflowRequest request) {
         UUID workflowId = UUID.randomUUID();
@@ -31,14 +33,24 @@ public class WorkflowService {
         Workflow workflow = workflowMapper.toWorkflow(workflowId, request);
         validateWorkflow(workflow);
         WorkflowEntity workflowEntity = workflowEntityMapper.toWorkflowEntity(workflow);
-        WorkflowEntity saved = workflowQueryService.saveWorkflowEntity(workflowEntity);
+        WorkflowEntity saved = saveWorkflow(workflowEntity);
 
         return new CreateWorkflowResponse(workflowId);
     }
 
     public WorkflowResponse getWorkflow(UUID workflowId) {
-        Workflow workflow = workflowQueryService.findWorkflow(workflowId);
+        Workflow workflow = workflowQueryService.findWorkflowEntityAndMapToWorkflow(workflowId);
         return workflowMapper.toWorkflowResponse(workflow);
+    }
+
+    private WorkflowEntity saveWorkflow(WorkflowEntity entity) {
+        String name = entity.getWorkflowName();
+        if (workflowRepository.findByWorkflowName(name).isPresent()) {
+            throw new InvalidWorkflowException("Workflow name already exists");
+        }
+
+        return workflowRepository.save(entity);
+
     }
 
 

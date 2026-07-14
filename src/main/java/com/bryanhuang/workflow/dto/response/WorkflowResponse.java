@@ -3,10 +3,7 @@ package com.bryanhuang.workflow.dto.response;
 import com.bryanhuang.workflow.dto.InputDto;
 import com.bryanhuang.workflow.dto.ProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Builder
+@NoArgsConstructor
 public class WorkflowResponse {
     private String workflowName;
     private ProfileDto profileDto;
