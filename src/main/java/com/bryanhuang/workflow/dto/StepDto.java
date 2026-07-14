@@ -18,7 +18,7 @@ public class StepDto {
     @NotNull(message = "Step name is required and cannot be blank")
     private StepName stepName;
 
-    @NotNull(message = "Next step IDs are required and must not be empty")
+    @NotNull(message = "Dependent IDs are required and cannot be blank")
     private List<Integer> dependsOnStepIds;
 
     public StepDto(
