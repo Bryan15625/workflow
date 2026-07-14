@@ -1,14 +1,19 @@
 package com.bryanhuang.workflow.service;
 
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.exception.InvalidWorkflowException;
+import com.bryanhuang.workflow.exception.WorkflowExecutionNotFoundException;
+import com.bryanhuang.workflow.repository.WorkflowExecutionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
@@ -21,7 +26,7 @@ class WorkflowExecutionWorkerTest {
     private TaskExecutionService taskExecutionService;
 
     @Mock
-    private WorkflowQueryService workflowQueryService;
+    private WorkflowExecutionRepository workflowExecutionRepository;
 
     @InjectMocks
     private WorkflowExecutionWorker workflowExecutionWorker;
@@ -32,15 +37,34 @@ class WorkflowExecutionWorkerTest {
         UUID executionId = UUID.randomUUID();
         WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
 
-        when(workflowQueryService.getWorkflowExecutionEntityById(executionId))
-                .thenReturn(entity);
+        when(workflowExecutionRepository.findById(executionId))
+                .thenReturn(Optional.ofNullable(entity));
 
         // when
         workflowExecutionWorker.executeWorkflow(executionId);
 
         // then
-        verify(workflowQueryService).getWorkflowExecutionEntityById(executionId);
+        verify(workflowExecutionRepository).findById(executionId);
         verify(taskExecutionService).executeWorkflow(entity);
-        verifyNoMoreInteractions(workflowQueryService, taskExecutionService);
+        verifyNoMoreInteractions(workflowExecutionRepository, taskExecutionService);
+    }
+
+    @Test
+    void executeWorkflow_workflowNotFound() {
+        // given
+        UUID executionId = UUID.randomUUID();
+        WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
+
+        when(workflowExecutionRepository.findById(executionId))
+                .thenReturn(Optional.empty());
+
+        // when
+        WorkflowExecutionNotFoundException ex = assertThrows(
+                WorkflowExecutionNotFoundException.class,
+                () -> workflowExecutionWorker.executeWorkflow(executionId)
+        );
+        // then
+        verify(workflowExecutionRepository).findById(executionId);
+        verifyNoMoreInteractions(workflowExecutionRepository);
     }
 }
