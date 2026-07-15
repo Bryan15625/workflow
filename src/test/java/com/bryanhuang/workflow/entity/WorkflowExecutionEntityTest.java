@@ -144,6 +144,17 @@ public class WorkflowExecutionEntityTest {
         }
 
         @Test
+        @DisplayName("terminate() should transition from PAUSED to TERMINATED and set completedAt")
+        void terminateFromPaused() {
+            WorkflowExecutionEntity entity = createEntityWithStatus(JobStatus.PAUSED);
+
+            entity.terminate();
+
+            assertEquals(JobStatus.TERMINATED, entity.getStatus());
+            assertNotNull(entity.getCompletedAt(), "completedAt should be set when terminating");
+        }
+
+        @Test
         @DisplayName("terminate() should fail when status is not RUNNING")
         void terminateFromNonRunningShouldThrow() {
             for (JobStatus status : JobStatus.values()) {

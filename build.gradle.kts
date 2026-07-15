@@ -60,6 +60,15 @@ tasks.jacocoTestReport {
 		xml.required.set(true)
 		csv.required.set(false)
 	}
+	classDirectories.setFrom(
+		files(classDirectories.files.map { file ->
+			fileTree(file) {
+				exclude("**/com/bryanhuang/workflow/WorkflowApplication.class")
+				exclude("**/com/bryanhuang/workflow/kafka/config/")
+				exclude("**/com/bryanhuang/workflow/redis/config")
+			}
+		})
+	)
 }
 
 tasks.jacocoTestCoverageVerification {
