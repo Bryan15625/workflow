@@ -43,7 +43,7 @@ public class WorkflowExecutionOrchestratorService {
 
         WorkflowExecution workflowExecution = buildWorkflowExecutionObject(workflowId);
         List<StepExecutionStatus> stepStatuses = buildStepExecutionStatus(
-                workflowId, workflowExecution.getWorkflowExecutionId());
+                workflowId);
 
         WorkflowExecutionEntity executionEntity = workflowExecutionEntityMapper
                 .toWorkflowExecutionEntity(workflowExecution);
@@ -82,7 +82,8 @@ public class WorkflowExecutionOrchestratorService {
         List<StepExecutionStatusEntity> stepStatusEntities = stepExecutionStatusRepository
                 .findByWorkflowExecutionEntityOrderByStepIdAsc(workflowExecutionEntity);
 
-        WorkflowExecution workflowExecution = workflowExecutionEntityMapper.toWorkflowExecution(workflowExecutionEntity);
+        WorkflowExecution workflowExecution = workflowExecutionEntityMapper
+                .toWorkflowExecution(workflowExecutionEntity);
         List<StepExecutionStatus> stepExecutionStatuses = stepStatusEntities.stream().map(
                 stepExecutionStatusEntityMapper::toStepExecutionStatus
         ).toList();
@@ -100,15 +101,7 @@ public class WorkflowExecutionOrchestratorService {
                 .build();
     }
 
-    private WorkflowExecutionEntity findWorkflowExecutionEntity(UUID workflowExecutionId) {
-        return workflowExecutionRepository
-                .findById(workflowExecutionId)
-                .orElseThrow(() -> new WorkflowExecutionNotFoundException(
-                        "Workflow execution not found with id: " + workflowExecutionId
-                ));
-    }
-
-    public List<StepExecutionStatus> buildStepExecutionStatus(UUID workflowId, UUID executionId) {
+    public List<StepExecutionStatus> buildStepExecutionStatus(UUID workflowId) {
         List<Step> steps = workflowQueryService.findWorkflowEntityAndMapToWorkflow(workflowId).getSteps();
 
         return steps.stream()
@@ -142,5 +135,12 @@ public class WorkflowExecutionOrchestratorService {
         workflowExecutionRedisService.setControl(workflowExecutionId, JobControl.TERMINATE);
     }
 
+    private WorkflowExecutionEntity findWorkflowExecutionEntity(UUID workflowExecutionId) {
+        return workflowExecutionRepository
+                .findById(workflowExecutionId)
+                .orElseThrow(() -> new WorkflowExecutionNotFoundException(
+                        "Workflow execution not found with id: " + workflowExecutionId
+                ));
+    }
 
 }

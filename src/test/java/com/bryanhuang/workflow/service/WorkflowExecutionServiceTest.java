@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WorkflowExecutionServiceTest {
+class WorkflowExecutionServiceTest {
 
     @Mock
     private WorkflowExecutionRepository workflowExecutionRepository;
