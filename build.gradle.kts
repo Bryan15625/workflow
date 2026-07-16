@@ -66,6 +66,8 @@ tasks.jacocoTestReport {
 				exclude("**/com/bryanhuang/workflow/WorkflowApplication.class")
 				exclude("**/com/bryanhuang/workflow/kafka/config/")
 				exclude("**/com/bryanhuang/workflow/redis/config")
+				exclude("**/com/bryanhuang/workflow/exception/*Exception.class")
+				exclude("**/com/bryanhuang/workflow/model/IssueType.class")
 			}
 		})
 	)

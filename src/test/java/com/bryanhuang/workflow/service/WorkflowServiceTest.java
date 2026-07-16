@@ -4,6 +4,7 @@ import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.entity.WorkflowEntity;
+import com.bryanhuang.workflow.exception.CycleDetectedException;
 import com.bryanhuang.workflow.exception.InvalidWorkflowException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowMapper;
@@ -242,8 +243,8 @@ class WorkflowServiceTest {
             when(workflowMapper.toWorkflow(any(UUID.class), eq(request))).thenReturn(workflow);
 
             // when / then
-            InvalidWorkflowException ex = assertThrows(
-                    InvalidWorkflowException.class,
+            CycleDetectedException ex = assertThrows(
+                    CycleDetectedException.class,
                     () -> workflowService.createWorkflow(request)
             );
 

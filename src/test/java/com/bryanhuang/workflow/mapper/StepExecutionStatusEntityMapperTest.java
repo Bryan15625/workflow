@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class StepExecutionStatusEntityMapperTest {
+class StepExecutionStatusEntityMapperTest {
 
     private final StepExecutionStatusEntityMapper mapper = new StepExecutionStatusEntityMapper();
 

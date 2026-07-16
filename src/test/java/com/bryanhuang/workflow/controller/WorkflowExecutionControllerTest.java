@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(WorkflowExecutionController.class)
-public class WorkflowExecutionControllerTests {
+class WorkflowExecutionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

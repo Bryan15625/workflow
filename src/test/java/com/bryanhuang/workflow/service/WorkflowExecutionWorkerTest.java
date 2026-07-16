@@ -1,7 +1,6 @@
 package com.bryanhuang.workflow.service;
 
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.exception.InvalidWorkflowException;
 import com.bryanhuang.workflow.exception.WorkflowExecutionNotFoundException;
 import com.bryanhuang.workflow.repository.WorkflowExecutionRepository;
 import org.junit.jupiter.api.Test;

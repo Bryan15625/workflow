@@ -4,6 +4,7 @@ import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.entity.WorkflowEntity;
+import com.bryanhuang.workflow.exception.CycleDetectedException;
 import com.bryanhuang.workflow.exception.InvalidWorkflowException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowMapper;
@@ -142,7 +143,7 @@ public class WorkflowService {
 
         for (Integer stepId : adjacencyList.keySet()) {
             if (hasCycle(stepId, adjacencyList, visiting, visited)) {
-                throw new InvalidWorkflowException("Cycle detected in workflow");
+                throw new CycleDetectedException("Cycle detected in workflow");
             }
         }
 

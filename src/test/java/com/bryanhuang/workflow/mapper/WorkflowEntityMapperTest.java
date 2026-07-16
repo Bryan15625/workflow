@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class WorkflowEntityMapperTest {
+class WorkflowEntityMapperTest {
 
     private final WorkflowEntityMapper mapper = new WorkflowEntityMapper();
 
