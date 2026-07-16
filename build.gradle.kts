@@ -47,6 +47,15 @@ jacoco {
 	toolVersion = "0.8.12"
 }
 
+val jacocoExcludes = listOf(
+	"**/com/bryanhuang/workflow/WorkflowApplication.class",
+	"**/com/bryanhuang/workflow/kafka/config/",
+	"**/com/bryanhuang/workflow/redis/config",
+	"**/com/bryanhuang/workflow/exception/*Exception.class",
+	"**/com/bryanhuang/workflow/model/IssueType.class"
+)
+
+
 tasks.test {
 	useJUnitPlatform()
 	finalizedBy(tasks.jacocoTestReport)
@@ -63,11 +72,7 @@ tasks.jacocoTestReport {
 	classDirectories.setFrom(
 		files(classDirectories.files.map { file ->
 			fileTree(file) {
-				exclude("**/com/bryanhuang/workflow/WorkflowApplication.class")
-				exclude("**/com/bryanhuang/workflow/kafka/config/")
-				exclude("**/com/bryanhuang/workflow/redis/config")
-				exclude("**/com/bryanhuang/workflow/exception/*Exception.class")
-				exclude("**/com/bryanhuang/workflow/model/IssueType.class")
+				exclude(jacocoExcludes)
 			}
 		})
 	)
@@ -75,6 +80,14 @@ tasks.jacocoTestReport {
 
 tasks.jacocoTestCoverageVerification {
 	dependsOn(tasks.test)
+
+	classDirectories.setFrom(
+		files(classDirectories.files.map {
+			fileTree(it) {
+				exclude(jacocoExcludes)
+			}
+		})
+	)
 
 	violationRules {
 		rule {

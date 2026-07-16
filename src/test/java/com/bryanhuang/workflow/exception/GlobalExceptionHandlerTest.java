@@ -108,6 +108,36 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void handleCycleDetectedException_returnsBadRequestWithCycleError() {
+        CycleDetectedException exception =
+                new CycleDetectedException("Cycle detected in workflow");
+
+        ResponseEntity<ErrorResponse> response =
+                globalExceptionHandler.handleCycleDetectedException(exception);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Invalid workflow");
+        assertThat(response.getBody().errors())
+                .containsEntry("cycle", "Cycle detected in workflow");
+    }
+
+    @Test
+    void handleInvalidWorkflowException_returnsBadRequestWithWorkflowError() {
+        InvalidWorkflowException exception =
+                new InvalidWorkflowException("Workflow must contain at least one terminal step");
+
+        ResponseEntity<ErrorResponse> response =
+                globalExceptionHandler.handleInvalidWorkflowException(exception);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Invalid workflow");
+        assertThat(response.getBody().errors())
+                .containsEntry("workflow", "Workflow must contain at least one terminal step");
+    }
+
+    @Test
     void handleGenericException_returnsInternalServerErrorResponse() {
         Exception exception = new RuntimeException("Something went wrong");
 
