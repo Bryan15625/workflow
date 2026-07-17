@@ -590,7 +590,7 @@ class WorkflowControllerTest {
 
 
             mockMvc.perform(get("/workflows/{workflowId}", workflowId))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("Workflow not found"))
                     .andExpect(jsonPath("$.errors.workflow").isNotEmpty());
         }

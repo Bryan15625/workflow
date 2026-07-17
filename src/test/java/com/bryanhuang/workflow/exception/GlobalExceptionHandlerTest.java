@@ -150,4 +150,39 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getBody().errors())
                 .containsEntry("error", "Something went wrong");
     }
+
+    @Test
+    void handleWorkflowNotFoundException_returns404WithExpectedErrorResponse() {
+        // given
+        String message = "Workflow with id=123 not found";
+        WorkflowNotFoundException ex = new WorkflowNotFoundException(message);
+
+        // when
+        ResponseEntity<ErrorResponse> response = globalExceptionHandler
+                .handleWorkflowNotFoundException(ex);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Workflow not found");
+        assertThat(response.getBody().errors())
+                .containsEntry("workflow", message);
+    }
+
+    @Test
+    void handleWorkflowExecutionNotFoundException_returns404WithExpectedErrorResponse() {
+        // given
+        String message = "Execution with id=456 not found";
+        WorkflowExecutionNotFoundException ex = new WorkflowExecutionNotFoundException(message);
+
+        // when
+        ResponseEntity<ErrorResponse> response = globalExceptionHandler.handleWorkflowExecutionNotFoundException(ex);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Workflow execution not found");
+        assertThat(response.getBody().errors())
+                .containsEntry("execution", message);
+    }
 }

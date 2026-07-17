@@ -63,7 +63,7 @@ class WorkflowExecutionControllerTest {
                     .thenThrow(new WorkflowNotFoundException("Workflow not found with id: {workflowId}"));
 
             mockMvc.perform(post("/workflows/{workflowId}/executions", workflowId))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("Workflow not found"))
                     .andExpect(jsonPath("$.errors.workflow").isNotEmpty());
 
@@ -109,7 +109,7 @@ class WorkflowExecutionControllerTest {
                     .thenThrow(new WorkflowExecutionNotFoundException("Workflow execution not found with id: {workflowExecutionId}"));
 
             mockMvc.perform(get("/workflow-executions/{executionId}", workflowExecutionId))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("Workflow execution not found"))
                     .andExpect(jsonPath("$.errors.execution").isNotEmpty());
 
@@ -138,7 +138,7 @@ class WorkflowExecutionControllerTest {
                     .pauseExecution(workflowExecutionId);
 
             mockMvc.perform(post("/workflow-executions/{executionId}/pause", workflowExecutionId))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("Workflow execution not found"))
                     .andExpect(jsonPath("$.errors.execution").isNotEmpty());
         }
@@ -166,7 +166,7 @@ class WorkflowExecutionControllerTest {
                     .resumeExecution(workflowExecutionId);
 
             mockMvc.perform(post("/workflow-executions/{executionId}/resume", workflowExecutionId))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("Workflow execution not found"))
                     .andExpect(jsonPath("$.errors.execution").isNotEmpty());
         }
@@ -194,7 +194,7 @@ class WorkflowExecutionControllerTest {
                     .terminateExecution(workflowExecutionId);
 
             mockMvc.perform(post("/workflow-executions/{executionId}/terminate", workflowExecutionId))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("Workflow execution not found"))
                     .andExpect(jsonPath("$.errors.execution").isNotEmpty());
         }
