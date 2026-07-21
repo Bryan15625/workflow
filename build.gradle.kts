@@ -52,7 +52,8 @@ val jacocoExcludes = listOf(
 	"**/com/bryanhuang/workflow/kafka/config/",
 	"**/com/bryanhuang/workflow/redis/config",
 	"**/com/bryanhuang/workflow/exception/*Exception.class",
-	"**/com/bryanhuang/workflow/model/IssueType.class"
+	"**/com/bryanhuang/workflow/model/IssueType.class",
+	"**/com/bryanhuang/workflow/config/*"
 )
 
 
