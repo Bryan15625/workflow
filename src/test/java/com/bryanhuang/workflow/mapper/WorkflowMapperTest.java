@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.mapper;
 
-import com.bryanhuang.workflow.dto.InputDto;
+import com.bryanhuang.workflow.dto.DataDto;
 import com.bryanhuang.workflow.dto.ProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
@@ -38,9 +38,9 @@ class WorkflowMapperTest {
                     .goal(Goal.FAT_LOSS)
                     .build();
 
-            InputDto input = InputDto.builder()
-                    .sourceFilePath("/input")
-                    .resultFilePath("/output")
+            DataDto data = DataDto.builder()
+                    .input("workout.csv")
+                    .output("summary.txt")
                     .build();
 
             List<StepDto> steps = List.of(
@@ -54,7 +54,7 @@ class WorkflowMapperTest {
             CreateWorkflowRequest request = CreateWorkflowRequest.builder()
                     .workflowName(workflowName)
                     .profile(profile)
-                    .input(input)
+                    .data(data)
                     .steps(steps)
                     .build();
 
@@ -74,9 +74,9 @@ class WorkflowMapperTest {
             assertEquals(profile.getSex(), workflowProfile.getSex());
             assertEquals(profile.getGoal(), workflowProfile.getGoal());
 
-            Input workflowInput = workflow.getInput();
-            assertEquals(input.getSourceFilePath(), workflowInput.getSourceFilePath());
-            assertEquals(input.getResultFilePath(), workflowInput.getResultFilePath());
+            Data workflowData = workflow.getData();
+            assertEquals(data.getInput(), workflowData.getInput());
+            assertEquals(data.getOutput(), workflowData.getOutput());
 
             List<Step> workflowSteps = workflow.getSteps();
             assertEquals(1, workflowSteps.size());
@@ -104,9 +104,9 @@ class WorkflowMapperTest {
                     .goal(Goal.MUSCLE_GAIN)
                     .build();
 
-            Input input = Input.builder()
-                    .sourceFilePath("/input")
-                    .resultFilePath("/output")
+            Data data = Data.builder()
+                    .input("workout.csv")
+                    .output("summary.txt")
                     .build();
 
             List<Step> steps = List.of(
@@ -126,7 +126,7 @@ class WorkflowMapperTest {
                     .workflowId(UUID.randomUUID())
                     .workflowName(workflowName)
                     .profile(profile)
-                    .input(input)
+                    .data(data)
                     .steps(steps)
                     .createdAt(createdAt)
                     .updatedAt(updatedAt)
@@ -145,9 +145,9 @@ class WorkflowMapperTest {
             assertEquals(profile.getSex(), profileDto.getSex());
             assertEquals(profile.getGoal(), profileDto.getGoal());
 
-            InputDto inputDto = response.getInputDto();
-            assertEquals(input.getSourceFilePath(), inputDto.getSourceFilePath());
-            assertEquals(input.getResultFilePath(), inputDto.getResultFilePath());
+            DataDto dataDto = response.getDataDto();
+            assertEquals(data.getInput(), dataDto.getInput());
+            assertEquals(data.getOutput(), dataDto.getOutput());
 
             List<StepDto> stepDtos = response.getStepDtos();
             assertEquals(2, stepDtos.size());
@@ -189,20 +189,20 @@ class WorkflowMapperTest {
     }
 
     @Nested
-    @DisplayName("toInput")
-    class ToInputTests {
+    @DisplayName("toData")
+    class ToDataTests {
 
         @Test
-        void toInput_shouldMapAllFields() {
-            InputDto dto = InputDto.builder()
-                    .sourceFilePath("/src")
-                    .resultFilePath("/res")
+        void toData_shouldMapAllFields() {
+            DataDto dto = DataDto.builder()
+                    .input("workout.csv")
+                    .output("summary.txt")
                     .build();
 
-            Input input = mapper.toInput(dto);
+            Data data = mapper.toData(dto);
 
-            assertEquals(dto.getSourceFilePath(), input.getSourceFilePath());
-            assertEquals(dto.getResultFilePath(), input.getResultFilePath());
+            assertEquals(dto.getInput(), data.getInput());
+            assertEquals(dto.getOutput(), data.getOutput());
         }
     }
 
@@ -265,20 +265,20 @@ class WorkflowMapperTest {
     }
 
     @Nested
-    @DisplayName("toInputDto")
-    class ToInputDtoTests {
+    @DisplayName("toDataDto")
+    class ToDataDtoTests {
 
         @Test
-        void toInputDto_shouldMapAllFields() {
-            Input input = Input.builder()
-                    .sourceFilePath("/a")
-                    .resultFilePath("/b")
+        void toDataDto_shouldMapAllFields() {
+            Data data = Data.builder()
+                    .input("workout.csv")
+                    .output("summary.txt")
                     .build();
 
-            InputDto dto = mapper.toInputDto(input);
+            DataDto dto = mapper.toDataDto(data);
 
-            assertEquals(input.getSourceFilePath(), dto.getSourceFilePath());
-            assertEquals(input.getResultFilePath(), dto.getResultFilePath());
+            assertEquals(data.getInput(), dto.getInput());
+            assertEquals(data.getOutput(), dto.getOutput());
         }
     }
 

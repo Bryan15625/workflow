@@ -55,9 +55,9 @@ class WorkflowControllerTest {
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS"
                                       },
-                                      "input": {
-                                          "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                          "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                      "data": {
+                                          "input": "workout_data.csv",
+                                          "output": "summary.txt"
                                       },
                                       "steps": [
                                           {
@@ -87,9 +87,9 @@ class WorkflowControllerTest {
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS"
                                       },
-                                      "input": {
-                                          "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                          "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                      "data": {
+                                          "input": "workout_data.csv",
+                                          "output": "summary.txt"
                                       },
                                       "steps": [
                                           {
@@ -115,9 +115,9 @@ class WorkflowControllerTest {
                             .content("""
                                     {
                                       "workflowName": "any non empty string works",
-                                      "input": {
-                                          "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                          "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                      "data": {
+                                          "input": "workout_data.csv",
+                                          "output": "summary.txt"
                                       },
                                       "steps": [
                                           {
@@ -135,8 +135,8 @@ class WorkflowControllerTest {
         }
 
         @Test
-        @DisplayName("CreateWorkflowRequest: Fails when Input is not provided")
-        void failsWhenInputBlank() throws Exception {
+        @DisplayName("CreateWorkflowRequest: Fails when Data is not provided")
+        void failsWhenDataBlank() throws Exception {
             mockMvc.perform(post("/workflows")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("""
@@ -160,8 +160,8 @@ class WorkflowControllerTest {
                                 """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors.input")
-                            .value("Input is required"));
+                    .andExpect(jsonPath("$.errors.data")
+                            .value("Data is required"));
         }
 
         @Test
@@ -179,9 +179,9 @@ class WorkflowControllerTest {
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS"
                                       },
-                                      "input": {
-                                          "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                          "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                      "data": {
+                                          "input": "workout_data.csv",
+                                          "output": "summary.txt"
                                       }
                                   }
                                 """))
@@ -205,9 +205,9 @@ class WorkflowControllerTest {
                                   "sex": "MALE",
                                   "goal": "FAT_LOSS"
                               },
-                              "input": {
-                                  "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                  "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                              "data": {
+                                  "input": "workout_data.csv",
+                                  "output": "summary.txt"
                               },
                               "steps": [
                                   {
@@ -238,9 +238,9 @@ class WorkflowControllerTest {
                                   "sex": "MALE",
                                   "goal": "FAT_LOSS"
                               },
-                              "input": {
-                                  "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                  "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                              "data": {
+                                  "input": "workout_data.csv",
+                                  "output": "summary.txt"
                               },
                               "steps": [
                                   {
@@ -271,9 +271,9 @@ class WorkflowControllerTest {
                                   "sex": "MALE",
                                   "goal": "FAT_LOSS"
                               },
-                              "input": {
-                                  "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                  "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                              "data": {
+                                  "input": "workout_data.csv",
+                                  "output": "summary.txt"
                               },
                               "steps": [
                                   {
@@ -304,9 +304,9 @@ class WorkflowControllerTest {
                                   "heightCm": 174,
                                   "goal": "FAT_LOSS"
                               },
-                              "input": {
-                                  "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                  "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                              "data": {
+                                  "input": "workout_data.csv",
+                                  "output": "summary.txt"
                               },
                               "steps": [
                                   {
@@ -337,9 +337,9 @@ class WorkflowControllerTest {
                                   "heightCm": 174,
                                   "sex": "MALE"
                               },
-                              "input": {
-                                  "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                  "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                              "data": {
+                                  "input": "workout_data.csv",
+                                  "output": "summary.txt"
                               },
                               "steps": [
                                   {
@@ -357,8 +357,8 @@ class WorkflowControllerTest {
         }
 
         @Test
-        @DisplayName("InputDto: Fails when sourceFilePath is not provided")
-        void failsWhenSourceFilePathMissing() throws Exception {
+        @DisplayName("DataDto: Fails when input is not provided")
+        void failsWhenInputMissing() throws Exception {
             mockMvc.perform(post("/workflows")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("""
@@ -371,8 +371,8 @@ class WorkflowControllerTest {
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS"
                                       },
-                                      "input": {
-                                          "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                      "data": {
+                                          "output": "summary.txt"
                                       },
                                       "steps": [
                                           {
@@ -385,13 +385,13 @@ class WorkflowControllerTest {
                                 """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors['input.sourceFilePath']")
-                            .value("Source file path is required and cannot be blank"));
+                    .andExpect(jsonPath("$.errors['data.input']")
+                            .value("Input is required and cannot be blank"));
         }
 
         @Test
-        @DisplayName("InputDto: Fails when resultFilePath is not provided")
-        void failsWhenResultFilePathMissing() throws Exception {
+        @DisplayName("DataDto: Fails when output is not provided")
+        void failsWhenOutputMissing() throws Exception {
             mockMvc.perform(post("/workflows")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("""
@@ -404,8 +404,8 @@ class WorkflowControllerTest {
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS"
                                       },
-                                      "input": {
-                                          "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv"
+                                      "data": {
+                                          "input": "workout_data.csv"
                                       },
                                       "steps": [
                                           {
@@ -418,8 +418,8 @@ class WorkflowControllerTest {
                                 """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors['input.resultFilePath']")
-                            .value("Result file path is required and cannot be blank"));
+                    .andExpect(jsonPath("$.errors['data.output']")
+                            .value("Output is required and cannot be blank"));
         }
 
         @Test
@@ -437,9 +437,9 @@ class WorkflowControllerTest {
                                       "sex": "MALE",
                                       "goal": "FAT_LOSS"
                                   },
-                                  "input": {
-                                      "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                      "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                  "data": {
+                                      "input": "workout_data.csv",
+                                      "output": "summary.txt"
                                   },
                                   "steps": [
                                       {
@@ -470,9 +470,9 @@ class WorkflowControllerTest {
                                      "sex": "MALE",
                                      "goal": "FAT_LOSS"
                                  },
-                                 "input": {
-                                     "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                     "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                 "data": {
+                                     "input": "workout_data.csv",
+                                     "output": "summary.txt"
                                  },
                                  "steps": [
                                      {
@@ -503,9 +503,9 @@ class WorkflowControllerTest {
                                      "sex": "MALE",
                                      "goal": "FAT_LOSS"
                                  },
-                                 "input": {
-                                     "sourceFilePath": "/Users/bryanhuang/Documents/workout_data.csv",
-                                     "resultFilePath": "/Users/bryanhuang/Documents/summary.txt"
+                                 "data": {
+                                     "input": "workout_data.csv",
+                                     "output": "summary.txt"
                                  },
                                  "steps": [
                                      {

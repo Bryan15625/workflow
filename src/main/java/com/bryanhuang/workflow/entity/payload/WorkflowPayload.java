@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.entity.payload;
 
-import com.bryanhuang.workflow.model.Input;
+import com.bryanhuang.workflow.model.Data;
 import com.bryanhuang.workflow.model.Profile;
 import com.bryanhuang.workflow.model.Step;
 import lombok.Builder;
@@ -12,16 +12,16 @@ import java.util.List;
 @Builder
 public class WorkflowPayload {
     private Profile profile;
-    private Input input;
+    private Data data;
     private List<Step> steps;
 
     public WorkflowPayload(
             Profile profile,
-            Input input,
+            Data data,
             List<Step> steps
     ) {
         this.profile = profile;
-        this.input = input;
+        this.data = data;
         this.steps = steps;
     }
 }

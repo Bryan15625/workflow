@@ -29,9 +29,9 @@ class WorkflowEntityMapperTest {
             Instant createdAt = Instant.now().minusSeconds(60);
             Instant updatedAt = Instant.now();
 
-            Input input = Input.builder()
-                    .sourceFilePath("/path")
-                    .resultFilePath("/path")
+            Data data = Data.builder()
+                    .input("workout.csv")
+                    .output("summary.txt")
                     .build();
 
             List<Step> steps = List.of(Step.builder()
@@ -52,7 +52,7 @@ class WorkflowEntityMapperTest {
                     .workflowId(workflowId)
                     .workflowName(workflowName)
                     .profile(profile)
-                    .input(input)
+                    .data(data)
                     .steps(steps)
                     .createdAt(createdAt)
                     .updatedAt(updatedAt)
@@ -64,7 +64,7 @@ class WorkflowEntityMapperTest {
             assertEquals(workflowName, entity.getWorkflowName());
             assertEquals(createdAt, entity.getCreatedAt());
             assertEquals(updatedAt, entity.getUpdatedAt());
-            assertSame(input, entity.getWorkflowJson().getInput());
+            assertSame(data, entity.getWorkflowJson().getData());
             assertSame(steps, entity.getWorkflowJson().getSteps());
             assertSame(profile, entity.getWorkflowJson().getProfile());
         }
@@ -79,9 +79,9 @@ class WorkflowEntityMapperTest {
             UUID workflowId = UUID.randomUUID();
             String workflowName = "workflow name";
 
-            Input input = Input.builder()
-                    .sourceFilePath("/path")
-                    .resultFilePath("/path")
+            Data data = Data.builder()
+                    .input("workout.csv")
+                    .output("summary.txt")
                     .build();
 
             List<Step> steps = List.of(Step.builder()
@@ -100,7 +100,7 @@ class WorkflowEntityMapperTest {
 
             WorkflowPayload workflowJson = WorkflowPayload.builder()
                     .profile(profile)
-                    .input(input)
+                    .data(data)
                     .steps(steps)
                     .build();
 
@@ -120,7 +120,7 @@ class WorkflowEntityMapperTest {
             assertEquals(workflowName, workflow.getWorkflowName());
             assertEquals(createdAt, workflow.getCreatedAt());
             assertEquals(updatedAt, workflow.getUpdatedAt());
-            assertSame(input, workflow.getInput());
+            assertSame(data, workflow.getData());
             assertSame(steps, workflow.getSteps());
             assertSame(profile, workflow.getProfile());
         }

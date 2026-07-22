@@ -12,7 +12,7 @@ public class Workflow {
     private UUID workflowId;
     private String workflowName;
     private Profile profile;
-    private Input input;
+    private Data data;
     private List<Step> steps;
     private Instant createdAt;
     private Instant updatedAt;
@@ -21,7 +21,7 @@ public class Workflow {
             UUID workflowId,
             String workflowName,
             Profile profile,
-            Input input,
+            Data data,
             List<Step> steps,
             Instant createdAt,
             Instant updatedAt
@@ -29,7 +29,7 @@ public class Workflow {
         this.workflowId = workflowId;
         this.workflowName = workflowName;
         this.profile = profile;
-        this.input = input;
+        this.data = data;
         this.steps = steps;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.dto.request;
 
-import com.bryanhuang.workflow.dto.InputDto;
+import com.bryanhuang.workflow.dto.DataDto;
 import com.bryanhuang.workflow.dto.ProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
 import jakarta.validation.Valid;
@@ -26,9 +26,9 @@ public class CreateWorkflowRequest {
     @Valid
     private ProfileDto profile;
 
-    @NotNull(message = "Input is required")
+    @NotNull(message = "Data is required")
     @Valid
-    private InputDto input;
+    private DataDto data;
 
     @Valid
     @NotEmpty(message = "At least one step is required")
@@ -37,12 +37,12 @@ public class CreateWorkflowRequest {
     public CreateWorkflowRequest(
             String workflowName,
             ProfileDto profile,
-            InputDto input,
+            DataDto data,
             List<StepDto> steps
     ) {
         this.workflowName = workflowName;
         this.profile = profile;
-        this.input = input;
+        this.data = data;
         this.steps = steps;
     }
 }

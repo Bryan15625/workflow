@@ -1,14 +1,11 @@
 package com.bryanhuang.workflow.mapper;
 
-import com.bryanhuang.workflow.dto.InputDto;
+import com.bryanhuang.workflow.dto.DataDto;
 import com.bryanhuang.workflow.dto.ProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
-import com.bryanhuang.workflow.model.Input;
-import com.bryanhuang.workflow.model.Profile;
-import com.bryanhuang.workflow.model.Step;
-import com.bryanhuang.workflow.model.Workflow;
+import com.bryanhuang.workflow.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,7 +20,7 @@ public class WorkflowMapper {
                 .workflowId(workflowId)
                 .workflowName(request.getWorkflowName())
                 .profile(toProfile(request.getProfile()))
-                .input(toInput(request.getInput()))
+                .data(toData(request.getData()))
                 .steps(toSteps(request.getSteps()))
                 .build();
     }
@@ -33,7 +30,7 @@ public class WorkflowMapper {
         return WorkflowResponse.builder()
                 .workflowName(workflow.getWorkflowName())
                 .profileDto(toProfileDto(workflow.getProfile()))
-                .inputDto(toInputDto(workflow.getInput()))
+                .dataDto(toDataDto(workflow.getData()))
                 .stepDtos(toStepDtos(workflow.getSteps()))
                 .createdAt(workflow.getCreatedAt())
                 .updatedAt(workflow.getUpdatedAt())
@@ -51,11 +48,11 @@ public class WorkflowMapper {
                 .build();
     }
 
-    public Input toInput(InputDto inputDto) {
+    public Data toData(DataDto dataDto) {
 
-        return Input.builder()
-                .sourceFilePath(inputDto.getSourceFilePath())
-                .resultFilePath(inputDto.getResultFilePath())
+        return Data.builder()
+                .input(dataDto.getInput())
+                .output(dataDto.getOutput())
                 .build();
     }
 
@@ -82,11 +79,11 @@ public class WorkflowMapper {
                 .build();
     }
 
-    public InputDto toInputDto(Input input) {
+    public DataDto toDataDto(Data data) {
 
-        return InputDto.builder()
-                .sourceFilePath(input.getSourceFilePath())
-                .resultFilePath(input.getResultFilePath())
+        return DataDto.builder()
+                .input(data.getInput())
+                .output(data.getOutput())
                 .build();
     }
 
