@@ -2,12 +2,9 @@ package com.bryanhuang.workflow.controller;
 
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
-import com.bryanhuang.workflow.dto.response.ErrorResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.service.WorkflowService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
