@@ -273,7 +273,7 @@ class WorkflowExecutionOrchestrationServiceTest {
                     .build();
             Step step2 = Step.builder()
                     .stepId(2)
-                    .stepName(StepName.DOWNLOAD_FILE)
+                    .stepName(StepName.PARSE_CSV)
                     .dependsOnStepIds(List.of(1))
                     .build();
             Workflow workflow = Workflow.builder()

@@ -62,7 +62,7 @@ class WorkflowControllerTest {
                                       "steps": [
                                           {
                                           "stepId": 1,
-                                          "stepName": "DOWNLOAD_FILE",
+                                          "stepName": "PARSE_CSV",
                                           "dependsOnStepIds": []
                                           }
                                       ]
@@ -94,7 +94,7 @@ class WorkflowControllerTest {
                                       "steps": [
                                           {
                                           "stepId": 1,
-                                          "stepName": "DOWNLOAD_FILE",
+                                          "stepName": "PARSE_CSV",
                                           "dependsOnStepIds": []
                                           }
                                       ]
@@ -122,7 +122,7 @@ class WorkflowControllerTest {
                                       "steps": [
                                           {
                                           "stepId": 1,
-                                          "stepName": "DOWNLOAD_FILE",
+                                          "stepName": "PARSE_CSV",
                                           "dependsOnStepIds": []
                                           }
                                       ]
@@ -152,7 +152,7 @@ class WorkflowControllerTest {
                                       "steps": [
                                           {
                                           "stepId": 1,
-                                          "stepName": "DOWNLOAD_FILE",
+                                          "stepName": "PARSE_CSV",
                                           "dependsOnStepIds": []
                                           }
                                       ]
@@ -212,7 +212,7 @@ class WorkflowControllerTest {
                               "steps": [
                                   {
                                   "stepId": 1,
-                                  "stepName": "DOWNLOAD_FILE",
+                                  "stepName": "PARSE_CSV",
                                   "dependsOnStepIds": []
                                   }
                               ]
@@ -245,7 +245,7 @@ class WorkflowControllerTest {
                               "steps": [
                                   {
                                   "stepId": 1,
-                                  "stepName": "DOWNLOAD_FILE",
+                                  "stepName": "PARSE_CSV",
                                   "dependsOnStepIds": []
                                   }
                               ]
@@ -278,7 +278,7 @@ class WorkflowControllerTest {
                               "steps": [
                                   {
                                   "stepId": 1,
-                                  "stepName": "DOWNLOAD_FILE",
+                                  "stepName": "PARSE_CSV",
                                   "dependsOnStepIds": []
                                   }
                               ]
@@ -311,7 +311,7 @@ class WorkflowControllerTest {
                               "steps": [
                                   {
                                   "stepId": 1,
-                                  "stepName": "DOWNLOAD_FILE",
+                                  "stepName": "PARSE_CSV",
                                   "dependsOnStepIds": []
                                   }
                               ]
@@ -344,7 +344,7 @@ class WorkflowControllerTest {
                               "steps": [
                                   {
                                   "stepId": 1,
-                                  "stepName": "DOWNLOAD_FILE",
+                                  "stepName": "PARSE_CSV",
                                   "dependsOnStepIds": []
                                   }
                               ]
@@ -377,7 +377,7 @@ class WorkflowControllerTest {
                                       "steps": [
                                           {
                                           "stepId": 1,
-                                          "stepName": "DOWNLOAD_FILE",
+                                          "stepName": "PARSE_CSV",
                                           "dependsOnStepIds": []
                                           }
                                       ]
@@ -410,7 +410,7 @@ class WorkflowControllerTest {
                                       "steps": [
                                           {
                                           "stepId": 1,
-                                          "stepName": "DOWNLOAD_FILE",
+                                          "stepName": "PARSE_CSV",
                                           "dependsOnStepIds": []
                                           }
                                       ]
@@ -443,7 +443,7 @@ class WorkflowControllerTest {
                                   },
                                   "steps": [
                                       {
-                                      "stepName": "DOWNLOAD_FILE",
+                                      "stepName": "PARSE_CSV",
                                       "dependsOnStepIds": []
                                       }
                                   ]
@@ -510,7 +510,7 @@ class WorkflowControllerTest {
                                  "steps": [
                                      {
                                      "stepId": 1,
-                                     "stepName": "DOWNLOAD_FILE"
+                                     "stepName": "PARSE_CSV"
                                      }
                                  ]
                              }

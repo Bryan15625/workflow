@@ -117,7 +117,7 @@ class WorkflowMapperTest {
                             .build(),
                     Step.builder()
                             .stepId(2)
-                            .stepName(StepName.DOWNLOAD_FILE)
+                            .stepName(StepName.PARSE_CSV)
                             .dependsOnStepIds(List.of(1))
                             .build()
             );
@@ -220,7 +220,7 @@ class WorkflowMapperTest {
                             .build(),
                     StepDto.builder()
                             .stepId(2)
-                            .stepName(StepName.DOWNLOAD_FILE)
+                            .stepName(StepName.PARSE_CSV)
                             .dependsOnStepIds(List.of(1))
                             .build()
             );
@@ -296,7 +296,7 @@ class WorkflowMapperTest {
                             .build(),
                     Step.builder()
                             .stepId(20)
-                            .stepName(StepName.DOWNLOAD_FILE)
+                            .stepName(StepName.PARSE_CSV)
                             .dependsOnStepIds(List.of(10))
                             .build()
             );
