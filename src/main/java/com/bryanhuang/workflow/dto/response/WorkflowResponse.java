@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.dto.response;
 
 import com.bryanhuang.workflow.dto.DataDto;
-import com.bryanhuang.workflow.dto.ProfileDto;
+import com.bryanhuang.workflow.dto.CohortProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
 import lombok.*;
 
@@ -14,24 +14,24 @@ import java.util.List;
 @NoArgsConstructor
 public class WorkflowResponse {
     private String workflowName;
-    private ProfileDto profileDto;
-    private DataDto dataDto;
-    private List<StepDto> stepDtos;
+    private CohortProfileDto cohortProfile;
+    private DataDto data;
+    private List<StepDto> steps;
     private Instant createdAt;
     private Instant updatedAt;
 
     public WorkflowResponse(
             String workflowName,
-            ProfileDto profileDto,
-            DataDto dataDto,
-            List<StepDto> stepDtos,
+            CohortProfileDto cohortProfile,
+            DataDto data,
+            List<StepDto> steps,
             Instant createdAt,
             Instant updatedAt
     ) {
         this.workflowName = workflowName;
-        this.profileDto = profileDto;
-        this.dataDto = dataDto;
-        this.stepDtos = stepDtos;
+        this.cohortProfile = cohortProfile;
+        this.data = data;
+        this.steps = steps;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
