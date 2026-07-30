@@ -147,17 +147,17 @@ def generate_phase_schedule(total_days, goal):
     return per_day_offset
 
 
-def generate_daily_record(user_id, profile, day, initial_weight, calorie_offset):
+def generate_daily_record(user_id, cohortProfile, day, initial_weight, calorie_offset):
     """
-    Generate a daily record for a user based on their profile and simulation parameters.
+    Generate a daily record for a user based on their cohortProfile and simulation parameters.
     """
     date = datetime(2026, 7, 1) + timedelta(days=day)
 
     bmr = calculate_bmr(
-        profile["age"],
-        profile["sex"],
+        cohortProfile["age"],
+        cohortProfile["sex"],
         initial_weight,
-        profile["height"]
+        cohortProfile["height"]
     )
 
     cardio_min = random.randint(0, 60)
@@ -197,7 +197,7 @@ def generate_daily_record(user_id, profile, day, initial_weight, calorie_offset)
     calorie_balance = calories - maintenance_calories
     weight_change = calorie_balance / KG_OF_FAT
     final_weight = initial_weight + weight_change + random.uniform(-0.3, 0.3) # Random noise to account for water/glycogen fluctuations, etc.
-    final_weight = max(final_weight, pow(profile["height"] / 100, 2) * 16)  # BMI floor of 16, which is considered the lower limit of healthy weight
+    final_weight = max(final_weight, pow(cohortProfile["height"] / 100, 2) * 16)  # BMI floor of 16, which is considered the lower limit of healthy weight
 
     workout = random.choice(workout_types)
 
@@ -249,20 +249,20 @@ def run():
             "sleep_h"
         ])
 
-        # Generate a single user profile representing a cohort of users with similar characteristics. 
-        profile = COHORT_PROFILE.copy()
+        # Generate a single user cohortProfile representing a cohort of users with similar characteristics.
+        cohortProfile = COHORT_PROFILE.copy()
 
         for i in range(NUM_USERS):
             user_id = f"user_{i:06d}"
 
-            curr_weight = profile["weight"]
+            curr_weight = cohortProfile["weight"]
 
-            calorie_offsets = generate_phase_schedule(DAYS_PER_USER, profile["goal"])
+            calorie_offsets = generate_phase_schedule(DAYS_PER_USER, cohortProfile["goal"])
 
             for day in range(DAYS_PER_USER):
                 daily_record, curr_weight = generate_daily_record(
                     user_id,
-                    profile,
+                    cohortProfile,
                     day,
                     curr_weight,
                     calorie_offsets[day]
@@ -271,10 +271,10 @@ def run():
 
     print(
         f"Successfully generated {DAYS_PER_USER} days of data for {NUM_USERS} users "
-        f"(height={profile['height'] / 100:.2f}m, "
-        f"weight={profile['weight']:.1f}kg, "
-        f"age={profile['age']}, sex={profile['sex']}, "
-        f"goal={profile['goal']})."
+        f"(height={cohortProfile['height'] / 100:.2f}m, "
+        f"weight={cohortProfile['weight']:.1f}kg, "
+        f"age={cohortProfile['age']}, sex={cohortProfile['sex']}, "
+        f"goal={cohortProfile['goal']})."
         )
 
 
