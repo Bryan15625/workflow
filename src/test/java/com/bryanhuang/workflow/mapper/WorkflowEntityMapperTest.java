@@ -40,7 +40,7 @@ class WorkflowEntityMapperTest {
                     .dependsOnStepIds(List.of())
                     .build());
 
-            Profile profile = Profile.builder()
+            CohortProfile cohortProfile = CohortProfile.builder()
                     .age(22)
                     .weightKg(75)
                     .heightCm(173)
@@ -51,7 +51,7 @@ class WorkflowEntityMapperTest {
             Workflow workflow = Workflow.builder()
                     .workflowId(workflowId)
                     .workflowName(workflowName)
-                    .profile(profile)
+                    .cohortProfile(cohortProfile)
                     .data(data)
                     .steps(steps)
                     .createdAt(createdAt)
@@ -66,7 +66,7 @@ class WorkflowEntityMapperTest {
             assertEquals(updatedAt, entity.getUpdatedAt());
             assertSame(data, entity.getWorkflowJson().getData());
             assertSame(steps, entity.getWorkflowJson().getSteps());
-            assertSame(profile, entity.getWorkflowJson().getProfile());
+            assertSame(cohortProfile, entity.getWorkflowJson().getCohortProfile());
         }
     }
 
@@ -90,7 +90,7 @@ class WorkflowEntityMapperTest {
                     .dependsOnStepIds(List.of())
                     .build());
 
-            Profile profile = Profile.builder()
+            CohortProfile cohortProfile = CohortProfile.builder()
                     .age(22)
                     .weightKg(75)
                     .heightCm(173)
@@ -99,7 +99,7 @@ class WorkflowEntityMapperTest {
                     .build();
 
             WorkflowPayload workflowJson = WorkflowPayload.builder()
-                    .profile(profile)
+                    .cohortProfile(cohortProfile)
                     .data(data)
                     .steps(steps)
                     .build();
@@ -122,7 +122,7 @@ class WorkflowEntityMapperTest {
             assertEquals(updatedAt, workflow.getUpdatedAt());
             assertSame(data, workflow.getData());
             assertSame(steps, workflow.getSteps());
-            assertSame(profile, workflow.getProfile());
+            assertSame(cohortProfile, workflow.getCohortProfile());
         }
 
     }

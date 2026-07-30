@@ -48,7 +48,7 @@ class WorkflowControllerTest {
                             .content("""
                                     {
                                       "workflowName": "any non empty string works",
-                                      "profile": {
+                                      "cohortProfile": {
                                           "age": 23,
                                           "weightKg": 76,
                                           "heightCm": 174,
@@ -80,7 +80,7 @@ class WorkflowControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("""
                                     {
-                                      "profile": {
+                                      "cohortProfile": {
                                           "age": 23,
                                           "weightKg": 76,
                                           "heightCm": 174,
@@ -107,8 +107,8 @@ class WorkflowControllerTest {
         }
 
         @Test
-        @DisplayName("CreateWorkflowRequest: Fails when Profile is not provided")
-        void failsWhenProfileBlank() throws Exception {
+        @DisplayName("CreateWorkflowRequest: Fails when Cohort Profile is not provided")
+        void failsWhenCohortProfileBlank() throws Exception {
 
             mockMvc.perform(post("/workflows")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -130,8 +130,8 @@ class WorkflowControllerTest {
                                 """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors.profile")
-                            .value("Profile is required"));
+                    .andExpect(jsonPath("$.errors.cohortProfile")
+                            .value("Cohort Profile is required"));
         }
 
         @Test
@@ -142,7 +142,7 @@ class WorkflowControllerTest {
                     .content("""
                                     {
                                       "workflowName": "any non empty string works",
-                                      "profile": {
+                                      "cohortProfile": {
                                           "age": 23,
                                           "weightKg": 76,
                                           "heightCm": 174,
@@ -172,7 +172,7 @@ class WorkflowControllerTest {
                             .content("""
                                     {
                                       "workflowName": "any non empty string works",
-                                      "profile": {
+                                      "cohortProfile": {
                                           "age": 23,
                                           "weightKg": 76,
                                           "heightCm": 174,
@@ -192,14 +192,14 @@ class WorkflowControllerTest {
         }
 
         @Test
-        @DisplayName("ProfileDto: Fails when age is not provided")
+        @DisplayName("CohortProfileDto: Fails when age is not provided")
         void failsWhenAgeMissing() throws Exception {
             mockMvc.perform(post("/workflows")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("""
                             {
                               "workflowName": "any non empty string works",
-                              "profile": {
+                              "cohortProfile": {
                                   "weightKg": 76,
                                   "heightCm": 174,
                                   "sex": "MALE",
@@ -220,19 +220,19 @@ class WorkflowControllerTest {
                         """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors['profile.age']")
+                    .andExpect(jsonPath("$.errors['cohortProfile.age']")
                             .value("Age is required"));
         }
 
         @Test
-        @DisplayName("ProfileDto: Fails when weightKg is not provided")
+        @DisplayName("CohortProfileDto: Fails when weightKg is not provided")
         void failsWhenWeightKgMissing() throws Exception {
             mockMvc.perform(post("/workflows")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("""
                             {
                               "workflowName": "any non empty string works",
-                              "profile": {
+                              "cohortProfile": {
                                   "age": 23,
                                   "heightCm": 174,
                                   "sex": "MALE",
@@ -253,19 +253,19 @@ class WorkflowControllerTest {
                         """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors['profile.weightKg']")
+                    .andExpect(jsonPath("$.errors['cohortProfile.weightKg']")
                             .value("Weight is required"));
         }
 
         @Test
-        @DisplayName("ProfileDto: Fails when heightCm is not provided")
+        @DisplayName("CohortProfileDto: Fails when heightCm is not provided")
         void failsWhenHeightCmMissing() throws Exception {
             mockMvc.perform(post("/workflows")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("""
                             {
                               "workflowName": "any non empty string works",
-                              "profile": {
+                              "cohortProfile": {
                                   "age": 23,
                                   "weightKg": 76,
                                   "sex": "MALE",
@@ -286,19 +286,19 @@ class WorkflowControllerTest {
                         """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors['profile.heightCm']")
+                    .andExpect(jsonPath("$.errors['cohortProfile.heightCm']")
                             .value("Height is required"));
         }
 
         @Test
-        @DisplayName("ProfileDto: Fails when Sex is not provided")
+        @DisplayName("CohortProfileDto: Fails when Sex is not provided")
         void failsWhenSexMissing() throws Exception {
             mockMvc.perform(post("/workflows")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("""
                             {
                               "workflowName": "any non empty string works",
-                              "profile": {
+                              "cohortProfile": {
                                   "age": 23,
                                   "weightKg": 76,
                                   "heightCm": 174,
@@ -319,19 +319,19 @@ class WorkflowControllerTest {
                         """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors['profile.sex']")
+                    .andExpect(jsonPath("$.errors['cohortProfile.sex']")
                             .value("Sex is required"));
         }
 
         @Test
-        @DisplayName("ProfileDto: Fails when Goal is not provided")
+        @DisplayName("CohortProfileDto: Fails when Goal is not provided")
         void failsWhenGoalMissing() throws Exception {
             mockMvc.perform(post("/workflows")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("""
                             {
                               "workflowName": "any non empty string works",
-                              "profile": {
+                              "cohortProfile": {
                                   "age": 23,
                                   "weightKg": 76,
                                   "heightCm": 174,
@@ -352,7 +352,7 @@ class WorkflowControllerTest {
                         """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Validation failed"))
-                    .andExpect(jsonPath("$.errors['profile.goal']")
+                    .andExpect(jsonPath("$.errors['cohortProfile.goal']")
                             .value("Goal is required"));
         }
 
@@ -364,7 +364,7 @@ class WorkflowControllerTest {
                     .content("""
                                     {
                                       "workflowName": "any non empty string works",
-                                      "profile": {
+                                      "cohortProfile": {
                                           "age": 23,
                                           "weightKg": 76,
                                           "heightCm": 174,
@@ -397,7 +397,7 @@ class WorkflowControllerTest {
                             .content("""
                                     {
                                       "workflowName": "any non empty string works",
-                                      "profile": {
+                                      "cohortProfile": {
                                           "age": 23,
                                           "weightKg": 76,
                                           "heightCm": 174,
@@ -430,7 +430,7 @@ class WorkflowControllerTest {
                             .content("""
                                 {
                                   "workflowName": "any non empty string works",
-                                  "profile": {
+                                  "cohortProfile": {
                                       "age": 23,
                                       "weightKg": 76,
                                       "heightCm": 174,
@@ -463,7 +463,7 @@ class WorkflowControllerTest {
                             .content("""
                                 {
                                  "workflowName": " ",
-                                 "profile": {
+                                 "cohortProfile": {
                                      "age": 23,
                                      "weightKg": 76,
                                      "heightCm": 174,
@@ -496,7 +496,7 @@ class WorkflowControllerTest {
                             .content("""
                                 {
                                  "workflowName": " ",
-                                 "profile": {
+                                 "cohortProfile": {
                                      "age": 23,
                                      "weightKg": 76,
                                      "heightCm": 174,

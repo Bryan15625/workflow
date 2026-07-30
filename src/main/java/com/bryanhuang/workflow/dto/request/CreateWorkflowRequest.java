@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.dto.request;
 
 import com.bryanhuang.workflow.dto.DataDto;
-import com.bryanhuang.workflow.dto.ProfileDto;
+import com.bryanhuang.workflow.dto.CohortProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -22,9 +22,9 @@ public class CreateWorkflowRequest {
     @NotBlank(message = "Workflow name is required and cannot be blank")
     private String workflowName;
 
-    @NotNull(message = "Profile is required")
+    @NotNull(message = "Cohort Profile is required")
     @Valid
-    private ProfileDto profile;
+    private CohortProfileDto cohortProfile;
 
     @NotNull(message = "Data is required")
     @Valid
@@ -36,12 +36,12 @@ public class CreateWorkflowRequest {
 
     public CreateWorkflowRequest(
             String workflowName,
-            ProfileDto profile,
+            CohortProfileDto cohortProfile,
             DataDto data,
             List<StepDto> steps
     ) {
         this.workflowName = workflowName;
-        this.profile = profile;
+        this.cohortProfile = cohortProfile;
         this.data = data;
         this.steps = steps;
     }

@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.dto.DataDto;
-import com.bryanhuang.workflow.dto.ProfileDto;
+import com.bryanhuang.workflow.dto.CohortProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
@@ -30,7 +30,7 @@ class WorkflowMapperTest {
             UUID workflowId = UUID.randomUUID();
             String workflowName = "Test Workflow";
 
-            ProfileDto profile = ProfileDto.builder()
+            CohortProfileDto profile = CohortProfileDto.builder()
                     .age(22)
                     .weightKg(75)
                     .heightCm(173)
@@ -53,7 +53,7 @@ class WorkflowMapperTest {
 
             CreateWorkflowRequest request = CreateWorkflowRequest.builder()
                     .workflowName(workflowName)
-                    .profile(profile)
+                    .cohortProfile(profile)
                     .data(data)
                     .steps(steps)
                     .build();
@@ -67,12 +67,12 @@ class WorkflowMapperTest {
             assertNull(workflow.getCreatedAt());
             assertNull(workflow.getUpdatedAt());
 
-            Profile workflowProfile = workflow.getProfile();
-            assertEquals(profile.getAge(), workflowProfile.getAge());
-            assertEquals(profile.getWeightKg(), workflowProfile.getWeightKg());
-            assertEquals(profile.getHeightCm(), workflowProfile.getHeightCm());
-            assertEquals(profile.getSex(), workflowProfile.getSex());
-            assertEquals(profile.getGoal(), workflowProfile.getGoal());
+            CohortProfile workflowCohortProfile = workflow.getCohortProfile();
+            assertEquals(profile.getAge(), workflowCohortProfile.getAge());
+            assertEquals(profile.getWeightKg(), workflowCohortProfile.getWeightKg());
+            assertEquals(profile.getHeightCm(), workflowCohortProfile.getHeightCm());
+            assertEquals(profile.getSex(), workflowCohortProfile.getSex());
+            assertEquals(profile.getGoal(), workflowCohortProfile.getGoal());
 
             Data workflowData = workflow.getData();
             assertEquals(data.getInput(), workflowData.getInput());
@@ -96,7 +96,7 @@ class WorkflowMapperTest {
             Instant createdAt = Instant.now().minusSeconds(300);
             Instant updatedAt = Instant.now().minusSeconds(100);
 
-            Profile profile = Profile.builder()
+            CohortProfile cohortProfile = CohortProfile.builder()
                     .age(30)
                     .weightKg(80)
                     .heightCm(180)
@@ -125,7 +125,7 @@ class WorkflowMapperTest {
             Workflow workflow = Workflow.builder()
                     .workflowId(UUID.randomUUID())
                     .workflowName(workflowName)
-                    .profile(profile)
+                    .cohortProfile(cohortProfile)
                     .data(data)
                     .steps(steps)
                     .createdAt(createdAt)
@@ -138,18 +138,18 @@ class WorkflowMapperTest {
             assertEquals(createdAt, response.getCreatedAt());
             assertEquals(updatedAt, response.getUpdatedAt());
 
-            ProfileDto profileDto = response.getProfileDto();
-            assertEquals(profile.getAge(), profileDto.getAge());
-            assertEquals(profile.getWeightKg(), profileDto.getWeightKg());
-            assertEquals(profile.getHeightCm(), profileDto.getHeightCm());
-            assertEquals(profile.getSex(), profileDto.getSex());
-            assertEquals(profile.getGoal(), profileDto.getGoal());
+            CohortProfileDto cohortProfileDto = response.getCohortProfile();
+            assertEquals(cohortProfile.getAge(), cohortProfileDto.getAge());
+            assertEquals(cohortProfile.getWeightKg(), cohortProfileDto.getWeightKg());
+            assertEquals(cohortProfile.getHeightCm(), cohortProfileDto.getHeightCm());
+            assertEquals(cohortProfile.getSex(), cohortProfileDto.getSex());
+            assertEquals(cohortProfile.getGoal(), cohortProfileDto.getGoal());
 
-            DataDto dataDto = response.getDataDto();
+            DataDto dataDto = response.getData();
             assertEquals(data.getInput(), dataDto.getInput());
             assertEquals(data.getOutput(), dataDto.getOutput());
 
-            List<StepDto> stepDtos = response.getStepDtos();
+            List<StepDto> stepDtos = response.getSteps();
             assertEquals(2, stepDtos.size());
 
             StepDto s1 = stepDtos.getFirst();
@@ -165,12 +165,12 @@ class WorkflowMapperTest {
     }
 
     @Nested
-    @DisplayName("toProfile")
-    class ToProfileTests {
+    @DisplayName("toCohortProfile")
+    class ToCohortProfileTests {
 
         @Test
-        void toProfile_shouldMapAllFields() {
-            ProfileDto dto = ProfileDto.builder()
+        void toCohortProfile_shouldMapAllFields() {
+            CohortProfileDto dto = CohortProfileDto.builder()
                     .age(25)
                     .weightKg(70)
                     .heightCm(175)
@@ -178,13 +178,13 @@ class WorkflowMapperTest {
                     .goal(Goal.FAT_LOSS)
                     .build();
 
-            Profile profile = mapper.toProfile(dto);
+            CohortProfile cohortProfile = mapper.toCohortProfile(dto);
 
-            assertEquals(dto.getAge(), profile.getAge());
-            assertEquals(dto.getWeightKg(), profile.getWeightKg());
-            assertEquals(dto.getHeightCm(), profile.getHeightCm());
-            assertEquals(dto.getSex(), profile.getSex());
-            assertEquals(dto.getGoal(), profile.getGoal());
+            assertEquals(dto.getAge(), cohortProfile.getAge());
+            assertEquals(dto.getWeightKg(), cohortProfile.getWeightKg());
+            assertEquals(dto.getHeightCm(), cohortProfile.getHeightCm());
+            assertEquals(dto.getSex(), cohortProfile.getSex());
+            assertEquals(dto.getGoal(), cohortProfile.getGoal());
         }
     }
 
@@ -242,11 +242,11 @@ class WorkflowMapperTest {
     }
 
     @Nested
-    @DisplayName("toProfileDto")
-    class ToProfileDtoTests {
+    @DisplayName("toCohortProfileDto")
+    class ToCohortProfileDtoTests {
         @Test
-        void toProfileDto_shouldMapAllFields() {
-            Profile profile = Profile.builder()
+        void toCohortProfileDto_shouldMapAllFields() {
+            CohortProfile cohortProfile = CohortProfile.builder()
                     .age(40)
                     .weightKg(90)
                     .heightCm(185)
@@ -254,13 +254,13 @@ class WorkflowMapperTest {
                     .goal(Goal.FAT_LOSS)
                     .build();
 
-            ProfileDto dto = mapper.toProfileDto(profile);
+            CohortProfileDto dto = mapper.toCohortProfileDto(cohortProfile);
 
-            assertEquals(profile.getAge(), dto.getAge());
-            assertEquals(profile.getWeightKg(), dto.getWeightKg());
-            assertEquals(profile.getHeightCm(), dto.getHeightCm());
-            assertEquals(profile.getSex(), dto.getSex());
-            assertEquals(profile.getGoal(), dto.getGoal());
+            assertEquals(cohortProfile.getAge(), dto.getAge());
+            assertEquals(cohortProfile.getWeightKg(), dto.getWeightKg());
+            assertEquals(cohortProfile.getHeightCm(), dto.getHeightCm());
+            assertEquals(cohortProfile.getSex(), dto.getSex());
+            assertEquals(cohortProfile.getGoal(), dto.getGoal());
         }
     }
 

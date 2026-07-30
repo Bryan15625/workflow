@@ -31,7 +31,7 @@ public class WorkflowController {
 
     @Operation(
             summary = "Create a new workflow",
-            description = "Creates a workflow definition given a profile, input schema, and ordered steps."
+            description = "Creates a workflow definition given a cohort profile, input schema, and ordered steps."
     )
     @ApiResponses({
             @ApiResponse(

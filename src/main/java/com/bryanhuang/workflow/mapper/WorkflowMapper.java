@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.dto.DataDto;
-import com.bryanhuang.workflow.dto.ProfileDto;
+import com.bryanhuang.workflow.dto.CohortProfileDto;
 import com.bryanhuang.workflow.dto.StepDto;
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
@@ -19,7 +19,7 @@ public class WorkflowMapper {
         return Workflow.builder()
                 .workflowId(workflowId)
                 .workflowName(request.getWorkflowName())
-                .profile(toProfile(request.getProfile()))
+                .cohortProfile(toCohortProfile(request.getCohortProfile()))
                 .data(toData(request.getData()))
                 .steps(toSteps(request.getSteps()))
                 .build();
@@ -29,22 +29,22 @@ public class WorkflowMapper {
 
         return WorkflowResponse.builder()
                 .workflowName(workflow.getWorkflowName())
-                .profileDto(toProfileDto(workflow.getProfile()))
-                .dataDto(toDataDto(workflow.getData()))
-                .stepDtos(toStepDtos(workflow.getSteps()))
+                .cohortProfile(toCohortProfileDto(workflow.getCohortProfile()))
+                .data(toDataDto(workflow.getData()))
+                .steps(toStepDtos(workflow.getSteps()))
                 .createdAt(workflow.getCreatedAt())
                 .updatedAt(workflow.getUpdatedAt())
                 .build();
     }
 
-    public Profile toProfile(ProfileDto profileDto) {
+    public CohortProfile toCohortProfile(CohortProfileDto cohortProfileDto) {
 
-        return Profile.builder()
-                .age(profileDto.getAge())
-                .weightKg(profileDto.getWeightKg())
-                .heightCm(profileDto.getHeightCm())
-                .sex(profileDto.getSex())
-                .goal(profileDto.getGoal())
+        return CohortProfile.builder()
+                .age(cohortProfileDto.getAge())
+                .weightKg(cohortProfileDto.getWeightKg())
+                .heightCm(cohortProfileDto.getHeightCm())
+                .sex(cohortProfileDto.getSex())
+                .goal(cohortProfileDto.getGoal())
                 .build();
     }
 
@@ -68,14 +68,14 @@ public class WorkflowMapper {
             .toList();
     }
 
-    public ProfileDto toProfileDto(Profile profile) {
+    public CohortProfileDto toCohortProfileDto(CohortProfile cohortProfile) {
 
-        return ProfileDto.builder()
-                .age(profile.getAge())
-                .weightKg(profile.getWeightKg())
-                .heightCm(profile.getHeightCm())
-                .sex(profile.getSex())
-                .goal(profile.getGoal())
+        return CohortProfileDto.builder()
+                .age(cohortProfile.getAge())
+                .weightKg(cohortProfile.getWeightKg())
+                .heightCm(cohortProfile.getHeightCm())
+                .sex(cohortProfile.getSex())
+                .goal(cohortProfile.getGoal())
                 .build();
     }
 

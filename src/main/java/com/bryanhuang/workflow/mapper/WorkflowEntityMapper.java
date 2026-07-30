@@ -14,7 +14,7 @@ public class WorkflowEntityMapper {
     public WorkflowEntity toWorkflowEntity(Workflow workflow) {
 
         WorkflowPayload payload = WorkflowPayload.builder()
-                .profile(workflow.getProfile())
+                .cohortProfile(workflow.getCohortProfile())
                 .data(workflow.getData())
                 .steps(workflow.getSteps())
                 .build();
@@ -35,7 +35,7 @@ public class WorkflowEntityMapper {
             return Workflow.builder()
                     .workflowId(workflowEntity.getWorkflowId())
                     .workflowName(workflowEntity.getWorkflowName())
-                    .profile(workflowPayload.getProfile())
+                    .cohortProfile(workflowPayload.getCohortProfile())
                     .data(workflowPayload.getData())
                     .steps(workflowPayload.getSteps())
                     .createdAt(workflowEntity.getCreatedAt())

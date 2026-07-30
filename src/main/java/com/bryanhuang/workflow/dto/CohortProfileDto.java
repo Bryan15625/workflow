@@ -5,12 +5,10 @@ import com.bryanhuang.workflow.model.Sex;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Builder
-public class ProfileDto {
+public class CohortProfileDto {
     @NotNull(message = "Age is required")
     private Integer age;
 
@@ -26,7 +24,7 @@ public class ProfileDto {
     @NotNull(message = "Goal is required")
     private Goal goal;
 
-    public ProfileDto(
+    public CohortProfileDto(
             Integer age,
             Integer weightKg,
             Integer heightCm,

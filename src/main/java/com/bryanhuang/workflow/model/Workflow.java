@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Workflow {
     private UUID workflowId;
     private String workflowName;
-    private Profile profile;
+    private CohortProfile cohortProfile;
     private Data data;
     private List<Step> steps;
     private Instant createdAt;
@@ -20,7 +20,7 @@ public class Workflow {
     public Workflow(
             UUID workflowId,
             String workflowName,
-            Profile profile,
+            CohortProfile cohortProfile,
             Data data,
             List<Step> steps,
             Instant createdAt,
@@ -28,7 +28,7 @@ public class Workflow {
     ) {
         this.workflowId = workflowId;
         this.workflowName = workflowName;
-        this.profile = profile;
+        this.cohortProfile = cohortProfile;
         this.data = data;
         this.steps = steps;
         this.createdAt = createdAt;
