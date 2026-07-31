@@ -1,8 +1,7 @@
-package com.bryanhuang.workflow.model;
+package com.bryanhuang.workflow.model.workflow;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.List;

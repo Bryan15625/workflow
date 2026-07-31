@@ -12,7 +12,7 @@ import com.bryanhuang.workflow.kafka.producer.KafkaEventPublisher;
 import com.bryanhuang.workflow.mapper.StepExecutionStatusEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkflowExecutionMapper;
-import com.bryanhuang.workflow.model.*;
+import com.bryanhuang.workflow.model.workflow.*;
 import com.bryanhuang.workflow.redis.service.WorkflowExecutionRedisService;
 import com.bryanhuang.workflow.repository.StepExecutionStatusRepository;
 import com.bryanhuang.workflow.repository.WorkflowExecutionRepository;

@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.dto;
 
-import com.bryanhuang.workflow.model.JobStatus;
-import com.bryanhuang.workflow.model.StepName;
+import com.bryanhuang.workflow.model.workflow.JobStatus;
+import com.bryanhuang.workflow.model.workflow.StepName;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -2,10 +2,10 @@ package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.dto.StepExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
-import com.bryanhuang.workflow.model.JobStatus;
-import com.bryanhuang.workflow.model.StepExecutionStatus;
-import com.bryanhuang.workflow.model.StepName;
-import com.bryanhuang.workflow.model.WorkflowExecution;
+import com.bryanhuang.workflow.model.workflow.JobStatus;
+import com.bryanhuang.workflow.model.workflow.StepExecutionStatus;
+import com.bryanhuang.workflow.model.workflow.StepName;
+import com.bryanhuang.workflow.model.workflow.WorkflowExecution;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

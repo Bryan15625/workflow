@@ -2,7 +2,7 @@ package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.entity.StepExecutionStatusEntity;
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.model.StepExecutionStatus;
+import com.bryanhuang.workflow.model.workflow.StepExecutionStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

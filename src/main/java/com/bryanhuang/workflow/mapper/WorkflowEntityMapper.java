@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.entity.WorkflowEntity;
-import com.bryanhuang.workflow.model.Workflow;
+import com.bryanhuang.workflow.model.workflow.Workflow;
 import com.bryanhuang.workflow.entity.payload.WorkflowPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

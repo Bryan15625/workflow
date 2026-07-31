@@ -3,7 +3,7 @@ package com.bryanhuang.workflow.service;
 import com.bryanhuang.workflow.entity.WorkflowEntity;
 import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
-import com.bryanhuang.workflow.model.Workflow;
+import com.bryanhuang.workflow.model.workflow.Workflow;
 import com.bryanhuang.workflow.repository.WorkflowRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

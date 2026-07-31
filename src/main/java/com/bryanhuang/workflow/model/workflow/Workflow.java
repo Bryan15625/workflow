@@ -1,5 +1,7 @@
-package com.bryanhuang.workflow.model;
+package com.bryanhuang.workflow.model.workflow;
 
+import com.bryanhuang.workflow.model.CohortProfile;
+import com.bryanhuang.workflow.model.Data;
 import lombok.*;
 
 import java.time.Instant;

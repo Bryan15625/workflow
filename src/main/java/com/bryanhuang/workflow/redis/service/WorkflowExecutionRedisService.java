@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.redis.service;
 
-import com.bryanhuang.workflow.model.JobControl;
+import com.bryanhuang.workflow.model.workflow.JobControl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

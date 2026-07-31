@@ -1,8 +1,8 @@
 package com.bryanhuang.workflow.mapper;
 
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.model.JobStatus;
-import com.bryanhuang.workflow.model.WorkflowExecution;
+import com.bryanhuang.workflow.model.workflow.JobStatus;
+import com.bryanhuang.workflow.model.workflow.WorkflowExecution;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

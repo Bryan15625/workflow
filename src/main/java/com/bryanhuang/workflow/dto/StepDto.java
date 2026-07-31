@@ -1,11 +1,9 @@
 package com.bryanhuang.workflow.dto;
 
-import com.bryanhuang.workflow.model.StepName;
+import com.bryanhuang.workflow.model.workflow.StepName;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 

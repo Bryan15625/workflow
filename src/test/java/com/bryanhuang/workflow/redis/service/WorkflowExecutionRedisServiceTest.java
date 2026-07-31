@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.redis.service;
 
-import com.bryanhuang.workflow.model.JobControl;
+import com.bryanhuang.workflow.model.workflow.JobControl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

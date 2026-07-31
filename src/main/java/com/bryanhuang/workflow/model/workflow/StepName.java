@@ -1,4 +1,4 @@
-package com.bryanhuang.workflow.model;
+package com.bryanhuang.workflow.model.workflow;
 
 public enum StepName {
     PARSE_CSV,

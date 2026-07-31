@@ -6,6 +6,8 @@ import com.bryanhuang.workflow.dto.StepDto;
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.model.*;
+import com.bryanhuang.workflow.model.workflow.Step;
+import com.bryanhuang.workflow.model.workflow.Workflow;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

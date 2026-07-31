@@ -2,7 +2,7 @@ package com.bryanhuang.workflow.entity.payload;
 
 import com.bryanhuang.workflow.model.Data;
 import com.bryanhuang.workflow.model.CohortProfile;
-import com.bryanhuang.workflow.model.Step;
+import com.bryanhuang.workflow.model.workflow.Step;
 import lombok.Builder;
 import lombok.Getter;
 
