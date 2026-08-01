@@ -1,4 +1,4 @@
-package com.bryanhuang.workflow.service;
+package com.bryanhuang.workflow.service.workflow;
 
 import com.bryanhuang.workflow.dto.response.CreateWorkflowExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
@@ -52,7 +52,8 @@ public class WorkflowExecutionOrchestratorService {
                         .toStepExecutionStatusEntity(status, executionEntity)
         ).toList();
 
-        WorkflowExecutionEntity savedWorkflowExecutionEntity = workflowExecutionRepository.save(executionEntity);
+        WorkflowExecutionEntity savedWorkflowExecutionEntity = workflowExecutionRepository
+                .save(executionEntity);
         Iterable<StepExecutionStatusEntity> savedStepExecutionStatusEntity = stepExecutionStatusRepository
                 .saveAll(stepEntities);
 
@@ -102,7 +103,8 @@ public class WorkflowExecutionOrchestratorService {
     }
 
     public List<StepExecutionStatus> buildStepExecutionStatus(UUID workflowId) {
-        List<Step> steps = workflowQueryService.findWorkflowEntityAndMapToWorkflow(workflowId).getSteps();
+        List<Step> steps = workflowQueryService
+                .findWorkflowEntityAndMapToWorkflow(workflowId).getSteps();
 
         return steps.stream()
                 .map(step -> StepExecutionStatus.builder()

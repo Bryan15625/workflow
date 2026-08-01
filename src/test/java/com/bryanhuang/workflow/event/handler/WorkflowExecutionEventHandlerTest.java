@@ -3,7 +3,7 @@ package com.bryanhuang.workflow.event.handler;
 import com.bryanhuang.workflow.event.EventEnvelope;
 import com.bryanhuang.workflow.event.EventType;
 import com.bryanhuang.workflow.event.execution.WorkflowExecutionEvent;
-import com.bryanhuang.workflow.service.WorkflowExecutionOrchestratorService;
+import com.bryanhuang.workflow.service.workflow.WorkflowExecutionOrchestratorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

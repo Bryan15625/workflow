@@ -3,7 +3,7 @@ package com.bryanhuang.workflow.controller;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
 import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
-import com.bryanhuang.workflow.service.WorkflowService;
+import com.bryanhuang.workflow.service.workflow.WorkflowService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

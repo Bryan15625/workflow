@@ -1,4 +1,4 @@
-package com.bryanhuang.workflow.service;
+package com.bryanhuang.workflow.service.workflow;
 
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;

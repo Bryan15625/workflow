@@ -1,4 +1,4 @@
-package com.bryanhuang.workflow.service;
+package com.bryanhuang.workflow.service.workflow;
 
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.exception.WorkflowExecutionNotFoundException;

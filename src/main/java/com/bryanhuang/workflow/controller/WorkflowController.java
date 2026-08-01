@@ -3,7 +3,7 @@ package com.bryanhuang.workflow.controller;
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
-import com.bryanhuang.workflow.service.WorkflowService;
+import com.bryanhuang.workflow.service.workflow.WorkflowService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

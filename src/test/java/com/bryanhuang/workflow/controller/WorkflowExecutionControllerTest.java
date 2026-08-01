@@ -5,7 +5,7 @@ import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
 import com.bryanhuang.workflow.exception.WorkflowExecutionNotFoundException;
 import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
 import com.bryanhuang.workflow.model.workflow.JobStatus;
-import com.bryanhuang.workflow.service.WorkflowExecutionOrchestratorService;
+import com.bryanhuang.workflow.service.workflow.WorkflowExecutionOrchestratorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
