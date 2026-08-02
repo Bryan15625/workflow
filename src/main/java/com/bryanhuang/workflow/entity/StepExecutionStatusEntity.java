@@ -25,6 +25,7 @@ public class StepExecutionStatusEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workflow_execution_id")
     private WorkflowExecutionEntity workflowExecutionEntity;
+
     private Integer stepId;
     private StepName stepName;
 

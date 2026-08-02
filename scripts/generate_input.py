@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 # MODIFY THESE SIMULATION PARAMETERS
 # --------------------------------
 FILE_NAME = "workout.csv"
-NUM_USERS = 50
+NUM_USERS = 10000
 DAYS_PER_USER = 100
 COHORT_PROFILE = {
     "age": 23,
@@ -202,7 +202,7 @@ def generate_daily_record(user_id, cohortProfile, day, initial_weight, calorie_o
     workout = random.choice(workout_types)
 
     if workout == "Rest":
-        total_sets = 0
+        total_sets = ""
         rir = None
     else:
         total_sets = random.randint(6, 20)
