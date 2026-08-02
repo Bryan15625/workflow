@@ -1,5 +1,7 @@
 package com.bryanhuang.workflow.model.workout;
 
+import com.bryanhuang.workflow.exception.InvalidRowException;
+
 public enum CardioZone {
     NONE,
     ONE,
@@ -13,7 +15,7 @@ public enum CardioZone {
     public static CardioZone fromInt(int zone) {
 
         if (zone < 1 || zone >= VALUES.length) {
-            throw new IllegalArgumentException(
+            throw new InvalidRowException(
                     "Cardio zone integer must be between 1 and 5. Found: " + zone
             );
         }

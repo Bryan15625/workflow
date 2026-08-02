@@ -31,9 +31,6 @@ public enum WorkoutRir {
         }
     }
 
-    /**
-     * Map numeric primitives directly to the Enum positions.
-     */
     public static WorkoutRir fromInt(int rir) {
         // Shift by 1 because NONE is at index 0, ZERO is at index 1...
         int targetIndex = rir + 1;
