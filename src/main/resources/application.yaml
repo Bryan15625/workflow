@@ -6,6 +6,7 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+    default-property-inclusion: non-null
   data:
     redis:
       host: redis
