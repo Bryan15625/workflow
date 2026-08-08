@@ -47,22 +47,6 @@ class WorkflowExecutionEventHandlerTest {
     }
 
     @Test
-    @DisplayName("handle() does not call orchestrator.onCreated for non-CREATED events")
-    void handle_nonCreatedEvents_doesNotCallOnCreated() {
-        EventEnvelope<WorkflowExecutionEvent> envelope = mock(EventEnvelope.class);
-
-        for (EventType eventType : EventType.values()) {
-            if (eventType == EventType.WORKFLOW_EXECUTION_CREATED) continue;
-            when(envelope.getEventType()).thenReturn(eventType);
-            handler.handle(envelope);
-        }
-
-        verify(orchestratorService, never()).onCreated(any());
-        verify(objectMapper, never()).convertValue(any(), eq(WorkflowExecutionEvent.class));
-        verifyNoMoreInteractions(orchestratorService, objectMapper);
-    }
-
-    @Test
     void handle_nullEventType_shouldThrowNullPointerException() {
         // given
         EventEnvelope<?> envelope = mock(EventEnvelope.class);

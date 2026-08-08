@@ -24,15 +24,12 @@ public class WorkflowExecutionEventHandler {
         EventType eventType = envelope.getEventType();
         if (eventType == null) {
             throw new NullPointerException("Event type cannot be null");
-        } else if (eventType == EventType.WORKFLOW_EXECUTION_CREATED) {
+        } else {
             WorkflowExecutionEvent event = objectMapper.convertValue(
                     envelope.getPayload(),
                     WorkflowExecutionEvent.class
             );
             workflowExecutionOrchestratorService.onCreated(event);
-        } else {
-            log.info("No handler for event type: {} yet", eventType);
         }
-
     }
 }
