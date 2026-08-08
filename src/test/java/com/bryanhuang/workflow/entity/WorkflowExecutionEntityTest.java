@@ -69,13 +69,14 @@ class WorkflowExecutionEntityTest {
     class FailTests {
 
         @Test
-        @DisplayName("fail() should transition from RUNNING to FAILED and set completedAt")
+        @DisplayName("fail() should transition from RUNNING to FAILED and set completedAt and errorMessage")
         void failFromRunning() {
             WorkflowExecutionEntity entity = createEntityWithStatus(JobStatus.RUNNING);
-
-            entity.fail();
+            String errorMessage = "Error encountered parsing CSV";
+            entity.fail(errorMessage);
 
             assertEquals(JobStatus.FAILED, entity.getStatus());
+            assertEquals(errorMessage, entity.getErrorMessage());
             assertNotNull(entity.getCompletedAt(), "completedAt should be set when failing");
         }
 
@@ -84,14 +85,16 @@ class WorkflowExecutionEntityTest {
         void failFromNonRunningShouldThrow() {
             for (JobStatus status : JobStatus.values()) {
                 if (status == JobStatus.RUNNING) continue;
+                String errorMessage = "";
 
                 WorkflowExecutionEntity entity = createEntityWithStatus(status);
                 IllegalStateException ex = assertThrows(
                         IllegalStateException.class,
-                        entity::fail,
+                        () -> entity.fail(errorMessage),
                         "Expected fail() to throw when status is " + status
                 );
                 assertEquals("Execution must be RUNNING to fail.", ex.getMessage());
+                assertNull(entity.getErrorMessage());
             }
         }
     }
@@ -180,21 +183,25 @@ class WorkflowExecutionEntityTest {
         void nonTerminalStatuses() {
             WorkflowExecutionEntity ready = createEntityWithStatus(JobStatus.READY);
             WorkflowExecutionEntity running = createEntityWithStatus(JobStatus.RUNNING);
+            WorkflowExecutionEntity paused = createEntityWithStatus(JobStatus.PAUSED);
 
             assertFalse(ready.isTerminal(), "READY should not be terminal");
             assertFalse(running.isTerminal(), "RUNNING should not be terminal");
+            assertFalse(paused.isTerminal(), "PAUSED should not be terminal");
         }
 
         @Test
-        @DisplayName("isTerminal() should be true for COMPLETED, FAILED and TERMINATED")
+        @DisplayName("isTerminal() should be true for COMPLETED, FAILED, TERMINATED, and SKIPPED")
         void terminalStatuses() {
             WorkflowExecutionEntity completed = createEntityWithStatus(JobStatus.COMPLETED);
             WorkflowExecutionEntity failed = createEntityWithStatus(JobStatus.FAILED);
             WorkflowExecutionEntity terminated = createEntityWithStatus(JobStatus.TERMINATED);
+            WorkflowExecutionEntity skipped = createEntityWithStatus(JobStatus.SKIPPED);
 
             assertTrue(completed.isTerminal(), "COMPLETED should be terminal");
             assertTrue(failed.isTerminal(), "FAILED should be terminal");
             assertTrue(terminated.isTerminal(), "TERMINATED should be terminal");
+            assertTrue(skipped.isTerminal(), "SKIPPED should be terminal");
         }
     }
 

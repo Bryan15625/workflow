@@ -15,6 +15,8 @@ public class WorkflowExecutionResponse {
     private final UUID workflowExecutionId;
     private final UUID workflowId;
     private final JobStatus status;
+    private String errorMessage;
+    private String note;
     private List<StepExecutionResponse> stepStatuses;
     private final Instant createdAt;
     private final Instant startedAt;
@@ -24,6 +26,8 @@ public class WorkflowExecutionResponse {
             UUID workflowExecutionId,
             UUID workflowId,
             JobStatus status,
+            String errorMessage,
+            String note,
             List<StepExecutionResponse> stepStatuses,
             Instant createdAt,
             Instant startedAt,
@@ -32,9 +36,19 @@ public class WorkflowExecutionResponse {
         this.workflowExecutionId = workflowExecutionId;
         this.workflowId = workflowId;
         this.status = status;
+        this.note = note;
+        this.errorMessage = errorMessage;
         this.stepStatuses = stepStatuses;
         this.createdAt = createdAt;
         this.startedAt = startedAt;
         this.completedAt = completedAt;
+    }
+
+    public String getNote() {
+        if (status == JobStatus.FAILED || status == JobStatus.TERMINATED) {
+            return "All changes made during this execution have been rolled back. " +
+                    "Restart the execution to retry.";
+        }
+        return null;
     }
 }

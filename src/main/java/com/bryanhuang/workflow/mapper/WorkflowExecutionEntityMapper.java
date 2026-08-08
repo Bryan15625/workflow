@@ -16,6 +16,7 @@ public class WorkflowExecutionEntityMapper {
                 .createdAt(workflowExecution.getCreatedAt())
                 .startedAt(workflowExecution.getStartedAt())
                 .completedAt(workflowExecution.getCompletedAt())
+                .errorMessage(workflowExecution.getErrorMessage())
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class WorkflowExecutionEntityMapper {
                 .createdAt(workflowExecutionEntity.getCreatedAt())
                 .startedAt(workflowExecutionEntity.getStartedAt())
                 .completedAt(workflowExecutionEntity.getCompletedAt())
+                .errorMessage(workflowExecutionEntity.getErrorMessage())
                 .build();
     }
 

@@ -120,16 +120,17 @@ class WorkflowExecutionServiceTest {
         void failCallsEntityFailWhenExecutionFound() {
             UUID workflowExecutionId = UUID.randomUUID();
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
+            String errorMessage = "error message";
 
             when(workflowExecutionRepository
                     .findByWorkflowExecutionId(workflowExecutionId))
                     .thenReturn(Optional.of(entity));
 
-            workflowExecutionService.fail(workflowExecutionId);
+            workflowExecutionService.fail(workflowExecutionId, errorMessage);
 
             verify(workflowExecutionRepository)
                     .findByWorkflowExecutionId(workflowExecutionId);
-            verify(entity).fail();
+            verify(entity).fail(errorMessage);
             verifyNoMoreInteractions(entity);
         }
 
@@ -137,6 +138,7 @@ class WorkflowExecutionServiceTest {
         @DisplayName("should throw WorkflowExecutionStatusNotFoundException when workflow execution not found")
         void failThrowsWhenExecutionNotFound() {
             UUID workflowExecutionId = UUID.randomUUID();
+            String errorMessage = "error message";
 
             when(workflowExecutionRepository
                     .findByWorkflowExecutionId(workflowExecutionId))
@@ -144,7 +146,7 @@ class WorkflowExecutionServiceTest {
 
             assertThrows(
                     WorkflowExecutionNotFoundException.class,
-                    () -> workflowExecutionService.fail(workflowExecutionId)
+                    () -> workflowExecutionService.fail(workflowExecutionId, errorMessage)
             );
 
             verify(workflowExecutionRepository)

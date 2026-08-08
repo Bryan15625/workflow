@@ -15,6 +15,7 @@ public class WorkflowExecution {
     private Instant createdAt;
     private Instant startedAt;
     private Instant completedAt;
+    private String errorMessage;
 
     public WorkflowExecution(
             UUID workflowExecutionId,
@@ -22,7 +23,8 @@ public class WorkflowExecution {
             JobStatus status,
             Instant createdAt,
             Instant startedAt,
-            Instant completedAt
+            Instant completedAt,
+            String errorMessage
     ) {
         this.workflowExecutionId = workflowExecutionId;
         this.workflowId = workflowId;
@@ -30,5 +32,6 @@ public class WorkflowExecution {
         this.createdAt = createdAt;
         this.startedAt = startedAt;
         this.completedAt = completedAt;
+        this.errorMessage = errorMessage;
     }
 }

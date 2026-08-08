@@ -34,13 +34,17 @@ public class WorkflowExecutionEntity {
 
     private Instant completedAt;
 
+    @Column(length = 1000)
+    private String errorMessage;
+
     public WorkflowExecutionEntity(
             UUID workflowExecutionId,
             UUID workflowId,
             JobStatus status,
             Instant createdAt,
             Instant startedAt,
-            Instant completedAt
+            Instant completedAt,
+            String errorMessage
     ) {
         this.workflowExecutionId = workflowExecutionId;
         this.workflowId = workflowId;
@@ -48,6 +52,7 @@ public class WorkflowExecutionEntity {
         this.createdAt = createdAt;
         this.startedAt = startedAt;
         this.completedAt = completedAt;
+        this.errorMessage = errorMessage;
     }
 
     public void start() {
@@ -59,13 +64,14 @@ public class WorkflowExecutionEntity {
         startedAt = Instant.now();
     }
 
-    public void fail() {
+    public void fail(String errorMessage) {
         if (status != JobStatus.RUNNING) {
             throw new IllegalStateException("Execution must be RUNNING to fail.");
         }
 
         status = JobStatus.FAILED;
         completedAt = Instant.now();
+        this.errorMessage = errorMessage;
     }
 
     public void complete() {
@@ -106,7 +112,8 @@ public class WorkflowExecutionEntity {
     public boolean isTerminal() {
         return status == JobStatus.COMPLETED
                 || status == JobStatus.FAILED
-                || status == JobStatus.TERMINATED;
+                || status == JobStatus.TERMINATED
+                || status == JobStatus.SKIPPED;
     }
 
 }

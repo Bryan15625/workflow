@@ -35,6 +35,7 @@ public class WorkflowExecutionMapper {
                 .createdAt(workflowExecution.getCreatedAt())
                 .startedAt(workflowExecution.getStartedAt())
                 .completedAt(workflowExecution.getCompletedAt())
+                .errorMessage(workflowExecution.getErrorMessage())
                 .build();
     }
 
