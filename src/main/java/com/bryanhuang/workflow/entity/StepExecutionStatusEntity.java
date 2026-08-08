@@ -81,19 +81,43 @@ public class StepExecutionStatusEntity {
         completedAt = Instant.now();
     }
 
-    public void terminate() {
-        if (status != JobStatus.RUNNING) {
-            throw new IllegalStateException("Execution must be RUNNING to terminate.");
+    public void markTerminated() {
+        // Terminate all the running and future steps when terminate signal sent.
+        if (status != JobStatus.READY && status != JobStatus.RUNNING) {
+            throw new IllegalStateException("Execution must be READY or RUNNING to be marked terminated.");
         }
-
         status = JobStatus.TERMINATED;
         completedAt = Instant.now();
+    }
+
+    public void markSkipped() {
+        if (status != JobStatus.READY) {
+            throw new IllegalStateException("Execution must be READY to be marked skipped.");
+        }
+        status = JobStatus.SKIPPED;
+    }
+
+    public void pause() {
+        if (status != JobStatus.RUNNING) {
+            throw new IllegalStateException("Execution must be RUNNING to pause.");
+        }
+
+        status = JobStatus.PAUSED;
+    }
+
+    public void resume() {
+        if (status != JobStatus.PAUSED) {
+            throw new IllegalStateException("Execution must be PAUSED to resume.");
+        }
+
+        status = JobStatus.RUNNING;
     }
 
     @JsonIgnore
     public boolean isTerminal() {
         return status == JobStatus.COMPLETED
                 || status == JobStatus.FAILED
-                || status == JobStatus.TERMINATED;
+                || status == JobStatus.TERMINATED
+                || status == JobStatus.SKIPPED;
     }
 }

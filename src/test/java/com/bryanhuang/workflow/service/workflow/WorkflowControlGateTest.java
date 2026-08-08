@@ -82,6 +82,26 @@ class WorkflowControlGateTest {
         }
 
         @Test
+        @DisplayName("pauses at workflow level only (no step-level pause) and resumes when RESUME arrives")
+        void pausesThenPausesThenResumes_withoutTouchingStepState() throws InterruptedException {
+            UUID workflowExecutionId = UUID.randomUUID();
+
+            when(workflowExecutionRedisService.getControl(workflowExecutionId))
+                    .thenReturn(
+                            JobControl.PAUSE,  // initial call
+                            JobControl.PAUSE,              // first iteration in wait loop, default case
+                            JobControl.RESUME  // second iteration, resumes
+                    );
+
+            JobControl result = workflowControlGate.checkpoint(workflowExecutionId);
+
+            assertEquals(JobControl.RESUME, result);
+            verify(workflowExecutionService).pause(workflowExecutionId);
+            verify(workflowExecutionService).resume(workflowExecutionId);
+            verifyNoInteractions(stepExecutionService);
+        }
+
+        @Test
         @DisplayName("terminates workflow and cleans up when TERMINATE arrives while paused")
         void terminatesWhilePaused() throws InterruptedException {
             UUID workflowExecutionId = UUID.randomUUID();
@@ -176,6 +196,24 @@ class WorkflowControlGateTest {
 
             when(workflowExecutionRedisService.getControl(workflowExecutionId))
                     .thenReturn(JobControl.PAUSE, null, JobControl.RESUME);
+
+            JobControl result = workflowControlGate.checkpointStep(workflowExecutionId, stepId);
+
+            assertEquals(JobControl.RESUME, result);
+            verify(workflowExecutionService).pause(workflowExecutionId);
+            verify(stepExecutionService).pause(workflowExecutionId, stepId);
+            verify(workflowExecutionService).resume(workflowExecutionId);
+            verify(stepExecutionService).resume(workflowExecutionId, stepId);
+        }
+
+        @Test
+        @DisplayName("pauses both workflow and step level and waits for resume, resumes both when RESUME arrives")
+        void pausesThenPausesThenResumes_touchingBothWorkflowAndStepState() throws InterruptedException {
+            UUID workflowExecutionId = UUID.randomUUID();
+            Integer stepId = 1;
+
+            when(workflowExecutionRedisService.getControl(workflowExecutionId))
+                    .thenReturn(JobControl.PAUSE, JobControl.PAUSE, JobControl.RESUME);
 
             JobControl result = workflowControlGate.checkpointStep(workflowExecutionId, stepId);
 

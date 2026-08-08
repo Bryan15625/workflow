@@ -81,6 +81,7 @@ public class WorkflowControlGate {
                         terminateWorkflow(workflowExecutionId);
                         return JobControl.TERMINATE;
                     }
+                    default -> { /* still paused, keep waiting */ }
                 }
             }
         }

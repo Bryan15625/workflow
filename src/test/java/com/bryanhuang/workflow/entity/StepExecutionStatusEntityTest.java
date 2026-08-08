@@ -19,7 +19,7 @@ class StepExecutionStatusEntityTest {
                 UUID.randomUUID(),
                 new WorkflowExecutionEntity(),
                 1,
-                StepName.DETECT_ISSUES,
+                StepName.INGEST_CSV,
                 status,
                 null,
                 null,
@@ -127,33 +127,123 @@ class StepExecutionStatusEntityTest {
     }
 
     @Nested
-    @DisplayName("terminate()")
-    class TerminateTests {
+    @DisplayName("markTerminated()")
+    class MarkTerminatedTests {
 
         @Test
         @DisplayName("terminate() should transition from RUNNING to TERMINATED and set completedAt")
         void terminateFromRunning() {
-            StepExecutionStatusEntity entity = createEntityWithStatus(JobStatus.RUNNING);
+            StepExecutionStatusEntity ready = createEntityWithStatus(JobStatus.READY);
+            StepExecutionStatusEntity running = createEntityWithStatus(JobStatus.RUNNING);
 
-            entity.terminate();
+            ready.markTerminated();
+            running.markTerminated();
 
-            assertEquals(JobStatus.TERMINATED, entity.getStatus());
-            assertNotNull(entity.getCompletedAt(), "completedAt should be set when terminating");
+            assertEquals(JobStatus.TERMINATED, ready.getStatus());
+            assertEquals(JobStatus.TERMINATED, running.getStatus());
+            assertNotNull(ready.getCompletedAt(), "completedAt should be set when terminating");
+            assertNotNull(running.getCompletedAt(), "completedAt should be set when terminating");
         }
 
         @Test
-        @DisplayName("terminate() should fail when status is not RUNNING")
+        @DisplayName("terminate() should fail when status is not RUNNING or READY")
         void terminateFromNonRunningShouldThrow() {
             for (JobStatus status : JobStatus.values()) {
-                if (status == JobStatus.RUNNING) continue;
+                if (status == JobStatus.RUNNING || status == JobStatus.READY) continue;
 
                 StepExecutionStatusEntity entity = createEntityWithStatus(status);
                 IllegalStateException ex = assertThrows(
                         IllegalStateException.class,
-                        entity::terminate,
+                        entity::markTerminated,
                         "Expected terminate() to throw when status is " + status
                 );
-                assertEquals("Execution must be RUNNING to terminate.", ex.getMessage());
+                assertEquals("Execution must be READY or RUNNING to be marked terminated.", ex.getMessage());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("markSKipped()")
+    class MarkSkippedTests {
+
+        @Test
+        @DisplayName("markSkipped() should transition to SKIPPED when status is READY")
+        void markSkippedWhenReady() {
+            StepExecutionStatusEntity entity = createEntityWithStatus(JobStatus.READY);
+
+            entity.markSkipped();
+            assertEquals(JobStatus.SKIPPED, entity.getStatus());
+        }
+
+        @Test
+        @DisplayName("markSkipped() should throw IllegalStateException when status is not READY")
+        void throwIllegalStateException_notReady() {
+            for (JobStatus status : JobStatus.values()) {
+                if (status == JobStatus.READY) continue;
+                StepExecutionStatusEntity entity = createEntityWithStatus(status);
+                IllegalStateException ex = assertThrows(
+                        IllegalStateException.class,
+                        entity::markSkipped
+                );
+                assertEquals("Execution must be READY to be marked skipped.", ex.getMessage());
+            }
+
+        }
+    }
+
+    @Nested
+    @DisplayName("pause()")
+    class PauseTests {
+
+        @Test
+        @DisplayName("pause() should transition to PAUSED when status is RUNNING")
+        void pauseWhenRunning() {
+            StepExecutionStatusEntity entity = createEntityWithStatus(JobStatus.RUNNING);
+
+            entity.pause();
+            assertEquals(JobStatus.PAUSED, entity.getStatus());
+        }
+
+        @Test
+        @DisplayName("markSkipped() should throw IllegalStateException when status is not RUNNING")
+        void throwIllegalStateException_notRunning() {
+            for (JobStatus status : JobStatus.values()) {
+                if (status == JobStatus.RUNNING) continue;
+                StepExecutionStatusEntity entity = createEntityWithStatus(status);
+                IllegalStateException ex = assertThrows(
+                        IllegalStateException.class,
+                        entity::pause
+                );
+                assertEquals("Execution must be RUNNING to pause.", ex.getMessage());
+            }
+
+        }
+    }
+
+    @Nested
+    @DisplayName("resume()")
+    class ResumeTests {
+
+        @Test
+        @DisplayName("resume() should transition to RUNNING when status is PAUSED")
+        void resumeWhenPaused() {
+            StepExecutionStatusEntity entity = createEntityWithStatus(JobStatus.PAUSED);
+
+            entity.resume();
+            assertEquals(JobStatus.RUNNING, entity.getStatus());
+        }
+
+        @Test
+        @DisplayName("resume() should throw IllegalStateException when status is not PAUSED")
+        void throwIllegalStateException_notPaused() {
+            for (JobStatus status : JobStatus.values()) {
+                if (status == JobStatus.PAUSED) continue;
+                StepExecutionStatusEntity entity = createEntityWithStatus(status);
+                IllegalStateException ex = assertThrows(
+                        IllegalStateException.class,
+                        entity::resume
+                );
+                assertEquals("Execution must be PAUSED to resume.", ex.getMessage());
             }
         }
     }
@@ -167,9 +257,11 @@ class StepExecutionStatusEntityTest {
         void nonTerminalStatuses() {
             StepExecutionStatusEntity ready = createEntityWithStatus(JobStatus.READY);
             StepExecutionStatusEntity running = createEntityWithStatus(JobStatus.RUNNING);
+            StepExecutionStatusEntity paused = createEntityWithStatus(JobStatus.PAUSED);
 
             assertFalse(ready.isTerminal(), "READY should not be terminal");
             assertFalse(running.isTerminal(), "RUNNING should not be terminal");
+            assertFalse(paused.isTerminal(), "PAUSED should not be terminal");
         }
 
         @Test
@@ -178,10 +270,12 @@ class StepExecutionStatusEntityTest {
             StepExecutionStatusEntity completed = createEntityWithStatus(JobStatus.COMPLETED);
             StepExecutionStatusEntity failed = createEntityWithStatus(JobStatus.FAILED);
             StepExecutionStatusEntity terminated = createEntityWithStatus(JobStatus.TERMINATED);
+            StepExecutionStatusEntity skipped = createEntityWithStatus(JobStatus.SKIPPED);
 
             assertTrue(completed.isTerminal(), "COMPLETED should be terminal");
             assertTrue(failed.isTerminal(), "FAILED should be terminal");
             assertTrue(terminated.isTerminal(), "TERMINATED should be terminal");
+            assertTrue(skipped.isTerminal(), "SKIPPED should be terminal");
         }
     }
 
