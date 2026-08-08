@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface StepExecutionStatusRepository extends JpaRepository<StepExecutionStatusEntity, UUID> {
     List<StepExecutionStatusEntity> findByWorkflowExecutionEntityOrderByStepIdAsc(WorkflowExecutionEntity workflowExecutionEntity);
     Optional<StepExecutionStatusEntity> findByWorkflowExecutionEntity_WorkflowExecutionIdAndStepId(UUID workflowExecutionId, Integer stepId);
+    List<StepExecutionStatusEntity> findByWorkflowExecutionEntity_WorkflowExecutionIdOrderByStepIdAsc(
+            UUID workflowExecutionId);
 }
