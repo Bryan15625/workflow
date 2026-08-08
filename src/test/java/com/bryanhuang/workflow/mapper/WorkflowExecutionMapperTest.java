@@ -41,7 +41,7 @@ class WorkflowExecutionMapperTest {
         StepExecutionStatus step = StepExecutionStatus.builder()
                 .id(stepExecutionId)
                 .stepId(1)
-                .stepName(StepName.DETECT_ISSUES)
+                .stepName(StepName.INGEST_CSV)
                 .status(JobStatus.COMPLETED)
                 .startedAt(Instant.now().minusSeconds(180))
                 .completedAt(Instant.now().minusSeconds(150))

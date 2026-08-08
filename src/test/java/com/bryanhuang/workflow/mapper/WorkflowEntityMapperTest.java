@@ -39,7 +39,7 @@ class WorkflowEntityMapperTest {
 
             List<Step> steps = List.of(Step.builder()
                     .stepId(1)
-                    .stepName(StepName.DETECT_ISSUES)
+                    .stepName(StepName.INGEST_CSV)
                     .dependsOnStepIds(List.of())
                     .build());
 
@@ -89,7 +89,7 @@ class WorkflowEntityMapperTest {
 
             List<Step> steps = List.of(Step.builder()
                     .stepId(1)
-                    .stepName(StepName.DETECT_ISSUES)
+                    .stepName(StepName.INGEST_CSV)
                     .dependsOnStepIds(List.of())
                     .build());
 

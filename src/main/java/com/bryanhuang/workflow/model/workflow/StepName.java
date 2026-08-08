@@ -1,10 +1,8 @@
 package com.bryanhuang.workflow.model.workflow;
 
 public enum StepName {
-    PARSE_CSV,
-    VALIDATE_ROWS,
-    GENERATE_STATS,
-    DETECT_ISSUES,
-    GENERATE_REPORT,
-    UPLOAD_RESULT
+    INGEST_CSV,
+    AGGREGATE_DATA,
+    EVALUATE_METRICS,
+    GENERATE_SUMMARY
 }

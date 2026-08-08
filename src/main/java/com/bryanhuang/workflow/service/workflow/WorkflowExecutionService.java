@@ -69,7 +69,7 @@ public class WorkflowExecutionService {
     }
 
     @Transactional
-    public void fail(UUID workflowExecutionId) {
+    public void fail(UUID workflowExecutionId, String errorMessage) {
         WorkflowExecutionEntity workflowExecutionEntity =
                 workflowExecutionRepository
                         .findByWorkflowExecutionId(
@@ -78,7 +78,7 @@ public class WorkflowExecutionService {
                         .orElseThrow(
                                 () -> new WorkflowExecutionNotFoundException("Workflow execution not found")
                         );
-        workflowExecutionEntity.fail();
+        workflowExecutionEntity.fail(errorMessage);
     }
 
     @Transactional

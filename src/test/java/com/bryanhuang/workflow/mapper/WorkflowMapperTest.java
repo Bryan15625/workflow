@@ -49,7 +49,7 @@ class WorkflowMapperTest {
             List<StepDto> steps = List.of(
                     StepDto.builder()
                             .stepId(1)
-                            .stepName(StepName.DETECT_ISSUES)
+                            .stepName(StepName.INGEST_CSV)
                             .dependsOnStepIds(List.of())
                             .build()
             );
@@ -115,12 +115,12 @@ class WorkflowMapperTest {
             List<Step> steps = List.of(
                     Step.builder()
                             .stepId(1)
-                            .stepName(StepName.DETECT_ISSUES)
+                            .stepName(StepName.INGEST_CSV)
                             .dependsOnStepIds(List.of())
                             .build(),
                     Step.builder()
                             .stepId(2)
-                            .stepName(StepName.PARSE_CSV)
+                            .stepName(StepName.INGEST_CSV)
                             .dependsOnStepIds(List.of(1))
                             .build()
             );
@@ -218,12 +218,12 @@ class WorkflowMapperTest {
             List<StepDto> stepDtos = List.of(
                     StepDto.builder()
                             .stepId(1)
-                            .stepName(StepName.DETECT_ISSUES)
+                            .stepName(StepName.INGEST_CSV)
                             .dependsOnStepIds(List.of())
                             .build(),
                     StepDto.builder()
                             .stepId(2)
-                            .stepName(StepName.PARSE_CSV)
+                            .stepName(StepName.INGEST_CSV)
                             .dependsOnStepIds(List.of(1))
                             .build()
             );
@@ -294,12 +294,12 @@ class WorkflowMapperTest {
             List<Step> steps = List.of(
                     Step.builder()
                             .stepId(10)
-                            .stepName(StepName.DETECT_ISSUES)
+                            .stepName(StepName.INGEST_CSV)
                             .dependsOnStepIds(List.of())
                             .build(),
                     Step.builder()
                             .stepId(20)
-                            .stepName(StepName.PARSE_CSV)
+                            .stepName(StepName.INGEST_CSV)
                             .dependsOnStepIds(List.of(10))
                             .build()
             );

@@ -268,12 +268,12 @@ class WorkflowExecutionOrchestrationServiceTest {
 
             Step step1 = Step.builder()
                     .stepId(1)
-                    .stepName(StepName.DETECT_ISSUES)
+                    .stepName(StepName.INGEST_CSV)
                     .dependsOnStepIds(List.of())
                     .build();
             Step step2 = Step.builder()
                     .stepId(2)
-                    .stepName(StepName.PARSE_CSV)
+                    .stepName(StepName.INGEST_CSV)
                     .dependsOnStepIds(List.of(1))
                     .build();
             Workflow workflow = Workflow.builder()

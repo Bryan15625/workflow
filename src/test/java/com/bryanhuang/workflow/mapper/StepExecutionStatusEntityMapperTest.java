@@ -28,7 +28,7 @@ class StepExecutionStatusEntityMapperTest {
         void toStepExecutionStatusEntity_shouldMapAllFields() {
             UUID id = UUID.randomUUID();
             Integer stepId = 1;
-            StepName stepName = StepName.DETECT_ISSUES;
+            StepName stepName = StepName.INGEST_CSV;
             JobStatus status = JobStatus.RUNNING;
             Instant startedAt = Instant.now().minusSeconds(60);
             Instant completedAt = Instant.now();
