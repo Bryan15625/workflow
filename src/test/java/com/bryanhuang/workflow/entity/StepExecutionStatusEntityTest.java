@@ -131,25 +131,25 @@ class StepExecutionStatusEntityTest {
     class MarkTerminatedTests {
 
         @Test
-        @DisplayName("terminate() should transition from RUNNING to TERMINATED and set completedAt")
+        @DisplayName("terminate() should transition from RUNNING or PAUSED to TERMINATED and set completedAt")
         void terminateFromRunning() {
-            StepExecutionStatusEntity ready = createEntityWithStatus(JobStatus.READY);
             StepExecutionStatusEntity running = createEntityWithStatus(JobStatus.RUNNING);
+            StepExecutionStatusEntity paused = createEntityWithStatus(JobStatus.PAUSED);
 
-            ready.markTerminated();
             running.markTerminated();
+            paused.markTerminated();
 
-            assertEquals(JobStatus.TERMINATED, ready.getStatus());
             assertEquals(JobStatus.TERMINATED, running.getStatus());
-            assertNotNull(ready.getCompletedAt(), "completedAt should be set when terminating");
+            assertEquals(JobStatus.TERMINATED, paused.getStatus());
             assertNotNull(running.getCompletedAt(), "completedAt should be set when terminating");
+            assertNotNull(paused.getCompletedAt(), "completedAt should be set when terminating");
         }
 
         @Test
-        @DisplayName("terminate() should fail when status is not RUNNING or READY")
+        @DisplayName("terminate() should fail when status is not RUNNING or PAUSED")
         void terminateFromNonRunningShouldThrow() {
             for (JobStatus status : JobStatus.values()) {
-                if (status == JobStatus.RUNNING || status == JobStatus.READY) continue;
+                if (status == JobStatus.RUNNING || status == JobStatus.PAUSED) continue;
 
                 StepExecutionStatusEntity entity = createEntityWithStatus(status);
                 IllegalStateException ex = assertThrows(

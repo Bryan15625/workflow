@@ -37,7 +37,7 @@ public class WorkoutCsvIngestionService {
     private final WorkoutValidationService validationService;
     private final WorkflowControlGate workflowControlGate;
 
-    public void ingestCsv(Step step, Workflow workflow, WorkflowExecutionEntity entity)
+    public JobControl ingestCsv(Step step, Workflow workflow, WorkflowExecutionEntity entity)
             throws InterruptedException {
         log.info("Parsing CSV file");
         String fp = "/data/input/" + workflow.getData().getInput();
@@ -66,7 +66,7 @@ public class WorkoutCsvIngestionService {
                     if (workflowControlGate.checkpointStep(workflowExecutionId, step.getStepId())
                             == JobControl.TERMINATE) {
                         log.info("CSV parsing terminated mid-file: {}", workflowExecutionId);
-                        return;
+                        return JobControl.TERMINATE;
                     }
                 }
             }
@@ -89,6 +89,7 @@ public class WorkoutCsvIngestionService {
             }
         }
         Thread.sleep(10000);
+        return JobControl.NONE;
     }
 
     private WorkoutRecord validateAndCreateWorkoutRecord(String line) {

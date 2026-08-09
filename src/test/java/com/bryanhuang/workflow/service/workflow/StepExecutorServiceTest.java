@@ -1,6 +1,7 @@
 package com.bryanhuang.workflow.service.workflow;
 
 import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.StepName;
 import com.bryanhuang.workflow.model.workflow.Workflow;
@@ -13,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,70 +38,27 @@ public class StepExecutorServiceTest {
             WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
 
             when(step.getStepName()).thenReturn(StepName.valueOf(StepName.INGEST_CSV.name()));
+            when(workoutCsvIngestionService.ingestCsv(step, workflow, workflowExecutionEntity))
+                    .thenReturn(JobControl.NONE);
 
-            stepExecutorService.execute(step, workflow, workflowExecutionEntity);
+            JobControl result = stepExecutorService.execute(step, workflow, workflowExecutionEntity);
 
-            // TODO: verify service is called once implemented
+            assertEquals(JobControl.NONE, result);
+            verify(workoutCsvIngestionService).ingestCsv(step, workflow, workflowExecutionEntity);
         }
 
         @Test
-        @DisplayName("delegates the aggregate data step to the downstream class")
-        void aggregateData_DelegatesDownstream() throws InterruptedException {
-            Step step = mock(Step.class);
+        @DisplayName("returns NONE for not-yet-implemented steps")
+        void returnsNone_forNotYetImplementedSteps() throws Exception {
             Workflow workflow = mock(Workflow.class);
-            WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
+            WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
 
-            when(step.getStepName()).thenReturn(StepName.valueOf(StepName.AGGREGATE_DATA.name()));
+            for (StepName stepName : new StepName[]{StepName.AGGREGATE_DATA, StepName.EVALUATE_METRICS, StepName.GENERATE_SUMMARY}) {
+                Step step = mock(Step.class);
+                when(step.getStepName()).thenReturn(stepName);
 
-            stepExecutorService.execute(step, workflow, workflowExecutionEntity);
-
-            // TODO: verify service is called once implemented
-        }
-
-        @Test
-        @DisplayName("delegates the evaluate metrics step to the downstream class")
-        void evaluateMetrics_DelegatesDownstream() throws InterruptedException {
-            Step step = mock(Step.class);
-            Workflow workflow = mock(Workflow.class);
-            WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
-
-            when(step.getStepName()).thenReturn(StepName.valueOf(StepName.EVALUATE_METRICS.name()));
-
-            stepExecutorService.execute(step, workflow, workflowExecutionEntity);
-
-            // TODO: verify service is called once implemented
-        }
-
-        @Test
-        @DisplayName("delegates the generate summary step to the downstream class")
-        void generateSummary_DelegatesDownstream() throws InterruptedException {
-            Step step = mock(Step.class);
-            Workflow workflow = mock(Workflow.class);
-            WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
-
-            when(step.getStepName()).thenReturn(StepName.valueOf(StepName.GENERATE_SUMMARY.name()));
-
-            stepExecutorService.execute(step, workflow, workflowExecutionEntity);
-
-            // TODO: verify service is called once implemented
-        }
-
-        @Test
-        @DisplayName("throws IllegalArgumentException when invalid step name is passed")
-        void default_throwsIllegalArgumentException() throws InterruptedException {
-            Step step = mock(Step.class);
-            Workflow workflow = mock(Workflow.class);
-            WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
-
-            when(step.getStepName()).thenReturn(null);
-
-            IllegalArgumentException ex = assertThrows(
-                    IllegalArgumentException.class,
-                    () -> stepExecutorService.execute(step, workflow, workflowExecutionEntity),
-                    "Invalid step name"
-            );
-
-            // TODO: verify service is called once implemented
+                assertEquals(JobControl.NONE, stepExecutorService.execute(step, workflow, entity));
+            }
         }
 
     }

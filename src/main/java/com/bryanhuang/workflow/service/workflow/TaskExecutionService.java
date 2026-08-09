@@ -39,9 +39,11 @@ public class TaskExecutionService {
                     log.info("Workflow execution terminated: {}", workflowExecutionId);
                     return;
                 }
-                executeStep(entity, step, workflow);
+                if (executeStep(entity, step, workflow) == JobControl.TERMINATE) {
+                    log.info("Workflow execution terminated mid-step: {}", workflowExecutionId);
+                    return;
+                }
             }
-
             workflowExecutionService.complete(workflowExecutionId);
             log.info("Task execution completed");
         } catch (Exception e) {
@@ -60,13 +62,18 @@ public class TaskExecutionService {
     }
 
 
-    private void executeStep(WorkflowExecutionEntity entity, Step step, Workflow workflow)
+    private JobControl executeStep(WorkflowExecutionEntity entity, Step step, Workflow workflow)
             throws InterruptedException {
         try {
             log.info("Executing step {}", step.getStepId());
             stepExecutionService.start(entity.getWorkflowExecutionId(), step.getStepId());
-            stepExecutorService.execute(step, workflow, entity);
+            JobControl result = stepExecutorService.execute(step, workflow, entity);
+            if (result == JobControl.TERMINATE) {
+                log.info("Step {} terminated mid-execution, skipping completion", step.getStepId());
+                return JobControl.TERMINATE;
+            }
             stepExecutionService.complete(entity.getWorkflowExecutionId(), step.getStepId());
+            return JobControl.NONE;
         } catch (Exception e) {
             log.error("Step {} failed", step.getStepId(), e);
             stepExecutionService.fail(entity.getWorkflowExecutionId(), step.getStepId());
@@ -99,7 +106,6 @@ public class TaskExecutionService {
                 completed.add(id);
             }
         }
-
         return order;
     }
 }

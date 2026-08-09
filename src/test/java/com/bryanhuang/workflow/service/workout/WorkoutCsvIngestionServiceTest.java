@@ -131,8 +131,9 @@ class WorkoutCsvIngestionServiceTest {
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
             when(entity.getWorkflowExecutionId()).thenReturn(UUID.randomUUID());
 
-            workoutCsvIngestionService.ingestCsv(step, workflow, entity);
+            JobControl result = workoutCsvIngestionService.ingestCsv(step, workflow, entity);
 
+            assertEquals(JobControl.NONE, result);
             verify(workoutRecordRepository, times(1)).saveAll(anyList());
             verify(workflowControlGate, never()).checkpointStep(any(), any());
         }
@@ -150,8 +151,9 @@ class WorkoutCsvIngestionServiceTest {
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
             when(entity.getWorkflowExecutionId()).thenReturn(UUID.randomUUID());
 
-            workoutCsvIngestionService.ingestCsv(step, workflow, entity);
+            JobControl result = workoutCsvIngestionService.ingestCsv(step, workflow, entity);
 
+            assertEquals(JobControl.NONE, result);
             verify(workoutRecordRepository, times(1)).saveAll(anyList());
         }
 
@@ -174,8 +176,9 @@ class WorkoutCsvIngestionServiceTest {
             when(workflowControlGate.checkpointStep(workflowExecutionId, 1))
                     .thenReturn(JobControl.NONE);
 
-            workoutCsvIngestionService.ingestCsv(step, workflow, entity);
+            JobControl result = workoutCsvIngestionService.ingestCsv(step, workflow, entity);
 
+            assertEquals(JobControl.NONE, result);
             verify(workoutRecordRepository, times(2)).saveAll(anyList());
             verify(workflowControlGate, times(1)).checkpointStep(workflowExecutionId, 1);
         }
@@ -199,8 +202,9 @@ class WorkoutCsvIngestionServiceTest {
             when(workflowControlGate.checkpointStep(workflowExecutionId, 1))
                     .thenReturn(JobControl.TERMINATE);
 
-            workoutCsvIngestionService.ingestCsv(step, workflow, entity);
+            JobControl result = workoutCsvIngestionService.ingestCsv(step, workflow, entity);
 
+            assertEquals(JobControl.TERMINATE, result);
             // Only the first batch (10,000 rows) is saved before TERMINATE stops the loop
             verify(workoutRecordRepository, times(1)).saveAll(anyList());
             verify(workflowControlGate, times(1)).checkpointStep(workflowExecutionId, 1);

@@ -249,6 +249,37 @@ class TaskExecutionServiceTest {
             verify(workflowExecutionService).fail(eq(workflowExecutionId), anyString());
             verify(workflowExecutionService, never()).complete(workflowExecutionId);
         }
+
+        @Test
+        @DisplayName("stops mid-step without calling complete/fail when step execution reports TERMINATE")
+        void stopsWithoutCompletingOrFailing_whenStepReportsTerminate() throws Exception {
+            UUID workflowExecutionId = UUID.randomUUID();
+            UUID workflowId = UUID.randomUUID();
+
+            WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
+            when(entity.getWorkflowExecutionId()).thenReturn(workflowExecutionId);
+            when(entity.getWorkflowId()).thenReturn(workflowId);
+
+            Step step1 = mockStep(1);
+
+            Workflow workflow = mock(Workflow.class);
+            when(workflow.getSteps()).thenReturn(List.of(step1));
+            when(workflowQueryService.findWorkflowEntityAndMapToWorkflow(workflowId))
+                    .thenReturn(workflow);
+
+            when(workflowControlGate.checkpoint(workflowExecutionId))
+                    .thenReturn(JobControl.NONE);
+            when(stepExecutorService.execute(step1, workflow, entity))
+                    .thenReturn(JobControl.TERMINATE);
+
+            taskExecutionService.executeWorkflow(entity);
+
+            verify(stepExecutionService).start(workflowExecutionId, 1);
+            verify(stepExecutionService, never()).complete(workflowExecutionId, 1);
+            verify(stepExecutionService, never()).fail(any(), eq(1));
+            verify(workflowExecutionService, never()).complete(workflowExecutionId);
+            verify(workflowExecutionService, never()).fail(eq(workflowExecutionId), anyString());
+        }
     }
 
     @Nested

@@ -12,7 +12,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.UUID;
 
 public interface WorkoutRecordRepository extends JpaRepository<WorkoutRecordEntity, UUID> {
-    Slice<WorkoutRecordEntity> findSliceByWorkflowExecutionEntity(WorkflowExecutionEntity workflowExecutionEntity, Pageable pageable);
+    Slice<WorkoutRecordEntity> findSliceByWorkflowExecutionEntity(
+            WorkflowExecutionEntity workflowExecutionEntity,
+            Pageable pageable
+    );
 
     @Modifying
     @Query("DELETE FROM WorkoutRecordEntity w WHERE w.workflowExecutionEntity.workflowExecutionId = :workflowExecutionId")

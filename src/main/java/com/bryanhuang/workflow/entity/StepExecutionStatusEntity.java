@@ -82,8 +82,7 @@ public class StepExecutionStatusEntity {
     }
 
     public void markTerminated() {
-        // Terminate all the running and future steps when terminate signal sent.
-        if (status != JobStatus.READY && status != JobStatus.RUNNING) {
+        if (status != JobStatus.RUNNING && status != JobStatus.PAUSED) {
             throw new IllegalStateException("Execution must be READY or RUNNING to be marked terminated.");
         }
         status = JobStatus.TERMINATED;
