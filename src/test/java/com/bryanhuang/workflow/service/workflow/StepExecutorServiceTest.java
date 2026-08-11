@@ -5,6 +5,7 @@ import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.StepName;
 import com.bryanhuang.workflow.model.workflow.Workflow;
+import com.bryanhuang.workflow.service.workout.WorkoutAggregationService;
 import com.bryanhuang.workflow.service.workout.WorkoutCsvIngestionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,6 +23,9 @@ public class StepExecutorServiceTest {
 
     @Mock
     private WorkoutCsvIngestionService workoutCsvIngestionService;
+
+    @Mock
+    private WorkoutAggregationService workoutAggregationService;
 
     @InjectMocks
     private StepExecutorService stepExecutorService;
@@ -48,12 +52,29 @@ public class StepExecutorServiceTest {
         }
 
         @Test
+        @DisplayName("delegates the aggregate data step to the downstream class")
+        void aggregateData_DelegatesDownstream() throws InterruptedException {
+            Step step = mock(Step.class);
+            Workflow workflow = mock(Workflow.class);
+            WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
+
+            when(step.getStepName()).thenReturn(StepName.valueOf(StepName.AGGREGATE_DATA.name()));
+            when(workoutAggregationService.aggregateWorkoutData(step, workflow, workflowExecutionEntity))
+                    .thenReturn(JobControl.NONE);
+
+            JobControl result = stepExecutorService.execute(step, workflow, workflowExecutionEntity);
+
+            assertEquals(JobControl.NONE, result);
+            verify(workoutAggregationService).aggregateWorkoutData(step, workflow, workflowExecutionEntity);
+        }
+
+        @Test
         @DisplayName("returns NONE for not-yet-implemented steps")
         void returnsNone_forNotYetImplementedSteps() throws Exception {
             Workflow workflow = mock(Workflow.class);
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
 
-            for (StepName stepName : new StepName[]{StepName.AGGREGATE_DATA, StepName.EVALUATE_METRICS, StepName.GENERATE_SUMMARY}) {
+            for (StepName stepName : new StepName[]{StepName.EVALUATE_METRICS, StepName.GENERATE_SUMMARY}) {
                 Step step = mock(Step.class);
                 when(step.getStepName()).thenReturn(stepName);
 

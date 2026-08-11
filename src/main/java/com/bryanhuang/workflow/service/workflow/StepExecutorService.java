@@ -24,7 +24,7 @@ public class StepExecutorService {
         if (stepName == StepName.INGEST_CSV) {
             return workoutCsvIngestionService.ingestCsv(step, workflow, entity);
         } else if (stepName == StepName.AGGREGATE_DATA) {
-//            workoutAggregationService.aggregateWorkoutData();
+            return workoutAggregationService.aggregateWorkoutData(step, workflow, entity);
         } else if (stepName == StepName.EVALUATE_METRICS) {
             log.info("Not yet implemented");
         } else if (stepName == StepName.GENERATE_SUMMARY) {
