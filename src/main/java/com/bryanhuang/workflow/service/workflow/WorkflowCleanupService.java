@@ -1,6 +1,7 @@
 package com.bryanhuang.workflow.service.workflow;
 
 import com.bryanhuang.workflow.repository.WorkoutRecordRepository;
+import com.bryanhuang.workflow.repository.WorkoutUserAggregateRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +14,12 @@ import java.util.UUID;
 @Slf4j
 public class WorkflowCleanupService {
     private final WorkoutRecordRepository workoutRecordRepository;
+    private final WorkoutUserAggregateRepository workoutUserAggregateRepository;
 
     @Transactional
     public void cleanupWorkflowExecution(UUID workflowExecutionId) {
         log.info("Cleaning up workflow execution");
         workoutRecordRepository.deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
+        workoutUserAggregateRepository.deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
     }
 }
