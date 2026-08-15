@@ -39,7 +39,7 @@ public class WorkoutCsvIngestionService {
 
     public JobControl ingestCsv(Step step, Workflow workflow, WorkflowExecutionEntity entity)
             throws InterruptedException {
-        log.info("Parsing CSV file");
+        log.info("Parsing CSV file for workflow execution: {}", entity.getWorkflowExecutionId());
         String fp = "/data/input/" + workflow.getData().getInput();
         UUID workflowExecutionId = entity.getWorkflowExecutionId();
 
