@@ -1,5 +1,7 @@
 package com.bryanhuang.workflow.entity;
 
+import com.bryanhuang.workflow.model.workout.CardioZone;
+import com.bryanhuang.workflow.model.workout.WorkoutRir;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,13 +37,18 @@ public class WorkoutUserAggregateEntity {
     private BigDecimal avgFatsG;
 
     private BigDecimal avgWeeklyCardioMin;
-    private BigDecimal avgCardioZone;
 
+    @Enumerated(EnumType.STRING)
+    private CardioZone avgCardioZone;
+
+    private BigDecimal avgDailySteps;
     private BigDecimal avgWorkoutsPerWeek;
     private Integer upperBodySessionsPerWeek;
     private Integer lowerBodySessionsPerWeek;
 
-    private BigDecimal avgWorkoutRir;
+    @Enumerated(EnumType.STRING)
+    private WorkoutRir avgWorkoutRir;
+
     private BigDecimal avgSetsCompleted;
     private BigDecimal avgSleepH;
 
@@ -57,11 +64,12 @@ public class WorkoutUserAggregateEntity {
             BigDecimal avgCarbsG,
             BigDecimal avgFatsG,
             BigDecimal avgWeeklyCardioMin,
-            BigDecimal avgCardioZone,
+            CardioZone avgCardioZone,
+            BigDecimal avgDailySteps,
             BigDecimal avgWorkoutsPerWeek,
             Integer upperBodySessionsPerWeek,
             Integer lowerBodySessionsPerWeek,
-            BigDecimal avgWorkoutRir,
+            WorkoutRir avgWorkoutRir,
             BigDecimal avgSetsCompleted,
             BigDecimal avgSleepH
     ) {
@@ -77,6 +85,7 @@ public class WorkoutUserAggregateEntity {
         this.avgFatsG = avgFatsG;
         this.avgWeeklyCardioMin = avgWeeklyCardioMin;
         this.avgCardioZone = avgCardioZone;
+        this.avgDailySteps = avgDailySteps;
         this.avgWorkoutsPerWeek = avgWorkoutsPerWeek;
         this.upperBodySessionsPerWeek = upperBodySessionsPerWeek;
         this.lowerBodySessionsPerWeek = lowerBodySessionsPerWeek;

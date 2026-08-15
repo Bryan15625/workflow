@@ -59,13 +59,13 @@ public class StepExecutorServiceTest {
             WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
 
             when(step.getStepName()).thenReturn(StepName.valueOf(StepName.AGGREGATE_DATA.name()));
-            when(workoutAggregationService.aggregateWorkoutData(step, workflow, workflowExecutionEntity))
+            when(workoutAggregationService.aggregateWorkoutData(step, workflowExecutionEntity))
                     .thenReturn(JobControl.NONE);
 
             JobControl result = stepExecutorService.execute(step, workflow, workflowExecutionEntity);
 
             assertEquals(JobControl.NONE, result);
-            verify(workoutAggregationService).aggregateWorkoutData(step, workflow, workflowExecutionEntity);
+            verify(workoutAggregationService).aggregateWorkoutData(step, workflowExecutionEntity);
         }
 
         @Test
