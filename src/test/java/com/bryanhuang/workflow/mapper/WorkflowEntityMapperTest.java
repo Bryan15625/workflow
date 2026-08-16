@@ -49,6 +49,7 @@ class WorkflowEntityMapperTest {
                     .heightCm(173)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .durationDays(100)
                     .build();
 
             Workflow workflow = Workflow.builder()
@@ -99,6 +100,7 @@ class WorkflowEntityMapperTest {
                     .heightCm(173)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .durationDays(100)
                     .build();
 
             WorkflowPayload workflowJson = WorkflowPayload.builder()

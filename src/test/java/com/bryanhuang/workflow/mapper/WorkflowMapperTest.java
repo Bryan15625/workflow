@@ -39,6 +39,7 @@ class WorkflowMapperTest {
                     .heightCm(173)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .durationDays(100)
                     .build();
 
             DataDto data = DataDto.builder()
@@ -105,6 +106,7 @@ class WorkflowMapperTest {
                     .heightCm(180)
                     .sex(Sex.MALE)
                     .goal(Goal.MUSCLE_GAIN)
+                    .durationDays(100)
                     .build();
 
             Data data = Data.builder()
@@ -179,6 +181,7 @@ class WorkflowMapperTest {
                     .heightCm(175)
                     .sex(Sex.FEMALE)
                     .goal(Goal.FAT_LOSS)
+                    .durationDays(100)
                     .build();
 
             CohortProfile cohortProfile = mapper.toCohortProfile(dto);
@@ -255,6 +258,7 @@ class WorkflowMapperTest {
                     .heightCm(185)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .durationDays(100)
                     .build();
 
             CohortProfileDto dto = mapper.toCohortProfileDto(cohortProfile);

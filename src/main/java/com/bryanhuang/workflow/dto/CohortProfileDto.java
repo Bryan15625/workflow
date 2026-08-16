@@ -24,17 +24,22 @@ public class CohortProfileDto {
     @NotNull(message = "Goal is required")
     private Goal goal;
 
+    @NotNull(message = "Duration is required")
+    private Integer durationDays;
+
     public CohortProfileDto(
             Integer age,
             Integer weightKg,
             Integer heightCm,
             Sex sex,
-            Goal goal
+            Goal goal,
+            Integer durationDays
     ) {
         this.age = age;
         this.weightKg = weightKg;
         this.heightCm = heightCm;
         this.sex = sex;
         this.goal = goal;
+        this.durationDays = durationDays;
     }
 }
