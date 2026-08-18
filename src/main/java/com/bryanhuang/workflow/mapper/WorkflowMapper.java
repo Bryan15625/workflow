@@ -47,6 +47,7 @@ public class WorkflowMapper {
                 .heightCm(cohortProfileDto.getHeightCm())
                 .sex(cohortProfileDto.getSex())
                 .goal(cohortProfileDto.getGoal())
+                .participants(cohortProfileDto.getParticipants())
                 .durationDays(cohortProfileDto.getDurationDays())
                 .build();
     }
@@ -79,6 +80,7 @@ public class WorkflowMapper {
                 .heightCm(cohortProfile.getHeightCm())
                 .sex(cohortProfile.getSex())
                 .goal(cohortProfile.getGoal())
+                .participants(cohortProfile.getParticipants())
                 .durationDays(cohortProfile.getDurationDays())
                 .build();
     }

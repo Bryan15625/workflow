@@ -10,6 +10,7 @@ public class CohortProfile {
     private Integer heightCm;
     private Sex sex;
     private Goal goal;
+    private Integer participants;
     private Integer durationDays;
 
     public CohortProfile(
@@ -18,6 +19,7 @@ public class CohortProfile {
             Integer heightCm,
             Sex sex,
             Goal goal,
+            Integer participants,
             Integer durationDays
     ) {
         this.durationDays = durationDays;
@@ -25,6 +27,7 @@ public class CohortProfile {
         this.weightKg = weightKg;
         this.heightCm = heightCm;
         this.sex = sex;
+        this.participants = participants;
         this.goal = goal;
     }
 }

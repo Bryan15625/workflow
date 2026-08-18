@@ -39,6 +39,7 @@ class WorkflowMapperTest {
                     .heightCm(173)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .participants(10)
                     .durationDays(100)
                     .build();
 
@@ -106,6 +107,7 @@ class WorkflowMapperTest {
                     .heightCm(180)
                     .sex(Sex.MALE)
                     .goal(Goal.MUSCLE_GAIN)
+                    .participants(10)
                     .durationDays(100)
                     .build();
 
@@ -181,6 +183,7 @@ class WorkflowMapperTest {
                     .heightCm(175)
                     .sex(Sex.FEMALE)
                     .goal(Goal.FAT_LOSS)
+                    .participants(10)
                     .durationDays(100)
                     .build();
 
@@ -258,6 +261,7 @@ class WorkflowMapperTest {
                     .heightCm(185)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .participants(10)
                     .durationDays(100)
                     .build();
 

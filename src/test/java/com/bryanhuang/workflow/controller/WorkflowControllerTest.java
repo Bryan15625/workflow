@@ -54,6 +54,7 @@ class WorkflowControllerTest {
                                           "heightCm": 174,
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS",
+                                          "participants": 10,
                                           "durationDays": 100
                                       },
                                       "data": {
@@ -87,6 +88,7 @@ class WorkflowControllerTest {
                                           "heightCm": 174,
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS",
+                                          "participants": 10,
                                           "durationDays": 100
                                       },
                                       "data": {
@@ -150,6 +152,7 @@ class WorkflowControllerTest {
                                           "heightCm": 174,
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS",
+                                          "participants": 10,
                                           "durationDays": 100
                                       },
                                       "steps": [
@@ -181,6 +184,7 @@ class WorkflowControllerTest {
                                           "heightCm": 174,
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS",
+                                          "participants": 10,
                                           "durationDays": 100
                                       },
                                       "data": {
@@ -208,6 +212,7 @@ class WorkflowControllerTest {
                                   "heightCm": 174,
                                   "sex": "MALE",
                                   "goal": "FAT_LOSS",
+                                  "participants": 10,
                                   "durationDays": 100
                               },
                               "data": {
@@ -242,6 +247,7 @@ class WorkflowControllerTest {
                                   "heightCm": 174,
                                   "sex": "MALE",
                                   "goal": "FAT_LOSS",
+                                  "participants": 10,
                                   "durationDays": 100
                               },
                               "data": {
@@ -276,6 +282,7 @@ class WorkflowControllerTest {
                                   "weightKg": 76,
                                   "sex": "MALE",
                                   "goal": "FAT_LOSS",
+                                  "participants": 10,
                                   "durationDays": 100
                               },
                               "data": {
@@ -310,6 +317,7 @@ class WorkflowControllerTest {
                                   "weightKg": 76,
                                   "heightCm": 174,
                                   "goal": "FAT_LOSS",
+                                  "participants": 10,
                                   "durationDays": 100
                               },
                               "data": {
@@ -344,6 +352,7 @@ class WorkflowControllerTest {
                                   "weightKg": 76,
                                   "heightCm": 174,
                                   "sex": "MALE",
+                                  "participants": 10,
                                   "durationDays": 100
                               },
                               "data": {
@@ -366,6 +375,40 @@ class WorkflowControllerTest {
         }
 
         @Test
+        @DisplayName("CohortProfileDto: Fails when Participants is not provided")
+        void failsWhenParticipantsMissing() throws Exception {
+            mockMvc.perform(post("/workflows")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("""
+                            {
+                              "workflowName": "any non empty string works",
+                              "cohortProfile": {
+                                  "age": 23,
+                                  "weightKg": 76,
+                                  "heightCm": 174,
+                                  "sex": "MALE",
+                                  "durationDays": 100
+                              },
+                              "data": {
+                                  "input": "workout_data.csv",
+                                  "output": "summary.txt"
+                              },
+                              "steps": [
+                                  {
+                                  "stepId": 1,
+                                  "stepName": "INGEST_CSV",
+                                  "dependsOnStepIds": []
+                                  }
+                              ]
+                          }
+                        """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("Validation failed"))
+                    .andExpect(jsonPath("$.errors['cohortProfile.participants']")
+                            .value("Participants is required"));
+        }
+
+        @Test
         @DisplayName("CohortProfileDto: Fails when Duration Days is not provided")
         void failsWhenDurationDaysMissing() throws Exception {
             mockMvc.perform(post("/workflows")
@@ -378,7 +421,8 @@ class WorkflowControllerTest {
                                   "weightKg": 76,
                                   "heightCm": 174,
                                   "sex": "MALE",
-                                  "goal": "FAT_LOSS"
+                                  "goal": "FAT_LOSS",
+                                  "participants": 10
                               },
                               "data": {
                                   "input": "workout_data.csv",
@@ -413,6 +457,7 @@ class WorkflowControllerTest {
                                           "heightCm": 174,
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS",
+                                          "participants": 10,
                                           "durationDays": 100
                                       },
                                       "data": {
@@ -447,6 +492,7 @@ class WorkflowControllerTest {
                                           "heightCm": 174,
                                           "sex": "MALE",
                                           "goal": "FAT_LOSS",
+                                          "participants": 10,
                                           "durationDays": 100
                                       },
                                       "data": {
@@ -481,6 +527,7 @@ class WorkflowControllerTest {
                                       "heightCm": 174,
                                       "sex": "MALE",
                                       "goal": "FAT_LOSS",
+                                      "participants": 10,
                                       "durationDays": 100
                                   },
                                   "data": {
@@ -515,6 +562,7 @@ class WorkflowControllerTest {
                                      "heightCm": 174,
                                      "sex": "MALE",
                                      "goal": "FAT_LOSS",
+                                     "participants": 10,
                                      "durationDays": 100
                                  },
                                  "data": {
@@ -549,6 +597,7 @@ class WorkflowControllerTest {
                                      "heightCm": 174,
                                      "sex": "MALE",
                                      "goal": "FAT_LOSS",
+                                     "participants": 10,
                                      "durationDays": 100
                                  },
                                  "data": {
