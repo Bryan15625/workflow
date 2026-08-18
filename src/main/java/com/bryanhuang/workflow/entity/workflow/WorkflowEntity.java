@@ -1,4 +1,4 @@
-package com.bryanhuang.workflow.entity;
+package com.bryanhuang.workflow.entity.workflow;
 
 import com.bryanhuang.workflow.entity.payload.WorkflowPayload;
 import jakarta.persistence.Column;

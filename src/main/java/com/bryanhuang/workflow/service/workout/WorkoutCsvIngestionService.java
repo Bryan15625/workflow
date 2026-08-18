@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.service.workout;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.entity.WorkoutRecordEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutRecordEntity;
 import com.bryanhuang.workflow.exception.InvalidRowException;
 import com.bryanhuang.workflow.mapper.WorkoutRecordEntityMapper;
 import com.bryanhuang.workflow.model.workflow.JobControl;
@@ -37,14 +37,15 @@ public class WorkoutCsvIngestionService {
     private final WorkoutValidationService validationService;
     private final WorkflowControlGate workflowControlGate;
 
+    private static final int BATCH_SIZE = 10_000;
+
     public JobControl ingestCsv(Step step, Workflow workflow, WorkflowExecutionEntity entity)
             throws InterruptedException {
-        log.info("Parsing CSV file for workflow execution: {}", entity.getWorkflowExecutionId());
-        String fp = "/data/input/" + workflow.getData().getInput();
         UUID workflowExecutionId = entity.getWorkflowExecutionId();
+        log.info("Parsing CSV file for workflow execution: {}", workflowExecutionId);
+        String fp = "/data/input/" + workflow.getData().getInput();
 
-        int batchSize = 10_000;
-        List<WorkoutRecordEntity> batch = new ArrayList<>(batchSize);
+        List<WorkoutRecordEntity> batch = new ArrayList<>(BATCH_SIZE);
 
         BufferedReader reader = null;
         try {
@@ -57,7 +58,7 @@ public class WorkoutCsvIngestionService {
                 WorkoutRecordEntity recordEntity = workoutRecordEntityMapper
                         .toWorkoutRecordEntity(record, entity);
                 batch.add(recordEntity);
-                if (batch.size() >= batchSize) {
+                if (batch.size() >= BATCH_SIZE) {
                     log.info("Saving batch of {} records", batch.size());
                     workoutRecordRepository.saveAll(batch);
                     batch.clear();
@@ -88,7 +89,6 @@ public class WorkoutCsvIngestionService {
                 }
             }
         }
-        Thread.sleep(10000);
         return JobControl.NONE;
     }
 

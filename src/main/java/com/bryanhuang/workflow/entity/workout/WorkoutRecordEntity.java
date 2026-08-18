@@ -1,5 +1,6 @@
-package com.bryanhuang.workflow.entity;
+package com.bryanhuang.workflow.entity.workout;
 
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.model.workout.CardioZone;
 import com.bryanhuang.workflow.model.workout.WorkoutRir;
 import com.bryanhuang.workflow.model.workout.WorkoutType;

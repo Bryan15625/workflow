@@ -1,5 +1,7 @@
 package com.bryanhuang.workflow.entity;
 
+import com.bryanhuang.workflow.entity.workflow.StepExecutionStatusEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.model.workflow.JobStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

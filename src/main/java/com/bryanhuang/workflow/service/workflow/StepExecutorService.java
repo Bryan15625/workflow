@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.service.workflow;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.StepName;
@@ -28,7 +28,7 @@ public class StepExecutorService {
         } else if (stepName == StepName.AGGREGATE_DATA) {
             return workoutAggregationService.aggregateWorkoutData(step, entity);
         } else if (stepName == StepName.EVALUATE_METRICS) {
-            log.info("Not yet implemented");
+            return workoutMetricsEvaluationService.evaluateMetrics(step, workflow, entity);
         } else if (stepName == StepName.GENERATE_SUMMARY) {
             log.info("Not yet implemented");
         }

@@ -1,5 +1,6 @@
 package com.bryanhuang.workflow.service.workflow;
 
+import com.bryanhuang.workflow.repository.ReportRepository;
 import com.bryanhuang.workflow.repository.WorkoutRecordRepository;
 import com.bryanhuang.workflow.repository.WorkoutUserAggregateRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,9 @@ class WorkflowCleanupServiceTest {
     @Mock
     private WorkoutUserAggregateRepository workoutUserAggregateRepository;
 
+    @Mock
+    private ReportRepository reportRepository;
+
     @InjectMocks
     private WorkflowCleanupService workflowCleanupService;
 
@@ -38,6 +42,7 @@ class WorkflowCleanupServiceTest {
 
             verify(workoutRecordRepository).deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
             verify(workoutUserAggregateRepository).deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
+            verify(reportRepository).deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
         }
     }
 }

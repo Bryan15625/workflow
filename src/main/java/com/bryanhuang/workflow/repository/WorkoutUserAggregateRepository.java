@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.repository;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.entity.WorkoutUserAggregateEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutUserAggregateEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.mapper;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.entity.WorkoutUserAggregateEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutUserAggregateEntity;
 import com.bryanhuang.workflow.model.workout.WorkoutUserAggregate;
 import org.springframework.stereotype.Component;
 

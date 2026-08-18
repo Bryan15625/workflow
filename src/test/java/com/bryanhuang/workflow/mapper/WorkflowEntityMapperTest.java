@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.mapper;
 
-import com.bryanhuang.workflow.entity.WorkflowEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowEntity;
 import com.bryanhuang.workflow.entity.payload.WorkflowPayload;
 import com.bryanhuang.workflow.model.*;
 import com.bryanhuang.workflow.model.workflow.Step;
@@ -49,6 +49,7 @@ class WorkflowEntityMapperTest {
                     .heightCm(173)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .participants(10)
                     .durationDays(100)
                     .build();
 
@@ -100,6 +101,7 @@ class WorkflowEntityMapperTest {
                     .heightCm(173)
                     .sex(Sex.MALE)
                     .goal(Goal.FAT_LOSS)
+                    .participants(10)
                     .durationDays(100)
                     .build();
 

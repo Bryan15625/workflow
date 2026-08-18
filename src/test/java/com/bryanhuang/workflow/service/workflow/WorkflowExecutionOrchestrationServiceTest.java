@@ -2,8 +2,8 @@ package com.bryanhuang.workflow.service.workflow;
 
 import com.bryanhuang.workflow.dto.response.CreateWorkflowExecutionResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowExecutionResponse;
-import com.bryanhuang.workflow.entity.StepExecutionStatusEntity;
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workflow.StepExecutionStatusEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.event.EventEnvelope;
 import com.bryanhuang.workflow.event.EventType;
 import com.bryanhuang.workflow.event.execution.WorkflowExecutionEvent;

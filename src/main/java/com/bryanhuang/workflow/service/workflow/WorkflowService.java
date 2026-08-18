@@ -3,7 +3,7 @@ package com.bryanhuang.workflow.service.workflow;
 import com.bryanhuang.workflow.dto.request.CreateWorkflowRequest;
 import com.bryanhuang.workflow.dto.response.CreateWorkflowResponse;
 import com.bryanhuang.workflow.dto.response.WorkflowResponse;
-import com.bryanhuang.workflow.entity.WorkflowEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowEntity;
 import com.bryanhuang.workflow.exception.CycleDetectedException;
 import com.bryanhuang.workflow.exception.InvalidWorkflowException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;

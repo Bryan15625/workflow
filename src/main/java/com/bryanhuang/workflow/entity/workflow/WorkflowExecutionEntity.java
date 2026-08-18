@@ -1,59 +1,60 @@
-package com.bryanhuang.workflow.entity;
+package com.bryanhuang.workflow.entity.workflow;
 
 
 import com.bryanhuang.workflow.model.workflow.JobStatus;
-import com.bryanhuang.workflow.model.workflow.StepName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "workflow_step_execution")
+@Table(name = "workflow_execution")
 @Getter
 @NoArgsConstructor
 @Builder
-public class StepExecutionStatusEntity {
+public class WorkflowExecutionEntity {
+
     @Id
-    private UUID id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workflow_execution_id")
-    private WorkflowExecutionEntity workflowExecutionEntity;
-
-    private Integer stepId;
-    private StepName stepName;
+    private UUID workflowExecutionId;
+    private UUID workflowId;
 
     @Enumerated(EnumType.STRING)
     private JobStatus status;
-    private Instant startedAt;
-    private Instant completedAt;
-    private List<Integer> dependsOnStepIds;
 
-    public StepExecutionStatusEntity(
-            UUID id,
-            WorkflowExecutionEntity workflowExecutionEntity,
-            Integer stepId,
-            StepName stepName,
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    private Instant startedAt;
+
+    private Instant completedAt;
+
+    @Column(length = 1000)
+    private String errorMessage;
+
+    public WorkflowExecutionEntity(
+            UUID workflowExecutionId,
+            UUID workflowId,
             JobStatus status,
+            Instant createdAt,
             Instant startedAt,
             Instant completedAt,
-            List<Integer> dependsOnStepIds
+            String errorMessage
     ) {
-        this.id = id;
-        this.workflowExecutionEntity = workflowExecutionEntity;
-        this.stepId = stepId;
-        this.stepName = stepName;
+        this.workflowExecutionId = workflowExecutionId;
+        this.workflowId = workflowId;
         this.status = status;
+        this.createdAt = createdAt;
         this.startedAt = startedAt;
         this.completedAt = completedAt;
-        this.dependsOnStepIds = dependsOnStepIds;
+        this.errorMessage = errorMessage;
     }
+
     public void start() {
         if (status != JobStatus.READY) {
             throw new IllegalStateException("Execution must be READY to start.");
@@ -63,13 +64,14 @@ public class StepExecutionStatusEntity {
         startedAt = Instant.now();
     }
 
-    public void fail() {
+    public void fail(String errorMessage) {
         if (status != JobStatus.RUNNING) {
             throw new IllegalStateException("Execution must be RUNNING to fail.");
         }
 
         status = JobStatus.FAILED;
         completedAt = Instant.now();
+        this.errorMessage = errorMessage;
     }
 
     public void complete() {
@@ -81,19 +83,13 @@ public class StepExecutionStatusEntity {
         completedAt = Instant.now();
     }
 
-    public void markTerminated() {
+    public void terminate() {
         if (status != JobStatus.RUNNING && status != JobStatus.PAUSED) {
-            throw new IllegalStateException("Execution must be READY or RUNNING to be marked terminated.");
+            throw new IllegalStateException("Execution must be RUNNING or PAUSED to terminate.");
         }
+
         status = JobStatus.TERMINATED;
         completedAt = Instant.now();
-    }
-
-    public void markSkipped() {
-        if (status != JobStatus.READY) {
-            throw new IllegalStateException("Execution must be READY to be marked skipped.");
-        }
-        status = JobStatus.SKIPPED;
     }
 
     public void pause() {
@@ -119,4 +115,5 @@ public class StepExecutionStatusEntity {
                 || status == JobStatus.TERMINATED
                 || status == JobStatus.SKIPPED;
     }
+
 }

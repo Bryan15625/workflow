@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.service.workflow;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 
 import com.bryanhuang.workflow.exception.InvalidWorkflowException;
 import com.bryanhuang.workflow.model.workflow.JobControl;

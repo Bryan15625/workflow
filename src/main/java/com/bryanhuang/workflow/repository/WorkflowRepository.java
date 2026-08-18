@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.repository;
 
-import com.bryanhuang.workflow.entity.WorkflowEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

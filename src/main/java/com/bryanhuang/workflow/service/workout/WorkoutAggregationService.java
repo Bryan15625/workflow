@@ -1,12 +1,11 @@
 package com.bryanhuang.workflow.service.workout;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.entity.WorkoutRecordEntity;
-import com.bryanhuang.workflow.entity.WorkoutUserAggregateEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutRecordEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutUserAggregateEntity;
 import com.bryanhuang.workflow.mapper.WorkoutUserAggregateEntityMapper;
 import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
-import com.bryanhuang.workflow.model.workflow.Workflow;
 import com.bryanhuang.workflow.model.workout.WorkoutUserAggregate;
 import com.bryanhuang.workflow.repository.WorkoutRecordRepository;
 import com.bryanhuang.workflow.repository.WorkoutUserAggregateRepository;
@@ -37,8 +36,8 @@ public class WorkoutAggregationService {
     private static final int SAVE_BATCH_SIZE = 10_000;
 
     public JobControl aggregateWorkoutData(Step step, WorkflowExecutionEntity entity) throws InterruptedException {
-        log.info("Aggregating workout data for workflow execution: {}", entity.getWorkflowExecutionId());
         UUID workflowExecutionId = entity.getWorkflowExecutionId();
+        log.info("Aggregating workout data for workflow execution: {}", workflowExecutionId);
 
         Sort sort = Sort.by(Sort.Order.asc("userId"), Sort.Order.asc("date"));
         Pageable pageable = PageRequest.of(0, READ_BATCH_SIZE, sort);

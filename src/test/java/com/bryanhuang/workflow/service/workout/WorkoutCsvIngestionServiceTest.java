@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.service.workout;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.entity.WorkoutRecordEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutRecordEntity;
 import com.bryanhuang.workflow.exception.InvalidRowException;
 import com.bryanhuang.workflow.mapper.WorkoutRecordEntityMapper;
 import com.bryanhuang.workflow.model.Data;

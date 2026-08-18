@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.service.workflow;
 
-import com.bryanhuang.workflow.entity.WorkflowEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowEntity;
 import com.bryanhuang.workflow.exception.WorkflowNotFoundException;
 import com.bryanhuang.workflow.mapper.WorkflowEntityMapper;
 import com.bryanhuang.workflow.model.workflow.Workflow;

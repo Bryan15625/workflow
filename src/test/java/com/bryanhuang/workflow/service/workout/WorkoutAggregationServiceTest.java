@@ -1,8 +1,8 @@
 package com.bryanhuang.workflow.service.workout;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
-import com.bryanhuang.workflow.entity.WorkoutRecordEntity;
-import com.bryanhuang.workflow.entity.WorkoutUserAggregateEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutRecordEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutUserAggregateEntity;
 import com.bryanhuang.workflow.mapper.WorkoutUserAggregateEntityMapper;
 import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
