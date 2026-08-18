@@ -1,6 +1,6 @@
 package com.bryanhuang.workflow.service.workflow;
 
-import com.bryanhuang.workflow.entity.StepExecutionStatusEntity;
+import com.bryanhuang.workflow.entity.workflow.StepExecutionStatusEntity;
 import com.bryanhuang.workflow.exception.StepExecutionStatusNotFoundException;
 import com.bryanhuang.workflow.model.workflow.JobStatus;
 import com.bryanhuang.workflow.repository.StepExecutionStatusRepository;

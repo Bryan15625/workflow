@@ -1,12 +1,13 @@
 package com.bryanhuang.workflow.service.workflow;
 
-import com.bryanhuang.workflow.entity.WorkflowExecutionEntity;
+import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.StepName;
 import com.bryanhuang.workflow.model.workflow.Workflow;
 import com.bryanhuang.workflow.service.workout.WorkoutAggregationService;
 import com.bryanhuang.workflow.service.workout.WorkoutCsvIngestionService;
+import com.bryanhuang.workflow.service.workout.WorkoutMetricsEvaluationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class StepExecutorServiceTest {
 
     @Mock
     private WorkoutAggregationService workoutAggregationService;
+
+    @Mock
+    private WorkoutMetricsEvaluationService workoutMetricsEvaluationService;
 
     @InjectMocks
     private StepExecutorService stepExecutorService;
@@ -69,12 +73,29 @@ public class StepExecutorServiceTest {
         }
 
         @Test
+        @DisplayName("delegates the metrics evaluation step to the downstream class")
+        void evaluateMetrics_DelegatesDownstream() throws InterruptedException {
+            Step step = mock(Step.class);
+            Workflow workflow = mock(Workflow.class);
+            WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
+
+            when(step.getStepName()).thenReturn(StepName.valueOf(StepName.EVALUATE_METRICS.name()));
+            when(workoutMetricsEvaluationService.evaluateMetrics(step, workflow, workflowExecutionEntity))
+                    .thenReturn(JobControl.NONE);
+
+            JobControl result = stepExecutorService.execute(step, workflow, workflowExecutionEntity);
+
+            assertEquals(JobControl.NONE, result);
+            verify(workoutMetricsEvaluationService).evaluateMetrics(step, workflow, workflowExecutionEntity);
+        }
+
+        @Test
         @DisplayName("returns NONE for not-yet-implemented steps")
         void returnsNone_forNotYetImplementedSteps() throws Exception {
             Workflow workflow = mock(Workflow.class);
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
 
-            for (StepName stepName : new StepName[]{StepName.EVALUATE_METRICS, StepName.GENERATE_SUMMARY}) {
+            for (StepName stepName : new StepName[]{ StepName.GENERATE_SUMMARY }) {
                 Step step = mock(Step.class);
                 when(step.getStepName()).thenReturn(stepName);
 
