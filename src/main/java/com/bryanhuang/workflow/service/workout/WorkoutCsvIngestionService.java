@@ -4,6 +4,7 @@ import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.entity.workout.WorkoutRecordEntity;
 import com.bryanhuang.workflow.exception.InvalidRowException;
 import com.bryanhuang.workflow.mapper.WorkoutRecordEntityMapper;
+import com.bryanhuang.workflow.model.CohortProfile;
 import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.Workflow;
@@ -46,6 +47,10 @@ public class WorkoutCsvIngestionService {
         String fp = "/data/input/" + workflow.getData().getInput();
 
         List<WorkoutRecordEntity> batch = new ArrayList<>(BATCH_SIZE);
+        String currentUserId = null;
+        int currentUserRowCount = 0;
+        BigDecimal cohortWeightKg = BigDecimal.valueOf(workflow.getCohortProfile().getWeightKg());
+        int expectedDurationDays = workflow.getCohortProfile().getDurationDays();
 
         BufferedReader reader = null;
         try {
@@ -55,6 +60,33 @@ public class WorkoutCsvIngestionService {
             String line;
             while ((line = reader.readLine()) != null) {
                 WorkoutRecord record = validateAndCreateWorkoutRecord(line);
+
+                // Validate weight for each user and number of rows per user (must match cohortProfile)
+                if (!record.getUserId().equals(currentUserId)) {
+                    if (currentUserId != null
+                            && currentUserRowCount != expectedDurationDays) {
+
+                        throw new InvalidRowException(
+                                "User " + currentUserId
+                                        + " has " + currentUserRowCount
+                                        + " rows, expected "
+                                        + expectedDurationDays
+                        );
+                    }
+
+                    // Check the new user and ensure their weight is within the cohort's range
+                    currentUserId = record.getUserId();
+                    currentUserRowCount = 0;
+
+                    validationService.checkWeightKgInRange(
+                            record.getWeightKg(),
+                            "weight_kg",
+                            cohortWeightKg
+                    );
+                }
+                currentUserRowCount++;
+
+
                 WorkoutRecordEntity recordEntity = workoutRecordEntityMapper
                         .toWorkoutRecordEntity(record, entity);
                 batch.add(recordEntity);
@@ -70,6 +102,17 @@ public class WorkoutCsvIngestionService {
                         return JobControl.TERMINATE;
                     }
                 }
+            }
+            // Validate the last user
+            if (currentUserId != null
+                    && currentUserRowCount != expectedDurationDays) {
+
+                throw new InvalidRowException(
+                        "User " + currentUserId
+                                + " has " + currentUserRowCount
+                                + " rows, expected "
+                                + expectedDurationDays
+                );
             }
             // Save any remaining records
             if (!batch.isEmpty()) {
