@@ -43,6 +43,21 @@ public class WorkoutValidationService {
         }
     }
 
+    public void checkWeightKgInRange(
+            BigDecimal weightKg,
+            String field,
+            BigDecimal cohortWeightKg
+    ) {
+        BigDecimal minWeight = cohortWeightKg.subtract(BigDecimal.ONE);
+        BigDecimal maxWeight = cohortWeightKg.add(BigDecimal.ONE);
+
+        if (weightKg.compareTo(minWeight) < 0
+                || weightKg.compareTo(maxWeight) > 0) {
+            throw new InvalidRowException(
+                    field + " must be within 1 kg of cohort starting weight"
+            );
+        }
+    }
     public Integer parseIntOrNull(String raw, String field) {
         String trimmed = raw == null ? "" : raw.trim();
         if (trimmed.isEmpty()) {

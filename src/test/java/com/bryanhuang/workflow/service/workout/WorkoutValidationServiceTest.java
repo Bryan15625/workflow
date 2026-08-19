@@ -98,6 +98,33 @@ class WorkoutValidationServiceTest {
     }
 
     @Nested
+    @DisplayName("checkWeightKgInRangeTests")
+    class CheckWeightKgInRangeTests {
+
+        @Test
+        void returns_whenWeightKgInRange() {
+            validationService.checkWeightKgInRange(BigDecimal.valueOf(69), "weight_kg", BigDecimal.valueOf(70));
+            validationService.checkWeightKgInRange(BigDecimal.valueOf(70), "weight_kg", BigDecimal.valueOf(70));
+            validationService.checkWeightKgInRange(BigDecimal.valueOf(71), "weight_kg", BigDecimal.valueOf(70));
+
+        }
+
+        @Test
+        void throwsException_whenWeightKgOutOfRange() {
+            assertThrows(
+                    InvalidRowException.class,
+                    () -> validationService.checkWeightKgInRange(BigDecimal.valueOf(68), "weight_kg",
+                            BigDecimal.valueOf(70))
+            );
+            assertThrows(
+                    InvalidRowException.class,
+                    () -> validationService.checkWeightKgInRange(BigDecimal.valueOf(72), "weight_kg",
+                            BigDecimal.valueOf(70))
+            );
+        }
+    }
+
+    @Nested
     @DisplayName("parseIntOrNullTests")
     class ParseIntOrNullTests {
 
