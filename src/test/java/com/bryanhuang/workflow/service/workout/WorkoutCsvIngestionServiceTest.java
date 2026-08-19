@@ -211,6 +211,8 @@ class WorkoutCsvIngestionServiceTest {
 
             Workflow workflow = buildWorkflow();
 
+            when(cohortProfile.getParticipants()).thenReturn(5);
+
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
             when(entity.getWorkflowExecutionId())
                     .thenReturn(UUID.randomUUID());
@@ -239,6 +241,8 @@ class WorkoutCsvIngestionServiceTest {
                     .build();
 
             Workflow workflow = buildWorkflow();
+
+            when(cohortProfile.getParticipants()).thenReturn(1000);
 
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
             UUID workflowExecutionId = UUID.randomUUID();
@@ -278,6 +282,8 @@ class WorkoutCsvIngestionServiceTest {
                     .build();
 
             Workflow workflow = buildWorkflow();
+
+            when(cohortProfile.getParticipants()).thenReturn(1001);
 
             UUID workflowExecutionId = UUID.randomUUID();
 
@@ -466,6 +472,8 @@ class WorkoutCsvIngestionServiceTest {
 
             Workflow workflow = buildWorkflow();
 
+            when(cohortProfile.getParticipants()).thenReturn(1);
+
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
             UUID workflowExecutionId = UUID.randomUUID();
 
@@ -503,6 +511,8 @@ class WorkoutCsvIngestionServiceTest {
                     .build();
 
             Workflow workflow = buildWorkflow();
+
+            when(cohortProfile.getParticipants()).thenReturn(1);
 
             WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
             UUID workflowExecutionId = UUID.randomUUID();
@@ -742,6 +752,100 @@ class WorkoutCsvIngestionServiceTest {
 
         assertEquals(
                 "User u1 has 9 rows, expected 10",
+                ex.getMessage()
+        );
+
+        verify(workoutRecordRepository, never())
+                .saveAll(anyList());
+    }
+
+    @Test
+    @DisplayName("accepts CSV when participant count matches cohort")
+    void acceptsParticipantCount_whenCorrect() throws Exception {
+        stubValidRowParsing();
+        stubEntityMapping();
+        stubReaderContent(buildCsvWithRows(100)); // 10 users × 10 rows
+
+        Step step = Step.builder()
+                .stepId(1)
+                .build();
+
+        Workflow workflow = buildWorkflow();
+
+        WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
+
+        when(cohortProfile.getParticipants()).thenReturn(10);
+
+        when(entity.getWorkflowExecutionId())
+                .thenReturn(UUID.randomUUID());
+
+        JobControl result =
+                workoutCsvIngestionService.ingestCsv(step, workflow, entity);
+
+        assertEquals(JobControl.NONE, result);
+
+        verify(workoutRecordRepository, times(1))
+                .saveAll(anyList());
+    }
+
+    @Test
+    @DisplayName("rejects CSV when participant count is below cohort")
+    void rejectsParticipantCount_whenBelowExpected() {
+        stubValidRowParsing();
+        stubEntityMapping();
+        stubReaderContent(buildCsvWithRows(90)); // 9 users × 10 rows
+
+        Step step = Step.builder()
+                .stepId(1)
+                .build();
+
+        Workflow workflow = buildWorkflow();
+
+        when(cohortProfile.getParticipants()).thenReturn(10);
+
+        WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
+        when(entity.getWorkflowExecutionId())
+                .thenReturn(UUID.randomUUID());
+
+        InvalidRowException ex = assertThrows(
+                InvalidRowException.class,
+                () -> workoutCsvIngestionService.ingestCsv(step, workflow, entity)
+        );
+
+        assertEquals(
+                "Found 9 participants, expected 10",
+                ex.getMessage()
+        );
+
+        verify(workoutRecordRepository, never())
+                .saveAll(anyList());
+    }
+
+    @Test
+    @DisplayName("rejects CSV when participant count is above cohort")
+    void rejectsParticipantCount_whenAboveExpected() {
+        stubValidRowParsing();
+        stubEntityMapping();
+        stubReaderContent(buildCsvWithRows(110)); // 11 users × 10 rows
+
+        Step step = Step.builder()
+                .stepId(1)
+                .build();
+
+        Workflow workflow = buildWorkflow();
+        when(cohortProfile.getParticipants()).thenReturn(10);
+
+        WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
+        when(entity.getWorkflowExecutionId())
+                .thenReturn(UUID.randomUUID());
+
+        InvalidRowException ex = assertThrows(
+                InvalidRowException.class,
+                () -> workoutCsvIngestionService.ingestCsv(step, workflow, entity)
+        );
+
+        assertEquals(
+                "Found 11 participants, expected 10",
                 ex.getMessage()
         );
 

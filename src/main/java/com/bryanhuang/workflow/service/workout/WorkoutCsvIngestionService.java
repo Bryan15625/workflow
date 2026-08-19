@@ -51,6 +51,7 @@ public class WorkoutCsvIngestionService {
         int currentUserRowCount = 0;
         BigDecimal cohortWeightKg = BigDecimal.valueOf(workflow.getCohortProfile().getWeightKg());
         int expectedDurationDays = workflow.getCohortProfile().getDurationDays();
+        int participantCount = 0;
 
         BufferedReader reader = null;
         try {
@@ -77,6 +78,7 @@ public class WorkoutCsvIngestionService {
                     // Check the new user and ensure their weight is within the cohort's range
                     currentUserId = record.getUserId();
                     currentUserRowCount = 0;
+                    participantCount++;
 
                     validationService.checkWeightKgInRange(
                             record.getWeightKg(),
@@ -112,6 +114,14 @@ public class WorkoutCsvIngestionService {
                                 + " has " + currentUserRowCount
                                 + " rows, expected "
                                 + expectedDurationDays
+                );
+            }
+            // Check to see if the number of participants matches cohortProfile
+            if (participantCount != workflow.getCohortProfile().getParticipants()) {
+                throw new InvalidRowException(
+                        "Found " + participantCount
+                                + " participants, expected "
+                                + workflow.getCohortProfile().getParticipants()
                 );
             }
             // Save any remaining records
