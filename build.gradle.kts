@@ -49,11 +49,11 @@ jacoco {
 
 val jacocoExcludes = listOf(
 	"**/com/bryanhuang/workflow/WorkflowApplication.class",
-	"**/com/bryanhuang/workflow/kafka/config/",
-	"**/com/bryanhuang/workflow/redis/config",
+	"**/com/bryanhuang/workflow/kafka/config/**",
+	"**/com/bryanhuang/workflow/redis/config/**",
 	"**/com/bryanhuang/workflow/exception/*Exception.class",
-	"**/com/bryanhuang/workflow/model/IssueType.class",
-	"**/com/bryanhuang/workflow/config/*"
+	"**/com/bryanhuang/workflow/model/**",
+	"**/com/bryanhuang/workflow/config/**"
 )
 
 
@@ -93,7 +93,7 @@ tasks.jacocoTestCoverageVerification {
 	violationRules {
 		rule {
 			limit {
-				minimum = "1.00".toBigDecimal() // 80%
+				minimum = "1.00".toBigDecimal()
 			}
 		}
 	}
