@@ -29,7 +29,7 @@ public class StepExecutorService {
             return workoutAggregationService.aggregateWorkoutData(step, entity);
         } else if (stepName == StepName.EVALUATE_METRICS) {
             return workoutMetricsEvaluationService.evaluateMetrics(step, workflow, entity);
-        } else if (stepName == StepName.GENERATE_SUMMARY) {
+        } else {
             log.info("Not yet implemented");
         }
         return JobControl.NONE;
