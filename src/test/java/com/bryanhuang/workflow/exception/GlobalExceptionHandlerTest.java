@@ -1,9 +1,10 @@
 package com.bryanhuang.workflow.exception;
 
 import com.bryanhuang.workflow.dto.response.ErrorResponse;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.exc.InvalidFormatException;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -70,15 +71,17 @@ class GlobalExceptionHandlerTest {
                 Integer.class
         );
 
-        invalidFormatException.prependPath(new JsonMappingException.Reference(null, 0));
-        invalidFormatException.prependPath(new JsonMappingException.Reference(null, "nextStepIds"));
-        invalidFormatException.prependPath(new JsonMappingException.Reference(null, 2));
-        invalidFormatException.prependPath(new JsonMappingException.Reference(null, "steps"));
+        invalidFormatException.prependPath(new JacksonException.Reference(null, 0));
+        invalidFormatException.prependPath(new JacksonException.Reference(null, "nextStepIds"));
+        invalidFormatException.prependPath(new JacksonException.Reference(null, 2));
+        invalidFormatException.prependPath(new JacksonException.Reference(null, "steps"));
+
+        HttpInputMessage inputMessage = mock(HttpInputMessage.class);
 
         HttpMessageNotReadableException exception = new HttpMessageNotReadableException(
                 "Invalid request body",
                 invalidFormatException,
-                null
+                inputMessage
         );
 
         ResponseEntity<ErrorResponse> response =
@@ -93,8 +96,11 @@ class GlobalExceptionHandlerTest {
 
     @Test
     void handleHttpMessageNotReadableException_whenNotInvalidFormatException_returnsBadRequestWithRequestBodyError() {
+        HttpInputMessage inputMessage = mock(HttpInputMessage.class);
+
         HttpMessageNotReadableException exception = new HttpMessageNotReadableException(
-                "Malformed JSON"
+                "Malformed JSON",
+                inputMessage
         );
 
         ResponseEntity<ErrorResponse> response =

@@ -58,8 +58,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/workflowdb
       SPRING_DATASOURCE_USERNAME: workflow
       SPRING_DATASOURCE_PASSWORD: workflow
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
     ports:
       - "8080:8080"
     volumes:

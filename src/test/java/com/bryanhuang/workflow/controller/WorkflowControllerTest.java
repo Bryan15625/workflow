@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -642,16 +642,28 @@ class WorkflowControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("""
                                 {
-                                  "workflowDefinitionName": "Test workflow",
-                                  "steps": [
-                                  {
-                                      "stepId": 1,
-                                      "stepName": "First step",
-                                      "UnknownField": 37,
-                                      "nextStepIds": []
-                                    }
-                                  ]
-                                }
+                                      "workflowName": "any non empty string works",
+                                      "cohortProfile": {
+                                          "age": 23,
+                                          "weightKg": 76,
+                                          "heightCm": 174,
+                                          "sex": "MALE",
+                                          "goal": "FAT_LOSS",
+                                          "participants": 10,
+                                          "unknownField": 100
+                                      },
+                                      "data": {
+                                          "input": "workout_data.csv",
+                                          "output": "summary.txt"
+                                      },
+                                      "steps": [
+                                          {
+                                          "stepId": 1,
+                                          "stepName": "INGEST_CSV",
+                                          "dependsOnStepIds": []
+                                          }
+                                      ]
+                                  }
                                 """))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Invalid request body"))

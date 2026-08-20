@@ -5,11 +5,13 @@ import com.bryanhuang.workflow.model.CohortProfile;
 import com.bryanhuang.workflow.model.workflow.Step;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
 @Getter
 @Builder
+@Jacksonized
 public class WorkflowPayload {
     private CohortProfile cohortProfile;
     private Data data;

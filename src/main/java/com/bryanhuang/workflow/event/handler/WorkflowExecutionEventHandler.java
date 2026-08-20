@@ -4,7 +4,7 @@ import com.bryanhuang.workflow.event.EventEnvelope;
 import com.bryanhuang.workflow.event.EventType;
 import com.bryanhuang.workflow.event.execution.WorkflowExecutionEvent;
 import com.bryanhuang.workflow.service.workflow.WorkflowExecutionOrchestratorService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

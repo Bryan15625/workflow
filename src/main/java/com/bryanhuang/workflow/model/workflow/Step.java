@@ -1,11 +1,13 @@
 package com.bryanhuang.workflow.model.workflow;
 
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
 @Getter
 @Builder
+@Jacksonized
 public class Step {
     private Integer stepId;
     private StepName stepName;

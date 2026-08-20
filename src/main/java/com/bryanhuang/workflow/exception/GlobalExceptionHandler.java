@@ -1,7 +1,7 @@
 package com.bryanhuang.workflow.exception;
 
 import com.bryanhuang.workflow.dto.response.ErrorResponse;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.UUID;
 
 
 @RestControllerAdvice
@@ -47,8 +46,8 @@ public class GlobalExceptionHandler {
 
         if (exception.getCause() instanceof InvalidFormatException invalidFormatException) {
             String fieldPath = invalidFormatException.getPath().stream()
-                    .map(reference -> reference.getFieldName() != null
-                            ? reference.getFieldName()
+                    .map(reference -> reference.getPropertyName() != null
+                            ? reference.getPropertyName()
                             : "[" + reference.getIndex() + "]")
                     .reduce((first, second) -> first + "." + second)
                     .orElse("requestBody");
