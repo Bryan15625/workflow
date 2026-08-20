@@ -1,7 +1,6 @@
 package com.bryanhuang.workflow.kafka.config;
 
 import com.bryanhuang.workflow.event.EventEnvelope;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -14,8 +13,8 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.DefaultErrorHandler;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,24 +32,26 @@ public class KafkaConfig {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JacksonJsonSerializer.class);
+        config.put(JacksonJsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+
         return new DefaultKafkaProducerFactory<>(config);
     }
 
     @Bean
     public ConsumerFactory<String, EventEnvelope<?>> consumerFactory() {
-        JsonDeserializer<EventEnvelope<?>> deserializer =
-                new JsonDeserializer<>(EventEnvelope.class);
+        JacksonJsonDeserializer<EventEnvelope<?>> deserializer =
+                new JacksonJsonDeserializer<>(EventEnvelope.class);
 
-        deserializer.addTrustedPackages("com.bryanhuang.workflow");
-        deserializer.setUseTypeHeaders(false);
+        deserializer.trustedPackages("com.bryanhuang.workflow");
+        deserializer.ignoreTypeHeaders();
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "workflow-group");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
+
         return new DefaultKafkaConsumerFactory<>(
                 props,
                 new StringDeserializer(),
@@ -67,6 +68,7 @@ public class KafkaConfig {
         factory.setCommonErrorHandler(new DefaultErrorHandler(
                 (record, ex) -> log.error("Failed to deserialize/process record: {}", record, ex)
         ));
+
         return factory;
     }
 
@@ -74,7 +76,4 @@ public class KafkaConfig {
     public KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
-
-
-
 }
