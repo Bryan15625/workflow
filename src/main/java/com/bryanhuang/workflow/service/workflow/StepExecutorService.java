@@ -5,9 +5,7 @@ import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.StepName;
 import com.bryanhuang.workflow.model.workflow.Workflow;
-import com.bryanhuang.workflow.service.workout.WorkoutAggregationService;
-import com.bryanhuang.workflow.service.workout.WorkoutCsvIngestionService;
-import com.bryanhuang.workflow.service.workout.WorkoutMetricsEvaluationService;
+import com.bryanhuang.workflow.service.workout.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,7 @@ public class StepExecutorService {
     private final WorkoutCsvIngestionService workoutCsvIngestionService;
     private final WorkoutAggregationService workoutAggregationService;
     private final WorkoutMetricsEvaluationService workoutMetricsEvaluationService;
+    private final WorkoutSummaryGenerationService workoutSummaryGenerationService;
 
     public JobControl execute(Step step, Workflow workflow, WorkflowExecutionEntity entity) throws InterruptedException {
         StepName stepName = step.getStepName();
@@ -30,9 +29,8 @@ public class StepExecutorService {
         } else if (stepName == StepName.EVALUATE_METRICS) {
             return workoutMetricsEvaluationService.evaluateMetrics(step, workflow, entity);
         } else {
-            log.info("Not yet implemented");
+            return workoutSummaryGenerationService.generateSummary(step, workflow, entity);
         }
-        return JobControl.NONE;
     }
 
 }

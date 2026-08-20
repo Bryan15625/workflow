@@ -5,9 +5,7 @@ import com.bryanhuang.workflow.model.workflow.JobControl;
 import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.StepName;
 import com.bryanhuang.workflow.model.workflow.Workflow;
-import com.bryanhuang.workflow.service.workout.WorkoutAggregationService;
-import com.bryanhuang.workflow.service.workout.WorkoutCsvIngestionService;
-import com.bryanhuang.workflow.service.workout.WorkoutMetricsEvaluationService;
+import com.bryanhuang.workflow.service.workout.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,6 +28,9 @@ public class StepExecutorServiceTest {
 
     @Mock
     private WorkoutMetricsEvaluationService workoutMetricsEvaluationService;
+
+    @Mock
+    private WorkoutSummaryGenerationService workoutSummaryGenerationService;
 
     @InjectMocks
     private StepExecutorService stepExecutorService;
@@ -90,17 +91,20 @@ public class StepExecutorServiceTest {
         }
 
         @Test
-        @DisplayName("returns NONE for not-yet-implemented steps")
-        void returnsNone_forNotYetImplementedSteps() throws Exception {
+        @DisplayName("delegates the generate summary step to the downstream class")
+        void generateSummary_DelegatesDownstream() throws InterruptedException {
+            Step step = mock(Step.class);
             Workflow workflow = mock(Workflow.class);
-            WorkflowExecutionEntity entity = mock(WorkflowExecutionEntity.class);
+            WorkflowExecutionEntity workflowExecutionEntity = mock(WorkflowExecutionEntity.class);
 
-            for (StepName stepName : new StepName[]{ StepName.GENERATE_SUMMARY }) {
-                Step step = mock(Step.class);
-                when(step.getStepName()).thenReturn(stepName);
+            when(step.getStepName()).thenReturn(StepName.valueOf(StepName.GENERATE_SUMMARY.name()));
+            when(workoutSummaryGenerationService.generateSummary(step, workflow, workflowExecutionEntity))
+                    .thenReturn(JobControl.NONE);
 
-                assertEquals(JobControl.NONE, stepExecutorService.execute(step, workflow, entity));
-            }
+            JobControl result = stepExecutorService.execute(step, workflow, workflowExecutionEntity);
+
+            assertEquals(JobControl.NONE, result);
+            verify(workoutSummaryGenerationService).generateSummary(step, workflow, workflowExecutionEntity);
         }
 
     }
