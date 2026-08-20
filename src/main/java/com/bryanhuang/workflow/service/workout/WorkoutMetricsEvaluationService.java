@@ -62,7 +62,8 @@ public class WorkoutMetricsEvaluationService {
                 log.info("No records found for evaluation");
                 break;
             }
-            log.info("Processing batch of {} aggregates", aggregates.size());
+            log.info("Processing batch of {} aggregates on step {} for workflowExecutionId {}", aggregates.size(),
+                    step.getStepId(), workflowExecutionId);
 
             // Compare each user to the ideal metrics
             for (WorkoutUserAggregateEntity aggregateEntity : aggregates) {

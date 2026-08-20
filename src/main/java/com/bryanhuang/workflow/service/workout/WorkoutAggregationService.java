@@ -54,7 +54,8 @@ public class WorkoutAggregationService {
                 log.info("No records found for aggregation");
                 break;
             }
-            log.info("Processing batch of {} records", records.size());
+            log.info("Processing batch of {} records on step {} for workflowExecutionId {}", records.size(),
+                    step.getStepId(), workflowExecutionId);
 
             for (WorkoutRecordEntity record : records) {
                 if (currentAccumulator == null || !currentAccumulator.getUserId().equals(record.getUserId())) {

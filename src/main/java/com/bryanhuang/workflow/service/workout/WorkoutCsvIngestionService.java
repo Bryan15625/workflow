@@ -93,7 +93,8 @@ public class WorkoutCsvIngestionService {
                         .toWorkoutRecordEntity(record, entity);
                 batch.add(recordEntity);
                 if (batch.size() >= BATCH_SIZE) {
-                    log.info("Saving batch of {} records", batch.size());
+                    log.info("Saving batch of {} records on step {} for workflowExecutionId {}", batch.size(),
+                            step.getStepId(), workflowExecutionId);
                     workoutRecordRepository.saveAll(batch);
                     batch.clear();
 
