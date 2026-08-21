@@ -18,6 +18,8 @@ repositories {
 	mavenCentral()
 }
 
+extra["springAiVersion"] = "2.0.0"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -27,6 +29,7 @@ dependencies {
 
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
+	implementation("org.springframework.ai:spring-ai-starter-model-google-genai")
 
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -41,6 +44,13 @@ dependencies {
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.ai:spring-ai-bom:${property("springAiVersion")}")
+	}
+}
+
 
 
 tasks.withType<Test> {
