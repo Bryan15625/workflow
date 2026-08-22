@@ -1,6 +1,7 @@
 package com.bryanhuang.workflow.service.workflow;
 
 import com.bryanhuang.workflow.repository.ReportRepository;
+import com.bryanhuang.workflow.repository.WorkoutIdealRepository;
 import com.bryanhuang.workflow.repository.WorkoutRecordRepository;
 import com.bryanhuang.workflow.repository.WorkoutUserAggregateRepository;
 import jakarta.transaction.Transactional;
@@ -17,6 +18,7 @@ public class WorkflowCleanupService {
     private final WorkoutRecordRepository workoutRecordRepository;
     private final WorkoutUserAggregateRepository workoutUserAggregateRepository;
     private final ReportRepository reportRepository;
+    private final WorkoutIdealRepository workoutIdealRepository;
 
     @Transactional
     public void cleanupWorkflowExecution(UUID workflowExecutionId) {
@@ -24,6 +26,6 @@ public class WorkflowCleanupService {
         workoutRecordRepository.deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
         workoutUserAggregateRepository.deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
         reportRepository.deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
-
+        workoutIdealRepository.deleteByWorkflowExecutionEntity_WorkflowExecutionId(workflowExecutionId);
     }
 }
