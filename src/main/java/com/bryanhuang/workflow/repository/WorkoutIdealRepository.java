@@ -1,7 +1,6 @@
 package com.bryanhuang.workflow.repository;
 
-import com.bryanhuang.workflow.entity.workout.ReportEntity;
-import org.springframework.data.jpa.repository.EntityGraph;
+import com.bryanhuang.workflow.entity.workout.WorkoutIdealEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,10 +11,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ReportRepository extends JpaRepository<ReportEntity, UUID> {
+public interface WorkoutIdealRepository extends JpaRepository<WorkoutIdealEntity, UUID> {
 
-    @EntityGraph(attributePaths = {"metrics", "metrics.passed", "metrics.failed", "overallResult"})
-    Optional<ReportEntity> findByWorkflowExecutionEntity_WorkflowExecutionId(UUID workflowExecutionId);
+    Optional<WorkoutIdealEntity> findByWorkflowExecutionEntity_WorkflowExecutionId(UUID workflowExecutionId);
 
     @Modifying
     @Query("DELETE FROM WorkoutUserAggregateEntity w WHERE w.workflowExecutionEntity.workflowExecutionId = :workflowExecutionId")
