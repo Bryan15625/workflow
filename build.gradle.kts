@@ -30,6 +30,8 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
 	implementation("org.springframework.ai:spring-ai-starter-model-google-genai")
+	implementation("io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.73")
+	implementation("org.thymeleaf:thymeleaf:3.1.2.RELEASE")
 
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
