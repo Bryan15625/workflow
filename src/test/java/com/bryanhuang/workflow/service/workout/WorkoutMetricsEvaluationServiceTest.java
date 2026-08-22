@@ -4,6 +4,7 @@ import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.entity.workout.ReportEntity;
 import com.bryanhuang.workflow.entity.workout.WorkoutUserAggregateEntity;
 import com.bryanhuang.workflow.mapper.ReportEntityMapper;
+import com.bryanhuang.workflow.mapper.WorkoutIdealEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkoutUserAggregateEntityMapper;
 import com.bryanhuang.workflow.model.CohortProfile;
 import com.bryanhuang.workflow.model.Goal;
@@ -12,6 +13,7 @@ import com.bryanhuang.workflow.model.workflow.Step;
 import com.bryanhuang.workflow.model.workflow.Workflow;
 import com.bryanhuang.workflow.model.workout.*;
 import com.bryanhuang.workflow.repository.ReportRepository;
+import com.bryanhuang.workflow.repository.WorkoutIdealRepository;
 import com.bryanhuang.workflow.repository.WorkoutUserAggregateRepository;
 import com.bryanhuang.workflow.service.workflow.WorkflowControlGate;
 import org.junit.jupiter.api.DisplayName;
@@ -50,6 +52,12 @@ class WorkoutMetricsEvaluationServiceTest {
 
     @Mock
     private WorkoutUserAggregateEntityMapper workoutUserAggregateEntityMapper;
+
+    @Mock
+    private WorkoutIdealEntityMapper workoutIdealEntityMapper;
+
+    @Mock
+    private WorkoutIdealRepository workoutIdealRepository;
 
     @Mock
     private ReportRepository reportRepository;

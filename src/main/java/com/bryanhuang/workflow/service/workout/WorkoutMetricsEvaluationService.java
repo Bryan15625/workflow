@@ -2,8 +2,10 @@ package com.bryanhuang.workflow.service.workout;
 
 import com.bryanhuang.workflow.entity.workflow.WorkflowExecutionEntity;
 import com.bryanhuang.workflow.entity.workout.ReportEntity;
+import com.bryanhuang.workflow.entity.workout.WorkoutIdealEntity;
 import com.bryanhuang.workflow.entity.workout.WorkoutUserAggregateEntity;
 import com.bryanhuang.workflow.mapper.ReportEntityMapper;
+import com.bryanhuang.workflow.mapper.WorkoutIdealEntityMapper;
 import com.bryanhuang.workflow.mapper.WorkoutUserAggregateEntityMapper;
 import com.bryanhuang.workflow.model.CohortProfile;
 import com.bryanhuang.workflow.model.workflow.JobControl;
@@ -13,6 +15,7 @@ import com.bryanhuang.workflow.model.workout.CohortAnalysisResult;
 import com.bryanhuang.workflow.model.workout.WorkoutIdeal;
 import com.bryanhuang.workflow.model.workout.WorkoutUserAggregate;
 import com.bryanhuang.workflow.repository.ReportRepository;
+import com.bryanhuang.workflow.repository.WorkoutIdealRepository;
 import com.bryanhuang.workflow.repository.WorkoutUserAggregateRepository;
 import com.bryanhuang.workflow.service.workflow.WorkflowControlGate;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,8 @@ public class WorkoutMetricsEvaluationService {
     private final WorkoutUserAggregateEntityMapper workoutUserAggregateEntityMapper;
     private final ReportRepository reportRepository;
     private final ReportEntityMapper reportEntityMapper;
+    private final WorkoutIdealEntityMapper workoutIdealEntityMapper;
+    private final WorkoutIdealRepository workoutIdealRepository;
 
     private static final int BATCH_SIZE = 10_000;
 
@@ -86,6 +91,10 @@ public class WorkoutMetricsEvaluationService {
         CohortAnalysisResult.Report report = cohortAccumulator.toReport(cohortProfile.getDurationDays());
         ReportEntity reportEntity = reportEntityMapper.toReportEntity(report, entity);
         reportRepository.save(reportEntity);
+
+        // Save workout ideals for next step
+        WorkoutIdealEntity idealEntity = workoutIdealEntityMapper.toWorkoutIdealEntity(ideal, entity);
+        workoutIdealRepository.save(idealEntity);
 
         log.info("Metrics evaluation completed");
         return JobControl.NONE;
