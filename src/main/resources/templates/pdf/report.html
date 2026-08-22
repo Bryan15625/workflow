@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+
+            @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                font-family: "Times New Roman", Times, serif;
+                font-size: 8.5pt;
+                color: #888;
+            }
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            color: #222;
+            font-size: 10.5pt;
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 26pt;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 16pt;
+            margin-top: 30px;
+            margin-bottom: 14px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        h3 {
+            font-size: 12.5pt;
+            margin-top: 22px;
+            margin-bottom: 6px;
+        }
+
+        p {
+            margin: 6px 0;
+        }
+
+        .header {
+            margin-bottom: 35px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 11pt;
+            margin-top: 5px;
+        }
+
+        .profile-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 4px;
+        }
+
+        .profile-grid td {
+            width: 50%;
+            padding: 8px 12px 8px 0;
+            vertical-align: top;
+        }
+
+        .label {
+            color: #777;
+            font-size: 8.5pt;
+            text-transform: uppercase;
+        }
+
+        .value {
+            font-size: 11.5pt;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .outcome {
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .outcome-number {
+            font-size: 28pt;
+            font-weight: bold;
+        }
+
+        .outcome-label {
+            color: #666;
+            font-size: 10pt;
+        }
+
+        .outcome-details {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .metric {
+            margin-bottom: 20px;
+        }
+
+        .metric-description {
+            color: #555;
+        }
+
+        .metric-summary {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .metric-summary td {
+            width: 33.33%;
+            padding: 5px 15px 5px 0;
+            vertical-align: top;
+        }
+
+        .metric-summary .label {
+            font-size: 8pt;
+        }
+
+        .metric-summary .value {
+            font-size: 10pt;
+        }
+
+        .narrative {
+            white-space: pre-line;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!-- HEADER -->
+<!-- ========================================================= -->
+
+<div class="header">
+
+    <h1>Fitness Analytics Report</h1>
+
+    <div class="subtitle">
+        <span th:text="${cohortProfile.goal.name() == 'FAT_LOSS' ? 'Fat loss' : 'Muscle growth'}">
+            Goal
+        </span>
+        &#183;
+        <span th:text="${cohortProfile.durationDays}">0</span>
+        day tracking period
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- COHORT PROFILE -->
+<!-- ========================================================= -->
+
+<h2>Cohort Profile</h2>
+
+<table class="profile-grid">
+
+    <tr>
+        <td>
+            <div class="label">Age</div>
+            <div class="value"
+                 th:text="${cohortProfile.age + ' years'}">
+                0 years
+            </div>
+        </td>
+
+        <td>
+            <div class="label">Sex</div>
+            <div class="value"
+                 th:text="${cohortProfile.sex}">
+                Unknown
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <div class="label">Height</div>
+            <div class="value"
+                 th:text="${cohortProfile.heightCm + ' cm'}">
+                0 cm
+            </div>
+        </td>
+
+        <td>
+            <div class="label">Starting Weight</div>
+            <div class="value"
+                 th:text="${cohortProfile.weightKg + ' kg'}">
+                0 kg
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <div class="label">Goal</div>
+            <div class="value"
+                 th:text="${cohortProfile.goal}">
+                Unknown
+            </div>
+        </td>
+
+        <td>
+            <div class="label">Participants</div>
+            <div class="value"
+                 th:text="${report.overallResult.passedCount
+                         + report.overallResult.failedCount}">
+                0
+            </div>
+        </td>
+    </tr>
+
+</table>
+
+
+<!-- ========================================================= -->
+<!-- OVERALL OUTCOME -->
+<!-- ========================================================= -->
+
+<h2>Overall Outcome</h2>
+
+<div class="outcome">
+
+    <div class="outcome-number">
+
+        <span th:text="${report.overallResult.passedCount}">
+            0
+        </span>
+
+        /
+
+        <span th:text="${report.overallResult.passedCount
+                         + report.overallResult.failedCount}">
+            0
+        </span>
+
+    </div>
+
+    <div class="outcome-label">
+        Participants meeting the primary outcome
+    </div>
+
+    <div class="outcome-details">
+
+        <span th:text="${report.overallResult.failedCount}">
+            0
+        </span>
+
+        participants did not meet the primary outcome.
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- METRIC OVERVIEW -->
+<!-- ========================================================= -->
+
+<h2>Metric Performance</h2>
+
+<div th:each="metric : ${report.metrics}"
+     class="metric">
+
+    <h3 th:text="${metric.title}">
+        Metric
+    </h3>
+
+    <p class="metric-description"
+       th:text="${metric.description}">
+        Metric description
+    </p>
+
+    <table class="metric-summary">
+
+        <tr>
+
+            <td>
+                <div class="label">Passed</div>
+
+                <div class="value"
+                     th:text="${metric.passed.number}">
+                    0
+                </div>
+            </td>
+
+            <td>
+                <div class="label">Failed Above Ideal</div>
+
+                <div class="value"
+                     th:text="${metric.failed.numberAboveIdeal}">
+                    0
+                </div>
+            </td>
+
+            <td>
+                <div class="label">Failed Below Ideal</div>
+
+                <div class="value"
+                     th:text="${metric.failed.numberBelowIdeal}">
+                    0
+                </div>
+            </td>
+
+        </tr>
+
+    </table>
+
+    <!-- Failed above ideal -->
+
+    <div th:if="${metric.failed.numberAboveIdeal > 0}">
+
+        <p th:text="${metric.failed.aboveDescription}">
+            Above-ideal description
+        </p>
+
+    </div>
+
+    <!-- Failed below ideal -->
+
+    <div th:if="${metric.failed.numberBelowIdeal > 0}">
+
+        <p th:text="${metric.failed.belowDescription}">
+            Below-ideal description
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- ANALYTICAL FINDINGS -->
+<!-- ========================================================= -->
+
+<div class="page-break"></div>
+
+<h2>Analytical Findings</h2>
+
+<div class="narrative"
+     th:text="${narrative}">
+    Analytical findings
+</div>
+
+
+</body>
+</html>
