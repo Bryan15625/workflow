@@ -203,7 +203,7 @@ Navigate to the project directory and run `docker compose up --build`.
 
 ## API
 
-![Swagger API](docs/images/swagger.png)
+![Swagger API](docs/images/Swagger.png)
 Full API spec available at `http://localhost:8080/swagger-ui/index.html`.
 
 ---
