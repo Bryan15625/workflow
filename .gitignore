@@ -44,4 +44,4 @@ out/
 
 # Local files
 .DS_Store
-/data/output/**
+/docs/images/**
