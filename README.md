@@ -8,9 +8,13 @@ A distributed workflow engine with a fitness analytics pipeline built on top of 
 ▶ [Workflow Engine Demo](https://youtu.be/huR1IJPJZyA)
 
 ---
-## Architectural Diagram
-<!-- ![Architecture Diagram](path/to/diagram.png) -->
+## Architectural Diagrams
 
+### Workflow Engine Diagram
+![Workflow Engine Architecture](docs/images/Workflow%20Engine%20Diagram.drawio.svg)
+
+### Workout Analytics Diagram
+![Workout Analytics Architecture](docs/images/Workout%20Analytics%20Diagram.drawio.svg)
 ---
 ## Workflow
 
@@ -210,4 +214,4 @@ Full API spec available at `http://localhost:8080/swagger-ui/index.html`.
 
 ## Status
 
-Fully functional MVP. The pipeline runs end-to-end.
+Fully functional MVP. The pipeline runs end-to-end. 100% test coverage.

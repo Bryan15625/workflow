@@ -6,13 +6,13 @@ from datetime import datetime, timedelta
 # MODIFY THESE SIMULATION PARAMETERS
 # --------------------------------
 FILE_NAME = "workout.csv"
-NUM_USERS = 10000
-DAYS_PER_USER = 100
+NUM_USERS = 90
+DAYS_PER_USER = 150
 COHORT_PROFILE = {
-    "age": 23,
-    "sex": "MALE", # "MALE" or "FEMALE"
-    "height": 174, # in cm
-    "weight": 77.7, # in kg
+    "age": 20,
+    "sex": "FEMALE", # "MALE" or "FEMALE"
+    "height": 165, # in cm
+    "weight": 51.5, # in kg
     "goal": "FAT_LOSS" # "FAT_LOSS" or "MUSCLE_GAIN"
 }
 # --------------------------------
@@ -54,7 +54,7 @@ workout_types = [
 
 def calories_per_step(weight):
     """
-    Linear interpolation functions to estimate calories burned per step and per minute of 
+    Linear interpolation functions to estimate calories burned per step and per minute of
     cardio based on weights that fall between the sample weights.
     """
     points = sorted(CALORIES_PER_STEP_FROM_WEIGHT.items())
