@@ -1,6 +1,6 @@
 # Workflow Engine & Workout Analytics Platform
 
-A event-driven workflow engine with a fitness analytics pipeline built on top of it. Define workflows as DAGs, execute 
+An event-driven workflow engine with a fitness analytics pipeline built on top of it. Define workflows as DAGs, execute 
 long-running jobs asynchronously, pause/resume/terminate them cooperatively, and generate AI-assisted PDF reports from cohort training data.
 ![Workout Analytics Example](docs/images/Workout%20Analytics%20Demo%20Thumbnail.png)
 ### Demo
@@ -21,11 +21,11 @@ long-running jobs asynchronously, pause/resume/terminate them cooperatively, and
 
 ### Purpose
 
-A distributed workflow engine built with Spring Boot, Kafka, Redis, and PostgreSQL. It's
+An event-driven workflow engine built with Spring Boot, Kafka, Redis, and PostgreSQL. It's
 designed to be a general-purpose pipeline runner, similar to Apache Airflow or Temporal. A workflow is defined
 by its steps (a directed acyclic graph) and executes as a
 long-running job, with the option to pause, resume, or terminate a currently executing workflow. Multiple executions 
-can be started at once, and will execute concurrently.
+can be started at once and will execute concurrently.
 
 ### Motivation
 
@@ -36,7 +36,7 @@ solution worked, but wasn't optimal, and I ran out of time to improve it before 
 The problem kept sticking with me, so I revisited it here, aiming for a better solution and combining it with
 something aligned with my personal hobbies.
 
-For now, the only executable sequence is the workout analytics platform (below), but I will be adding more
+For now, the only executable sequence is the workout analytics platform (below), but I will be adding more in 
 the future.
 
 ### Job Control: Pause / Resume / Terminate
