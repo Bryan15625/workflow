@@ -1,6 +1,7 @@
 # Workflow Engine & Workout Analytics Platform
 
-A distributed workflow engine with a fitness analytics pipeline built on top of it. Define workflows as DAGs, execute long-running jobs asynchronously, pause/resume/terminate them cooperatively, and generate AI-assisted PDF reports from cohort training data.
+A event-driven workflow engine with a fitness analytics pipeline built on top of it. Define workflows as DAGs, execute 
+long-running jobs asynchronously, pause/resume/terminate them cooperatively, and generate AI-assisted PDF reports from cohort training data.
 ![Workout Analytics Example](docs/images/Workout%20Analytics%20Demo%20Thumbnail.png)
 ### Demo
 ▶ [Workout Analytics Demo](https://youtu.be/UxV8Rf9_7RQ)
@@ -35,24 +36,25 @@ solution worked, but wasn't optimal, and I ran out of time to improve it before 
 The problem kept sticking with me, so I revisited it here, aiming for a better solution and combining it with
 something aligned with my personal hobbies.
 
-For now, the only executable sequence is the workout analytics platform below.
+For now, the only executable sequence is the workout analytics platform (below), but I will be adding more
+the future.
 
 ### Job Control: Pause / Resume / Terminate
 
-Job control is **cooperative checkpointing**, not thread interruption. A single `WorkflowControlGate`, backed by Redis, is the source of truth for pause/resume/terminate signals.
-
-- `checkpoint(workflowExecutionId)` — called between steps, touches workflow-level state only.
-- `checkpointStep(workflowExecutionId, stepId)` — called mid-step (inside batch loops), since a step is actively `RUNNING`.
+Job control uses cooperative checkpointing rather than thread interruption. While a workflow is running, each step 
+periodically reaches a checkpoint at a safe point in its execution, such as between batches during a large 
+CSV import. At each checkpoint, the worker checks the execution's control state in Redis `checkpointStep` to determine whether it 
+should continue, pause, or terminate.
+- `checkpoint(workflowExecutionId)` is called between steps, touches workflow-level state only.
+- `checkpointStep(workflowExecutionId, stepId)` is called mid-step (inside batch loops), since a step is actively 
+  `RUNNING`.
 - **Terminate is treated like a transaction.** `WorkflowControlGate.terminateWorkflow()` marks the workflow `TERMINATED`, sweeps all step statuses (`RUNNING`/`PAUSED` → `TERMINATED`, `READY` → `SKIPPED`), and calls `WorkflowCleanupService` to delete every persisted output row for that execution.
 - Step statuses: `READY, RUNNING, FAILED, PAUSED, TERMINATED, COMPLETED, SKIPPED`. A step failure sweeps all not-yet-started steps to `SKIPPED`, distinct from an explicit `TERMINATE`.
-- Step methods return `JobControl` rather than `void`/`boolean` — callers must check and propagate a `TERMINATE` signal *before* calling `complete()`/`fail()`, otherwise you get a cascading `IllegalStateException` chain.
-
-<!-- PLACEHOLDER: workflow state-machine diagram -->
-<!-- ![Workflow State Machine](path/to/state-diagram.png) -->
+- Step methods return `JobControl` rather than `void`/`boolean`. Callers must check and propagate a `TERMINATE` 
+  signal *before* calling `complete()`/`fail()`, otherwise you get a cascading `IllegalStateException` chain.
 
 ### Defining a Workflow
 
-<!-- PLACEHOLDER: minimal example of a workflow/step definition, e.g. -->
 ```json
 {
   "workflowName": "my workflow", 
@@ -141,7 +143,7 @@ That row represents their average stats across the entire tracked duration.
 #### 3. `EVALUATE_METRICS`
 Computes a set of "ideal" target ranges based on age, weight, duration, and gender (specified in the initial
 `CohortProfile` in the workflow definition request), and scores every user's aggregates against them
-across 11 metric definitions — tracking pass/fail counts and how far failures deviate from their boundary. It also
+across 11 metric definitions, tracking pass/fail counts and how far failures deviate from their boundary. It also
 distinguishes between failing by being too far above vs. too far below the ideal.
 Results are persisted as a fully relational entity graph rather than a JSON blob, so the
 report stays queryable for the next step.
@@ -152,7 +154,6 @@ findings, and renders a PDF (using Thymeleaf and openhtmltopdf).
 
 ### How Metrics Are Evaluated
 
-<!-- PLACEHOLDER: one plain-language paragraph, e.g. -->
 Each cohort gets a set of "ideal ranges" derived from established exercise-science principles. These include calorie and
 macro targets based on estimated energy expenditure, training volume and intensity targets, sleep and step
 benchmarks. Every user's tracked data is compared against these ranges to see where they're on track and where
@@ -193,15 +194,15 @@ Navigate to the project directory and run `docker compose up --build`.
 
 ## Tech Stack
 
-| Layer | Choice |
-|---|---|
-| Framework | Spring Boot |
-| Async messaging | Kafka (KRaft mode) |
-| State / control signals | Redis |
-| Persistence | PostgreSQL |
+| Layer | Choice                                                                      |
+|---|-----------------------------------------------------------------------------|
+| Framework | Spring Boot                                                                 |
+| Async messaging | Apache Kafka (KRaft mode)                                                   |
+| State / control signals | Redis                                                                       |
+| Persistence | PostgreSQL                                                                  |
 | PDF rendering | openhtmltopdf + Thymeleaf (standalone `TemplateEngine`, no MVC auto-config) |
-| AI summary generation | Gemini via Spring AI `ChatModel` |
-| Testing | JUnit 5, Mockito |
+| AI summary generation | Gemini via Spring AI `ChatModel`                                            |
+| Testing | JUnit 5, Mockito                                                            |
 
 ---
 
