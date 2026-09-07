@@ -170,8 +170,10 @@ they're falling short.
 
 ### Prerequisites
 
-- [Docker](https://www.docker.com/) with Docker Compose
+- Clone the repository
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) and log into your account
 - Create a [Google Gemini API key](https://aistudio.google.com)
+- Download [Postman](https://www.postman.com) to send requests to the API (optional)
 
 No local installation of Java, PostgreSQL, Kafka, or Redis is required. These
 services are provided through Docker Compose.
@@ -182,6 +184,7 @@ The application requires a Gemini API key for generating the report narrative.
 
 Set the `GEMINI_API_KEY` environment variable:
 
+eg. on Mac/Linux:
 ```bash
 export GEMINI_API_KEY=your_api_key_here
 ```
